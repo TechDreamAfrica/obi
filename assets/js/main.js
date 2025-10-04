@@ -5,12 +5,12 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, on
 
 // Firebase config - Replace with your actual config
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyC3O06GUcRgAdNQ4A8pXxkzlsYzGvtlKhg",
+    authDomain: "oasis-c0682.firebaseapp.com",
+    projectId: "oasis-c0682",
+    storageBucket: "oasis-c0682.firebasestorage.app",
+    messagingSenderId: "1094274857981",
+    appId: "1:1094274857981:web:8334fa229fb0706786b794"
 };
 
 // Initialize Firebase
