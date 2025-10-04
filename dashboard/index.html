@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Oasis IMG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <aside class="w-64 bg-gray-900 text-white">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold">Oasis IMG</h2>
+                <p class="text-sm text-gray-400">Admin Dashboard</p>
+            </div>
+            <nav class="mt-6">
+                <a href="index.html" class="flex items-center px-6 py-3 bg-blue-600 text-white">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="admissions.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-user-graduate mr-3"></i> Admissions
+                </a>
+                <a href="news.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-newspaper mr-3"></i> News
+                </a>
+                <a href="contacts.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-envelope mr-3"></i> Contacts
+                </a>
+                <a href="gallery.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-images mr-3"></i> Gallery
+                </a>
+                <a href="leadership.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-users mr-3"></i> Leadership
+                </a>
+                <a href="login.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto">
+            <header class="bg-white shadow-sm p-6">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">Dashboard</h1>
+                    <div class="flex items-center">
+                        <span class="text-gray-600 mr-4">Admin User</span>
+                        <img src="https://ui-avatars.com/api/?name=Admin" class="w-10 h-10 rounded-full">
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-6">
+                <div class="grid md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Total Applications</p>
+                                <p class="text-3xl font-bold text-gray-900">156</p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-full">
+                                <i class="fas fa-file-alt text-blue-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Pending</p>
+                                <p class="text-3xl font-bold text-yellow-600">23</p>
+                            </div>
+                            <div class="bg-yellow-100 p-3 rounded-full">
+                                <i class="fas fa-clock text-yellow-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Total Contacts</p>
+                                <p class="text-3xl font-bold text-gray-900">89</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-full">
+                                <i class="fas fa-envelope text-green-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-600">Active News</p>
+                                <p class="text-3xl font-bold text-gray-900">12</p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-full">
+                                <i class="fas fa-newspaper text-purple-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Recent Applications</h2>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                                <div>
+                                    <p class="font-semibold">John Doe</p>
+                                    <p class="text-sm text-gray-600">Diploma Program</p>
+                                </div>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Pending</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                                <div>
+                                    <p class="font-semibold">Jane Smith</p>
+                                    <p class="text-sm text-gray-600">Certificate</p>
+                                </div>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Approved</span>
+                            </div>
+                        </div>
+                        <a href="admissions.html" class="block mt-4 text-blue-600 hover:text-blue-700 font-semibold">View All →</a>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Quick Actions</h2>
+                        <div class="space-y-3">
+                            <a href="news.html" class="block p-3 bg-blue-50 rounded hover:bg-blue-100 transition">
+                                <i class="fas fa-plus-circle text-blue-600 mr-2"></i> Add New Article
+                            </a>
+                            <a href="admissions.html" class="block p-3 bg-green-50 rounded hover:bg-green-100 transition">
+                                <i class="fas fa-check-circle text-green-600 mr-2"></i> Review Applications
+                            </a>
+                            <a href="gallery.html" class="block p-3 bg-purple-50 rounded hover:bg-purple-100 transition">
+                                <i class="fas fa-image text-purple-600 mr-2"></i> Update Gallery
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html>

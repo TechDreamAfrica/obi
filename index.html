@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oasis IMG Ministries Ghana - Home</title>
+    <meta name="description" content="Oasis IMG Ministries Ghana - Transforming lives through the Gospel">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <img src="assets/images/logo.png" alt="Oasis IMG Logo" class="h-12 w-auto">
+                        <span class="ml-3 text-xl font-bold text-blue-900">Oasis IMG</span>
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="index.html" class="text-blue-900 font-semibold border-b-2 border-blue-600">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-900 transition">About Us</a>
+                    <a href="admissions.html" class="text-gray-700 hover:text-blue-900 transition">Admissions</a>
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-blue-900 transition flex items-center">
+                            Applications <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 py-2 w-56">
+                            <a href="credential-application.html" class="block px-4 py-2 hover:bg-blue-50">Credential Application</a>
+                            <a href="sponsor-student.html" class="block px-4 py-2 hover:bg-blue-50">Sponsor a Student</a>
+                        </div>
+                    </div>
+                    <a href="ministries.html" class="text-gray-700 hover:text-blue-900 transition">Ministries</a>
+                    <a href="leadership.html" class="text-gray-700 hover:text-blue-900 transition">Leadership</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 transition">Contact</a>
+                    <a href="gallery.html" class="text-gray-700 hover:text-blue-900 transition">Gallery</a>
+                    <a href="obi/index.html" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Bible Institute</a>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-900">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
+            <div class="px-4 py-3 space-y-3">
+                <a href="index.html" class="block text-blue-900 font-semibold">Home</a>
+                <a href="about.html" class="block text-gray-700">About Us</a>
+                <a href="admissions.html" class="block text-gray-700">Admissions</a>
+                <a href="credential-application.html" class="block text-gray-700 pl-4">Credential Application</a>
+                <a href="sponsor-student.html" class="block text-gray-700 pl-4">Sponsor a Student</a>
+                <a href="ministries.html" class="block text-gray-700">Ministries</a>
+                <a href="leadership.html" class="block text-gray-700">Leadership</a>
+                <a href="contact.html" class="block text-gray-700">Contact</a>
+                <a href="gallery.html" class="block text-gray-700">Gallery</a>
+                <a href="obi/index.html" class="block bg-blue-600 text-white px-4 py-2 rounded-md text-center">Bible Institute</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Carousel -->
+    <section class="mt-20 relative">
+        <div id="carousel" class="relative h-[600px] overflow-hidden">
+            <!-- Slide 1 -->
+            <div class="carousel-slide absolute w-full h-full transition-opacity duration-1000">
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-600/60"></div>
+                <img src="assets/images/hero1.jpg" alt="Ministry" class="w-full h-full object-cover">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center text-white px-4">
+                        <h1 class="text-5xl md:text-6xl font-bold mb-4">Welcome to Oasis IMG</h1>
+                        <p class="text-xl md:text-2xl mb-8">Transforming Lives Through the Gospel</p>
+                        <a href="about.html" class="bg-white text-blue-900 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition">Learn More</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="carousel-slide absolute w-full h-full transition-opacity duration-1000 opacity-0">
+                <div class="absolute inset-0 bg-gradient-to-r from-green-900/80 to-green-600/60"></div>
+                <img src="assets/images/hero2.jpg" alt="Bible Institute" class="w-full h-full object-cover">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center text-white px-4">
+                        <h1 class="text-5xl md:text-6xl font-bold mb-4">Oasis Bible Institute</h1>
+                        <p class="text-xl md:text-2xl mb-8">Equipping Leaders for Kingdom Service</p>
+                        <a href="obi/index.html" class="bg-white text-green-900 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition">Visit OBI</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="carousel-slide absolute w-full h-full transition-opacity duration-1000 opacity-0">
+                <div class="absolute inset-0 bg-gradient-to-r from-purple-900/80 to-purple-600/60"></div>
+                <img src="assets/images/hero3.jpg" alt="Community" class="w-full h-full object-cover">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center text-white px-4">
+                        <h1 class="text-5xl md:text-6xl font-bold mb-4">Join Our Community</h1>
+                        <p class="text-xl md:text-2xl mb-8">Making a Difference in Ghana</p>
+                        <a href="contact.html" class="bg-white text-purple-900 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition">Get Involved</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carousel Controls -->
+        <button id="prev-slide" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full transition">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="next-slide" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white p-3 rounded-full transition">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Carousel Indicators -->
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-3">
+            <button class="carousel-indicator w-3 h-3 bg-white rounded-full transition" data-slide="0"></button>
+            <button class="carousel-indicator w-3 h-3 bg-white/50 rounded-full transition" data-slide="1"></button>
+            <button class="carousel-indicator w-3 h-3 bg-white/50 rounded-full transition" data-slide="2"></button>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="py-16 bg-blue-900 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-count="1000">0</div>
+                    <div class="text-lg text-blue-200">Lives Impacted</div>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-count="50">0</div>
+                    <div class="text-lg text-blue-200">Ministries</div>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-count="200">0</div>
+                    <div class="text-lg text-blue-200">Students Trained</div>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-count="15">0</div>
+                    <div class="text-lg text-blue-200">Years of Service</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-6">About Oasis IMG Ministries</h2>
+                    <p class="text-lg text-gray-600 mb-6">
+                        Oasis IMG Ministries is a vibrant Christian organization dedicated to spreading the Gospel of Jesus Christ and transforming lives across Ghana and beyond. Founded on the principles of faith, hope, and love, we are committed to empowering communities through spiritual guidance, education, and practical support.
+                    </p>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Our mission is to be an oasis of hope and transformation, bringing the life-giving message of Christ to all who seek truth and purpose.
+                    </p>
+                    <a href="about.html" class="bg-blue-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-700 transition inline-block">
+                        Discover Our Story
+                    </a>
+                </div>
+                <div>
+                    <img src="assets/images/about-home.jpg" alt="About Oasis IMG" class="rounded-lg shadow-xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ministries Section -->
+    <section class="py-20 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Ministries</h2>
+                <p class="text-lg text-gray-600">Serving God through diverse ministries</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry1.jpg" alt="Ministry 1" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Youth Ministry</h3>
+                        <p class="text-gray-600 mb-4">Empowering young people to live purposeful lives in Christ.</p>
+                        <a href="ministry-detail.html?id=youth" class="text-blue-600 font-semibold hover:text-blue-700">Learn More →</a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry2.jpg" alt="Ministry 2" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Women's Ministry</h3>
+                        <p class="text-gray-600 mb-4">Building strong, faith-filled women of God.</p>
+                        <a href="ministry-detail.html?id=women" class="text-blue-600 font-semibold hover:text-blue-700">Learn More →</a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry3.jpg" alt="Ministry 3" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Children's Ministry</h3>
+                        <p class="text-gray-600 mb-4">Nurturing the next generation in God's love.</p>
+                        <a href="ministry-detail.html?id=children" class="text-blue-600 font-semibold hover:text-blue-700">Learn More →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="ministries.html" class="bg-blue-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-700 transition inline-block">
+                    View All Ministries
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Our Leadership</h2>
+                <p class="text-lg text-gray-600">Meet the dedicated leaders guiding our ministry</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <img src="assets/images/leader1.jpg" alt="Leader 1" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-lg font-bold text-gray-900">Rev. John Doe</h3>
+                    <p class="text-gray-600">Senior Pastor</p>
+                </div>
+                <div class="text-center">
+                    <img src="assets/images/leader2.jpg" alt="Leader 2" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-lg font-bold text-gray-900">Rev. Jane Smith</h3>
+                    <p class="text-gray-600">Associate Pastor</p>
+                </div>
+                <div class="text-center">
+                    <img src="assets/images/leader3.jpg" alt="Leader 3" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-lg font-bold text-gray-900">Elder David Brown</h3>
+                    <p class="text-gray-600">Elder</p>
+                </div>
+                <div class="text-center">
+                    <img src="assets/images/leader4.jpg" alt="Leader 4" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-lg font-bold text-gray-900">Deacon Mary Wilson</h3>
+                    <p class="text-gray-600">Deacon</p>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <a href="leadership.html" class="bg-blue-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-700 transition inline-block">
+                    Meet All Leaders
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold mb-6">Ready to Make a Difference?</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">
+                Join us in our mission to transform lives and communities. Whether through volunteering, donations, or partnership, your support makes a real impact.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="contact.html" class="bg-white text-blue-600 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition">
+                    Get Involved
+                </a>
+                <a href="sponsor-student.html" class="bg-blue-800 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-900 transition">
+                    Sponsor a Student
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map & Contact Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Map -->
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Visit Us</h3>
+                    <div class="bg-gray-200 rounded-lg overflow-hidden h-96">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3970.8094572843564!2d-0.1870!3d5.6037!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMzYnMTMuMyJOIDDCsDExJzEzLjIiVw!5e0!3m2!1sen!2sgh!4v1234567890"
+                            width="100%"
+                            height="100%"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-blue-600 text-2xl mt-1 mr-4"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-1">Address</h4>
+                                <p class="text-gray-600">123 Oasis Street, Accra, Ghana</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-phone text-blue-600 text-2xl mt-1 mr-4"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-1">Phone</h4>
+                                <p class="text-gray-600">+233 123 456 789</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-envelope text-blue-600 text-2xl mt-1 mr-4"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-1">Email</h4>
+                                <p class="text-gray-600">info@oasisimg.org</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-clock text-blue-600 text-2xl mt-1 mr-4"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 mb-1">Service Times</h4>
+                                <p class="text-gray-600">Sunday: 8:00 AM & 10:30 AM</p>
+                                <p class="text-gray-600">Wednesday: 6:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Oasis IMG</h4>
+                    <p class="text-gray-400">Transforming lives through the Gospel of Jesus Christ.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="ministries.html" class="text-gray-400 hover:text-white transition">Ministries</a></li>
+                        <li><a href="leadership.html" class="text-gray-400 hover:text-white transition">Leadership</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="obi/index.html" class="text-gray-400 hover:text-white transition">Bible Institute</a></li>
+                        <li><a href="admissions.html" class="text-gray-400 hover:text-white transition">Admissions</a></li>
+                        <li><a href="gallery.html" class="text-gray-400 hover:text-white transition">Gallery</a></li>
+                        <li><a href="dashboard/login.html" class="text-gray-400 hover:text-white transition">Admin Login</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Connect</h4>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-youtube text-2xl"></i></a>
+                    </div>
+                    <p class="text-gray-400 text-sm">Follow us on social media</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Oasis IMG Ministries Ghana. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

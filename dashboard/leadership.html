@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership - Oasis IMG Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <aside class="w-64 bg-gray-900 text-white">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold">Oasis IMG</h2>
+                <p class="text-sm text-gray-400">Admin Dashboard</p>
+            </div>
+            <nav class="mt-6">
+                <a href="index.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="admissions.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-user-graduate mr-3"></i> Admissions
+                </a>
+                <a href="news.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-newspaper mr-3"></i> News
+                </a>
+                <a href="contacts.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-envelope mr-3"></i> Contacts
+                </a>
+                <a href="gallery.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-images mr-3"></i> Gallery
+                </a>
+                <a href="leadership.html" class="flex items-center px-6 py-3 bg-blue-600 text-white">
+                    <i class="fas fa-users mr-3"></i> Leadership
+                </a>
+                <a href="login.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto">
+            <header class="bg-white shadow-sm p-6">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">Leadership Management</h1>
+                    <button onclick="showAddModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-plus mr-2"></i>Add Leader
+                    </button>
+                </div>
+            </header>
+
+            <div class="p-6">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-4 border-b">
+                        <h2 class="text-lg font-bold">Current Leaders</h2>
+                    </div>
+
+                    <div class="divide-y">
+                        <div class="p-6 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <img src="../assets/images/leader1.jpg" class="w-16 h-16 rounded-full object-cover">
+                                <div>
+                                    <h3 class="font-bold text-lg">Rev. Dr. John Mensah</h3>
+                                    <p class="text-gray-600">Senior Pastor</p>
+                                    <p class="text-sm text-gray-500">Leading the church since 2009</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="text-gray-600 hover:text-gray-800 p-2">
+                                    <i class="fas fa-arrows-alt"></i>
+                                </button>
+                                <button class="text-blue-600 hover:text-blue-700 p-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-700 p-2">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-6 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <img src="../assets/images/leader2.jpg" class="w-16 h-16 rounded-full object-cover">
+                                <div>
+                                    <h3 class="font-bold text-lg">Rev. Grace Owusu</h3>
+                                    <p class="text-gray-600">Associate Pastor</p>
+                                    <p class="text-sm text-gray-500">Women's Ministry & Pastoral Care</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="text-gray-600 hover:text-gray-800 p-2">
+                                    <i class="fas fa-arrows-alt"></i>
+                                </button>
+                                <button class="text-blue-600 hover:text-blue-700 p-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-700 p-2">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-6 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <img src="../assets/images/leader3.jpg" class="w-16 h-16 rounded-full object-cover">
+                                <div>
+                                    <h3 class="font-bold text-lg">Elder Samuel Boateng</h3>
+                                    <p class="text-gray-600">Board Chairman</p>
+                                    <p class="text-sm text-gray-500">Elder & Board Leader</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="text-gray-600 hover:text-gray-800 p-2">
+                                    <i class="fas fa-arrows-alt"></i>
+                                </button>
+                                <button class="text-blue-600 hover:text-blue-700 p-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-700 p-2">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-6 flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <img src="../assets/images/leader4.jpg" class="w-16 h-16 rounded-full object-cover">
+                                <div>
+                                    <h3 class="font-bold text-lg">Pastor David Mensah</h3>
+                                    <p class="text-gray-600">Youth Ministry Leader</p>
+                                    <p class="text-sm text-gray-500">Leading youth programs</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="text-gray-600 hover:text-gray-800 p-2">
+                                    <i class="fas fa-arrows-alt"></i>
+                                </button>
+                                <button class="text-blue-600 hover:text-blue-700 p-2">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="text-red-600 hover:text-red-700 p-2">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="addModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Add Leader</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <form id="leaderForm" class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Full Name</label>
+                        <input type="text" name="name" required class="w-full px-4 py-2 border rounded-md">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Title</label>
+                        <input type="text" name="title" required class="w-full px-4 py-2 border rounded-md">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Image URL</label>
+                    <input type="url" name="image" class="w-full px-4 py-2 border rounded-md">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Biography</label>
+                    <textarea name="bio" rows="4" required class="w-full px-4 py-2 border rounded-md"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Display Order</label>
+                    <input type="number" name="order" min="1" value="1" class="w-full px-4 py-2 border rounded-md">
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showAddModal() {
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+        function closeModal() {
+            document.getElementById('addModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

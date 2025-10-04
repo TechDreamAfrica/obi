@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - Oasis Bible Institute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-teal-900 shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <img src="../assets/images/logo.png" alt="OBI Logo" class="h-12 w-auto">
+                        <span class="ml-3 text-xl font-bold text-white">Oasis Bible Institute</span>
+                    </a>
+                </div>
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="index.html" class="text-teal-100 hover:text-white transition">Home</a>
+                    <a href="admissions.html" class="text-teal-100 hover:text-white transition">Admissions</a>
+                    <a href="events.html" class="text-teal-100 hover:text-white transition">Events</a>
+                    <a href="news.html" class="text-white font-semibold border-b-2 border-teal-400">News</a>
+                    <a href="../index.html" class="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 transition">Main Site</a>
+                </div>
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-white">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-teal-800 border-t border-teal-700">
+            <div class="px-4 py-3 space-y-3">
+                <a href="index.html" class="block text-teal-100">Home</a>
+                <a href="admissions.html" class="block text-teal-100">Admissions</a>
+                <a href="events.html" class="block text-teal-100">Events</a>
+                <a href="news.html" class="block text-white font-semibold">News</a>
+                <a href="../index.html" class="block bg-teal-600 text-white px-4 py-2 rounded-md text-center">Main Site</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="mt-20 bg-teal-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-4xl font-bold mb-4">News & Updates</h1>
+            <nav class="text-teal-200">
+                <a href="index.html" class="hover:text-white">Home</a>
+                <span class="mx-2">/</span>
+                <span>News</span>
+            </nav>
+        </div>
+    </section>
+
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="../assets/images/news1.jpg" alt="News" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-teal-600">October 1, 2024</span>
+                            <span class="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded">Admissions</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Applications Open for 2025</h3>
+                        <p class="text-gray-600 mb-4">We are now accepting applications for the 2025 academic year across all programs including diploma, certificate, and short courses.</p>
+                        <a href="news-item.html?id=1" class="text-teal-600 font-semibold hover:text-teal-700 inline-flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="../assets/images/news2.jpg" alt="News" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-teal-600">September 15, 2024</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">Events</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Graduation Ceremony Success</h3>
+                        <p class="text-gray-600 mb-4">45 students graduated with honors from our diploma and certificate programs in a beautiful ceremony attended by faculty and families.</p>
+                        <a href="news-item.html?id=2" class="text-teal-600 font-semibold hover:text-teal-700 inline-flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="../assets/images/news3.jpg" alt="News" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-teal-600">September 1, 2024</span>
+                            <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Facilities</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">New Library Resources</h3>
+                        <p class="text-gray-600 mb-4">Our library has been expanded with 500+ new theological books and digital resources to enhance student learning.</p>
+                        <a href="news-item.html?id=3" class="text-teal-600 font-semibold hover:text-teal-700 inline-flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="../assets/images/news4.jpg" alt="News" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-teal-600">August 20, 2024</span>
+                            <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Academic</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">New Faculty Members Join OBI</h3>
+                        <p class="text-gray-600 mb-4">We welcome three new experienced theologians to our teaching faculty for the upcoming semester.</p>
+                        <a href="news-item.html?id=4" class="text-teal-600 font-semibold hover:text-teal-700 inline-flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="../assets/images/news5.jpg" alt="News" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-teal-600">August 5, 2024</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Scholarship</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Scholarship Program Announced</h3>
+                        <p class="text-gray-600 mb-4">New scholarship opportunities available for deserving students with financial need.</p>
+                        <a href="news-item.html?id=5" class="text-teal-600 font-semibold hover:text-teal-700 inline-flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <img src="../assets/images/news6.jpg" alt="News" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-sm text-teal-600">July 15, 2024</span>
+                            <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Achievement</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Student Ministry Success Stories</h3>
+                        <p class="text-gray-600 mb-4">Our students are making impact in churches and communities across Ghana.</p>
+                        <a href="news-item.html?id=6" class="text-teal-600 font-semibold hover:text-teal-700 inline-flex items-center">
+                            Read More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2024 Oasis Bible Institute. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="../assets/js/main.js"></script>
+</body>
+</html>

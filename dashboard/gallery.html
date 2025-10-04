@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Oasis IMG Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <aside class="w-64 bg-gray-900 text-white">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold">Oasis IMG</h2>
+                <p class="text-sm text-gray-400">Admin Dashboard</p>
+            </div>
+            <nav class="mt-6">
+                <a href="index.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="admissions.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-user-graduate mr-3"></i> Admissions
+                </a>
+                <a href="news.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-newspaper mr-3"></i> News
+                </a>
+                <a href="contacts.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-envelope mr-3"></i> Contacts
+                </a>
+                <a href="gallery.html" class="flex items-center px-6 py-3 bg-blue-600 text-white">
+                    <i class="fas fa-images mr-3"></i> Gallery
+                </a>
+                <a href="leadership.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-users mr-3"></i> Leadership
+                </a>
+                <a href="login.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto">
+            <header class="bg-white shadow-sm p-6">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">Gallery Management</h1>
+                    <button onclick="showUploadModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-cloud-upload-alt mr-2"></i>Upload Images
+                    </button>
+                </div>
+            </header>
+
+            <div class="p-6">
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4">Google Drive Integration</h2>
+                    <div class="flex items-center space-x-4">
+                        <input type="text" placeholder="Google Drive Folder ID" class="flex-1 px-4 py-2 border rounded-md" value="1a2b3c4d5e6f7g8h9i0j">
+                        <button class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                        <button class="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700">
+                            <i class="fas fa-sync mr-2"></i>Sync
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-3">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Enter your Google Drive folder ID to display images on the gallery page
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-lg font-bold mb-4">Recent Images</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        <div class="relative group">
+                            <img src="../assets/images/event1.jpg" class="w-full h-32 object-cover rounded">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <button class="text-white p-2 hover:text-red-500">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="relative group">
+                            <img src="../assets/images/event2.jpg" class="w-full h-32 object-cover rounded">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <button class="text-white p-2 hover:text-red-500">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="relative group">
+                            <img src="../assets/images/event3.jpg" class="w-full h-32 object-cover rounded">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <button class="text-white p-2 hover:text-red-500">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="relative group">
+                            <img src="../assets/images/event4.jpg" class="w-full h-32 object-cover rounded">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <button class="text-white p-2 hover:text-red-500">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="relative group">
+                            <img src="../assets/images/event5.jpg" class="w-full h-32 object-cover rounded">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <button class="text-white p-2 hover:text-red-500">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="relative group">
+                            <img src="../assets/images/event6.jpg" class="w-full h-32 object-cover rounded">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <button class="text-white p-2 hover:text-red-500">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="uploadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-lg w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Upload Images</h2>
+                <button onclick="closeUploadModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
+                <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600 mb-4">Drag and drop images here or click to browse</p>
+                <input type="file" multiple accept="image/*" class="hidden" id="fileInput">
+                <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                    Choose Files
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showUploadModal() {
+            document.getElementById('uploadModal').classList.remove('hidden');
+        }
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

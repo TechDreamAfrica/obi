@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Article - Oasis Bible Institute</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-teal-900 shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <img src="../assets/images/logo.png" alt="OBI Logo" class="h-12 w-auto">
+                        <span class="ml-3 text-xl font-bold text-white">Oasis Bible Institute</span>
+                    </a>
+                </div>
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="index.html" class="text-teal-100 hover:text-white transition">Home</a>
+                    <a href="admissions.html" class="text-teal-100 hover:text-white transition">Admissions</a>
+                    <a href="events.html" class="text-teal-100 hover:text-white transition">Events</a>
+                    <a href="news.html" class="text-white font-semibold border-b-2 border-teal-400">News</a>
+                    <a href="../index.html" class="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 transition">Main Site</a>
+                </div>
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-white">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-teal-800 border-t border-teal-700">
+            <div class="px-4 py-3 space-y-3">
+                <a href="index.html" class="block text-teal-100">Home</a>
+                <a href="admissions.html" class="block text-teal-100">Admissions</a>
+                <a href="events.html" class="block text-teal-100">Events</a>
+                <a href="news.html" class="block text-white font-semibold">News</a>
+                <a href="../index.html" class="block bg-teal-600 text-white px-4 py-2 rounded-md text-center">Main Site</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="mt-20 bg-teal-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="text-teal-200 mb-4">
+                <a href="index.html" class="hover:text-white">Home</a>
+                <span class="mx-2">/</span>
+                <a href="news.html" class="hover:text-white">News</a>
+                <span class="mx-2">/</span>
+                <span id="news-breadcrumb">Article</span>
+            </nav>
+            <h1 id="news-title" class="text-4xl font-bold">News Article</h1>
+        </div>
+    </section>
+
+    <section class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <article class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <img id="news-image" src="../assets/images/news1.jpg" alt="News" class="w-full h-96 object-cover">
+                <div class="p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-calendar mr-2"></i>
+                            <span id="news-date">October 1, 2024</span>
+                        </div>
+                        <div class="flex items-center text-gray-600">
+                            <i class="fas fa-user mr-2"></i>
+                            <span id="news-author">Admin</span>
+                        </div>
+                    </div>
+                    <div id="news-content" class="prose max-w-none text-gray-600 leading-relaxed">
+                        <p>Loading article content...</p>
+                    </div>
+                    <div class="mt-8 pt-8 border-t">
+                        <h3 class="font-bold text-gray-900 mb-4">Share this article</h3>
+                        <div class="flex space-x-4">
+                            <a href="#" class="text-blue-600 hover:text-blue-700"><i class="fab fa-facebook text-2xl"></i></a>
+                            <a href="#" class="text-blue-400 hover:text-blue-500"><i class="fab fa-twitter text-2xl"></i></a>
+                            <a href="#" class="text-blue-700 hover:text-blue-800"><i class="fab fa-linkedin text-2xl"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <div class="mt-12">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">Related News</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <a href="news-item.html?id=2" class="bg-white rounded-lg shadow-lg overflow-hidden block hover:shadow-xl transition">
+                        <img src="../assets/images/news2.jpg" alt="Related" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-900 mb-2">Graduation Ceremony Success</h4>
+                            <p class="text-sm text-gray-600">September 15, 2024</p>
+                        </div>
+                    </a>
+                    <a href="news-item.html?id=3" class="bg-white rounded-lg shadow-lg overflow-hidden block hover:shadow-xl transition">
+                        <img src="../assets/images/news3.jpg" alt="Related" class="w-full h-40 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-900 mb-2">New Library Resources</h4>
+                            <p class="text-sm text-gray-600">September 1, 2024</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <a href="news.html" class="text-teal-600 font-semibold hover:text-teal-700 inline-flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to News
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2024 Oasis Bible Institute. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="../assets/js/main.js"></script>
+    <script>
+        const newsData = {
+            1: {
+                title: "Applications Open for 2025",
+                date: "October 1, 2024",
+                author: "Admissions Office",
+                image: "../assets/images/news1.jpg",
+                content: `
+                    <p class="mb-4">We are excited to announce that applications are now open for the 2025 academic year at Oasis Bible Institute. This is an excellent opportunity for those called to ministry to receive quality theological education.</p>
+                    <p class="mb-4">Our programs include:</p>
+                    <ul class="list-disc pl-6 mb-4">
+                        <li>Diploma in Theology (3 years)</li>
+                        <li>Certificate Program (1 year)</li>
+                        <li>Short Courses (3-6 months)</li>
+                    </ul>
+                    <p class="mb-4">The application deadline is November 1, 2024. We encourage all interested candidates to submit their applications early.</p>
+                    <p class="mb-4">For more information and to apply, please visit our admissions page or contact our office at obi@oasisimg.org</p>
+                `
+            },
+            2: {
+                title: "Graduation Ceremony Success",
+                date: "September 15, 2024",
+                author: "OBI Communications",
+                image: "../assets/images/news2.jpg",
+                content: `
+                    <p class="mb-4">On September 15, 2024, Oasis Bible Institute celebrated the graduation of 45 students who completed their theological studies with excellence.</p>
+                    <p class="mb-4">The ceremony was attended by families, faculty members, and distinguished guests from various churches across Ghana. The keynote address was delivered by Rev. Dr. Emmanuel Asante, emphasizing the importance of faithful ministry in challenging times.</p>
+                    <p class="mb-4">Graduates will now serve in various capacities including pastoral ministry, teaching, missions, and church leadership roles.</p>
+                    <p class="mb-4">We congratulate all our graduates and pray God's blessings upon their ministries!</p>
+                `
+            },
+            3: {
+                title: "New Library Resources",
+                date: "September 1, 2024",
+                author: "Library Department",
+                image: "../assets/images/news3.jpg",
+                content: `
+                    <p class="mb-4">Our library has been significantly expanded with over 500 new theological books and digital resources to enhance student learning and research.</p>
+                    <p class="mb-4">The new collection includes commentaries, systematic theology texts, church history resources, and practical ministry guides from leading evangelical scholars.</p>
+                    <p class="mb-4">Additionally, students now have access to online theological journals and research databases.</p>
+                    <p class="mb-4">The library is open Monday through Saturday from 8:00 AM to 6:00 PM.</p>
+                `
+            }
+        };
+
+        const newsId = window.getUrlParameter('id') || '1';
+        const article = newsData[newsId] || newsData['1'];
+
+        document.getElementById('news-title').textContent = article.title;
+        document.getElementById('news-breadcrumb').textContent = article.title;
+        document.getElementById('news-date').textContent = article.date;
+        document.getElementById('news-author').textContent = article.author;
+        document.getElementById('news-image').src = article.image;
+        document.getElementById('news-content').innerHTML = article.content;
+    </script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ministries - Oasis IMG Ministries Ghana</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <img src="assets/images/logo.png" alt="Oasis IMG Logo" class="h-12 w-auto">
+                        <span class="ml-3 text-xl font-bold text-blue-900">Oasis IMG</span>
+                    </a>
+                </div>
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 transition">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-900 transition">About Us</a>
+                    <a href="admissions.html" class="text-gray-700 hover:text-blue-900 transition">Admissions</a>
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-blue-900 transition flex items-center">
+                            Applications <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 py-2 w-56">
+                            <a href="credential-application.html" class="block px-4 py-2 hover:bg-blue-50">Credential Application</a>
+                            <a href="sponsor-student.html" class="block px-4 py-2 hover:bg-blue-50">Sponsor a Student</a>
+                        </div>
+                    </div>
+                    <a href="ministries.html" class="text-blue-900 font-semibold border-b-2 border-blue-600">Ministries</a>
+                    <a href="leadership.html" class="text-gray-700 hover:text-blue-900 transition">Leadership</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 transition">Contact</a>
+                    <a href="gallery.html" class="text-gray-700 hover:text-blue-900 transition">Gallery</a>
+                    <a href="obi/index.html" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Bible Institute</a>
+                </div>
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-900">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
+            <div class="px-4 py-3 space-y-3">
+                <a href="index.html" class="block text-gray-700">Home</a>
+                <a href="about.html" class="block text-gray-700">About Us</a>
+                <a href="admissions.html" class="block text-gray-700">Admissions</a>
+                <a href="credential-application.html" class="block text-gray-700 pl-4">Credential Application</a>
+                <a href="sponsor-student.html" class="block text-gray-700 pl-4">Sponsor a Student</a>
+                <a href="ministries.html" class="block text-blue-900 font-semibold">Ministries</a>
+                <a href="leadership.html" class="block text-gray-700">Leadership</a>
+                <a href="contact.html" class="block text-gray-700">Contact</a>
+                <a href="gallery.html" class="block text-gray-700">Gallery</a>
+                <a href="obi/index.html" class="block bg-blue-600 text-white px-4 py-2 rounded-md text-center">Bible Institute</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="mt-20 bg-blue-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 class="text-4xl font-bold mb-4">Our Ministries</h1>
+            <nav class="breadcrumb text-blue-200">
+                <a href="index.html" class="hover:text-white">Home</a>
+                <span class="breadcrumb-item">Ministries</span>
+            </nav>
+        </div>
+    </section>
+
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Serving God Through Diverse Ministries</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Join us in transforming lives and communities through our various ministry programs designed to meet spiritual, physical, and social needs.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry1.jpg" alt="Youth Ministry" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <i class="fas fa-users text-blue-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Youth Ministry</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Empowering young people to discover their purpose in Christ and live impactful lives for God's kingdom.</p>
+                        <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                            <li><i class="fas fa-clock text-blue-600 mr-2"></i>Fridays, 6:00 PM</li>
+                            <li><i class="fas fa-user text-blue-600 mr-2"></i>Pastor David Mensah</li>
+                        </ul>
+                        <a href="ministry-detail.html?id=youth" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry2.jpg" alt="Women's Ministry" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-pink-100 p-3 rounded-lg">
+                                <i class="fas fa-female text-pink-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Women's Ministry</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Building strong, faith-filled women who impact their families, churches, and communities.</p>
+                        <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                            <li><i class="fas fa-clock text-pink-600 mr-2"></i>Saturdays, 9:00 AM</li>
+                            <li><i class="fas fa-user text-pink-600 mr-2"></i>Mrs. Grace Owusu</li>
+                        </ul>
+                        <a href="ministry-detail.html?id=women" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry3.jpg" alt="Children's Ministry" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-yellow-100 p-3 rounded-lg">
+                                <i class="fas fa-child text-yellow-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Children's Ministry</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Nurturing the next generation with biblical foundations and age-appropriate spiritual growth.</p>
+                        <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                            <li><i class="fas fa-clock text-yellow-600 mr-2"></i>Sundays, 9:00 AM</li>
+                            <li><i class="fas fa-user text-yellow-600 mr-2"></i>Sister Mary Adu</li>
+                        </ul>
+                        <a href="ministry-detail.html?id=children" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry4.jpg" alt="Men's Ministry" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <i class="fas fa-male text-green-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Men's Ministry</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Equipping men to be godly leaders in their homes, workplaces, and communities.</p>
+                        <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                            <li><i class="fas fa-clock text-green-600 mr-2"></i>Saturdays, 7:00 AM</li>
+                            <li><i class="fas fa-user text-green-600 mr-2"></i>Elder Samuel Boateng</li>
+                        </ul>
+                        <a href="ministry-detail.html?id=men" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry5.jpg" alt="Music & Worship" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-purple-100 p-3 rounded-lg">
+                                <i class="fas fa-music text-purple-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Music & Worship</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Leading God's people into His presence through anointed worship and praise.</p>
+                        <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                            <li><i class="fas fa-clock text-purple-600 mr-2"></i>Thursdays, 7:00 PM</li>
+                            <li><i class="fas fa-user text-purple-600 mr-2"></i>Min. John Appiah</li>
+                        </ul>
+                        <a href="ministry-detail.html?id=worship" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry6.jpg" alt="Evangelism & Outreach" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-red-100 p-3 rounded-lg">
+                                <i class="fas fa-bullhorn text-red-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Evangelism</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Spreading the Gospel to the unreached and bringing souls into God's kingdom.</p>
+                        <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                            <li><i class="fas fa-clock text-red-600 mr-2"></i>Saturdays, 2:00 PM</li>
+                            <li><i class="fas fa-user text-red-600 mr-2"></i>Pastor Emmanuel Nyarko</li>
+                        </ul>
+                        <a href="ministry-detail.html?id=evangelism" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry7.jpg" alt="Community Outreach" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-indigo-100 p-3 rounded-lg">
+                                <i class="fas fa-hands-helping text-indigo-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Community Outreach</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Demonstrating Christ's love through practical service to those in need.</p>
+                        <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                            <li><i class="fas fa-clock text-indigo-600 mr-2"></i>Monthly Events</li>
+                            <li><i class="fas fa-user text-indigo-600 mr-2"></i>Deacon Francis Asante</li>
+                        </ul>
+                        <a href="ministry-detail.html?id=outreach" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry8.jpg" alt="Prayer Ministry" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-teal-100 p-3 rounded-lg">
+                                <i class="fas fa-praying-hands text-teal-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Prayer Ministry</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Interceding for the church, nation, and world through fervent prayer.</p>
+                        <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                            <li><i class="fas fa-clock text-teal-600 mr-2"></i>Daily, 5:00 AM</li>
+                            <li><i class="fas fa-user text-teal-600 mr-2"></i>Rev. Esther Osei</li>
+                        </ul>
+                        <a href="ministry-detail.html?id=prayer" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <img src="assets/images/ministry9.jpg" alt="Media Ministry" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="bg-orange-100 p-3 rounded-lg">
+                                <i class="fas fa-video text-orange-600 text-2xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 ml-4">Media Ministry</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4">Using technology and media to amplify the Gospel message to the world.</p>
+                        <ul class="space-y-2 text-sm text-gray-600 mb-6">
+                            <li><i class="fas fa-clock text-orange-600 mr-2"></i>All Services</li>
+                            <li><i class="fas fa-user text-orange-600 mr-2"></i>Bro. Joseph Amoah</li>
+                        </ul>
+                        <a href="ministry-detail.html?id=media" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                            Learn More <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl font-bold mb-6">Join a Ministry Today</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">
+                Discover your spiritual gifts and use them to serve God and His people. Every member is a minister.
+            </p>
+            <a href="contact.html" class="bg-white text-blue-600 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition inline-block">
+                Get Involved
+            </a>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Oasis IMG</h4>
+                    <p class="text-gray-400">Transforming lives through the Gospel of Jesus Christ.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="ministries.html" class="text-gray-400 hover:text-white transition">Ministries</a></li>
+                        <li><a href="leadership.html" class="text-gray-400 hover:text-white transition">Leadership</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="obi/index.html" class="text-gray-400 hover:text-white transition">Bible Institute</a></li>
+                        <li><a href="admissions.html" class="text-gray-400 hover:text-white transition">Admissions</a></li>
+                        <li><a href="gallery.html" class="text-gray-400 hover:text-white transition">Gallery</a></li>
+                        <li><a href="dashboard/login.html" class="text-gray-400 hover:text-white transition">Admin Login</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Connect</h4>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-youtube text-2xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Oasis IMG Ministries Ghana. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

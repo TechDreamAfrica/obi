@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ministry Details - Oasis IMG Ministries Ghana</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <img src="assets/images/logo.png" alt="Oasis IMG Logo" class="h-12 w-auto">
+                        <span class="ml-3 text-xl font-bold text-blue-900">Oasis IMG</span>
+                    </a>
+                </div>
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-blue-900 transition">Home</a>
+                    <a href="about.html" class="text-gray-700 hover:text-blue-900 transition">About Us</a>
+                    <a href="admissions.html" class="text-gray-700 hover:text-blue-900 transition">Admissions</a>
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-blue-900 transition flex items-center">
+                            Applications <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 py-2 w-56">
+                            <a href="credential-application.html" class="block px-4 py-2 hover:bg-blue-50">Credential Application</a>
+                            <a href="sponsor-student.html" class="block px-4 py-2 hover:bg-blue-50">Sponsor a Student</a>
+                        </div>
+                    </div>
+                    <a href="ministries.html" class="text-blue-900 font-semibold border-b-2 border-blue-600">Ministries</a>
+                    <a href="leadership.html" class="text-gray-700 hover:text-blue-900 transition">Leadership</a>
+                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 transition">Contact</a>
+                    <a href="gallery.html" class="text-gray-700 hover:text-blue-900 transition">Gallery</a>
+                    <a href="obi/index.html" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Bible Institute</a>
+                </div>
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-900">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
+            <div class="px-4 py-3 space-y-3">
+                <a href="index.html" class="block text-gray-700">Home</a>
+                <a href="about.html" class="block text-gray-700">About Us</a>
+                <a href="admissions.html" class="block text-gray-700">Admissions</a>
+                <a href="credential-application.html" class="block text-gray-700 pl-4">Credential Application</a>
+                <a href="sponsor-student.html" class="block text-gray-700 pl-4">Sponsor a Student</a>
+                <a href="ministries.html" class="block text-blue-900 font-semibold">Ministries</a>
+                <a href="leadership.html" class="block text-gray-700">Leadership</a>
+                <a href="contact.html" class="block text-gray-700">Contact</a>
+                <a href="gallery.html" class="block text-gray-700">Gallery</a>
+                <a href="obi/index.html" class="block bg-blue-600 text-white px-4 py-2 rounded-md text-center">Bible Institute</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="mt-20 bg-blue-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h1 id="ministry-title" class="text-4xl font-bold mb-4">Ministry Details</h1>
+            <nav class="breadcrumb text-blue-200">
+                <a href="index.html" class="hover:text-white">Home</a>
+                <a href="ministries.html" class="hover:text-white">Ministries</a>
+                <span id="ministry-breadcrumb" class="breadcrumb-item">Ministry</span>
+            </nav>
+        </div>
+    </section>
+
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="md:col-span-2">
+                    <img id="ministry-image" src="assets/images/ministry1.jpg" alt="Ministry" class="w-full h-96 object-cover rounded-lg shadow-xl mb-8">
+
+                    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                        <h2 class="text-3xl font-bold text-gray-900 mb-6">About This Ministry</h2>
+                        <div id="ministry-description" class="text-gray-600 space-y-4">
+                            <p>Loading ministry information...</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Activities & Programs</h2>
+                        <ul id="ministry-activities" class="space-y-3 text-gray-600">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i>
+                                <span>Loading...</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-6">Join This Ministry</h2>
+                        <p class="text-gray-600 mb-6">Interested in serving with us? Fill out the form below and we'll get in touch with you.</p>
+                        <form class="space-y-4">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <input type="text" placeholder="Your Name" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                <input type="email" placeholder="Your Email" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <input type="tel" placeholder="Phone Number" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            <textarea placeholder="Why do you want to join this ministry?" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                            <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-700 transition">
+                                Submit Application
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="md:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-6 mb-6 sticky top-24">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">Ministry Information</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <i class="fas fa-clock text-blue-600 text-xl mr-3 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Meeting Time</h4>
+                                    <p id="ministry-time" class="text-gray-600">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-map-marker-alt text-blue-600 text-xl mr-3 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Location</h4>
+                                    <p id="ministry-location" class="text-gray-600">Main Sanctuary</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-user text-blue-600 text-xl mr-3 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Ministry Leader</h4>
+                                    <p id="ministry-leader" class="text-gray-600">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fas fa-envelope text-blue-600 text-xl mr-3 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-gray-900">Contact</h4>
+                                    <p id="ministry-contact" class="text-gray-600">info@oasisimg.org</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 pt-6 border-t">
+                            <a href="ministries.html" class="block text-center bg-gray-100 text-gray-700 px-6 py-3 rounded-md font-semibold hover:bg-gray-200 transition">
+                                View All Ministries
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Oasis IMG</h4>
+                    <p class="text-gray-400">Transforming lives through the Gospel of Jesus Christ.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="ministries.html" class="text-gray-400 hover:text-white transition">Ministries</a></li>
+                        <li><a href="leadership.html" class="text-gray-400 hover:text-white transition">Leadership</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="obi/index.html" class="text-gray-400 hover:text-white transition">Bible Institute</a></li>
+                        <li><a href="admissions.html" class="text-gray-400 hover:text-white transition">Admissions</a></li>
+                        <li><a href="gallery.html" class="text-gray-400 hover:text-white transition">Gallery</a></li>
+                        <li><a href="dashboard/login.html" class="text-gray-400 hover:text-white transition">Admin Login</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Connect</h4>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-youtube text-2xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Oasis IMG Ministries Ghana. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module" src="assets/js/main.js"></script>
+    <script>
+        const ministries = {
+            youth: {
+                title: "Youth Ministry",
+                image: "assets/images/ministry1.jpg",
+                description: "The Youth Ministry at Oasis IMG is dedicated to empowering young people aged 13-30 to discover their purpose in Christ and live impactful lives for God's kingdom. Through dynamic worship, biblical teaching, and mentorship, we help youth develop a strong foundation of faith that will sustain them throughout their lives.",
+                activities: [
+                    "Weekly youth services with contemporary worship and relevant teaching",
+                    "Bible study groups tailored for different age ranges",
+                    "Leadership development and discipleship programs",
+                    "Community service and outreach projects",
+                    "Annual youth camps and conferences",
+                    "Sports and recreational activities",
+                    "Talent development and creative arts"
+                ],
+                time: "Fridays, 6:00 PM",
+                leader: "Pastor David Mensah",
+                contact: "youth@oasisimg.org"
+            },
+            women: {
+                title: "Women's Ministry",
+                image: "assets/images/ministry2.jpg",
+                description: "The Women's Ministry creates a nurturing environment where women of all ages can grow spiritually, build meaningful relationships, and discover their God-given purpose. We focus on building strong, faith-filled women who impact their families, churches, and communities.",
+                activities: [
+                    "Weekly women's fellowship and Bible study",
+                    "Monthly prayer and fasting sessions",
+                    "Marriage enrichment seminars",
+                    "Skills training and entrepreneurship workshops",
+                    "Mentorship programs pairing younger and older women",
+                    "Community outreach to widows and vulnerable women",
+                    "Annual women's conference and retreats"
+                ],
+                time: "Saturdays, 9:00 AM",
+                leader: "Mrs. Grace Owusu",
+                contact: "women@oasisimg.org"
+            },
+            children: {
+                title: "Children's Ministry",
+                image: "assets/images/ministry3.jpg",
+                description: "The Children's Ministry provides a safe, fun, and engaging environment where children learn about Jesus and develop a personal relationship with God. Using age-appropriate methods, we teach biblical truths that shape character and faith.",
+                activities: [
+                    "Sunday School with interactive lessons",
+                    "Children's church during main service",
+                    "Vacation Bible School programs",
+                    "Scripture memorization competitions",
+                    "Music and drama presentations",
+                    "Special events and holiday celebrations",
+                    "Parent-child activities and resources"
+                ],
+                time: "Sundays, 9:00 AM",
+                leader: "Sister Mary Adu",
+                contact: "children@oasisimg.org"
+            }
+        };
+
+        const ministryId = window.getUrlParameter('id') || 'youth';
+        const ministry = ministries[ministryId] || ministries.youth;
+
+        document.getElementById('ministry-title').textContent = ministry.title;
+        document.getElementById('ministry-breadcrumb').textContent = ministry.title;
+        document.getElementById('ministry-image').src = ministry.image;
+        document.getElementById('ministry-description').innerHTML = `<p>${ministry.description}</p>`;
+
+        const activitiesList = ministry.activities.map(activity =>
+            `<li class="flex items-start"><i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i><span>${activity}</span></li>`
+        ).join('');
+        document.getElementById('ministry-activities').innerHTML = activitiesList;
+
+        document.getElementById('ministry-time').textContent = ministry.time;
+        document.getElementById('ministry-leader').textContent = ministry.leader;
+        document.getElementById('ministry-contact').textContent = ministry.contact;
+    </script>
+</body>
+</html>

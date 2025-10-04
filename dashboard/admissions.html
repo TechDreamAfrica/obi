@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admissions - Oasis IMG Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <aside class="w-64 bg-gray-900 text-white">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold">Oasis IMG</h2>
+                <p class="text-sm text-gray-400">Admin Dashboard</p>
+            </div>
+            <nav class="mt-6">
+                <a href="index.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="admissions.html" class="flex items-center px-6 py-3 bg-blue-600 text-white">
+                    <i class="fas fa-user-graduate mr-3"></i> Admissions
+                </a>
+                <a href="news.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-newspaper mr-3"></i> News
+                </a>
+                <a href="contacts.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-envelope mr-3"></i> Contacts
+                </a>
+                <a href="gallery.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-images mr-3"></i> Gallery
+                </a>
+                <a href="leadership.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-users mr-3"></i> Leadership
+                </a>
+                <a href="login.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </a>
+            </nav>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto">
+            <header class="bg-white shadow-sm p-6">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">Admission Applications</h1>
+                    <div class="flex items-center space-x-4">
+                        <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                            <i class="fas fa-download mr-2"></i>Export CSV
+                        </button>
+                        <img src="https://ui-avatars.com/api/?name=Admin" class="w-10 h-10 rounded-full">
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-6">
+                <div class="bg-white rounded-lg shadow mb-6">
+                    <div class="p-4 border-b flex justify-between items-center">
+                        <div class="flex space-x-4">
+                            <button class="px-4 py-2 bg-blue-600 text-white rounded-md">All (156)</button>
+                            <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Pending (23)</button>
+                            <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Approved (98)</button>
+                            <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Rejected (35)</button>
+                        </div>
+                        <input type="text" placeholder="Search applications..." class="px-4 py-2 border rounded-md">
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Applicant</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Program</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="applications-table" class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://ui-avatars.com/api/?name=John+Doe" class="w-10 h-10 rounded-full mr-3">
+                                            <div>
+                                                <p class="font-semibold">John Doe</p>
+                                                <p class="text-sm text-gray-500">john@example.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">Diploma in Theology</td>
+                                    <td class="px-6 py-4">Oct 1, 2024</td>
+                                    <td class="px-6 py-4">
+                                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button class="text-blue-600 hover:text-blue-700 mr-3"><i class="fas fa-eye"></i></button>
+                                        <button class="text-green-600 hover:text-green-700 mr-3"><i class="fas fa-check"></i></button>
+                                        <button class="text-red-600 hover:text-red-700"><i class="fas fa-times"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://ui-avatars.com/api/?name=Jane+Smith" class="w-10 h-10 rounded-full mr-3">
+                                            <div>
+                                                <p class="font-semibold">Jane Smith</p>
+                                                <p class="text-sm text-gray-500">jane@example.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">Certificate Program</td>
+                                    <td class="px-6 py-4">Sep 28, 2024</td>
+                                    <td class="px-6 py-4">
+                                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Approved</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button class="text-blue-600 hover:text-blue-700 mr-3"><i class="fas fa-eye"></i></button>
+                                        <button class="text-gray-400"><i class="fas fa-check"></i></button>
+                                        <button class="text-gray-400"><i class="fas fa-times"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="px-6 py-4">
+                                        <div class="flex items-center">
+                                            <img src="https://ui-avatars.com/api/?name=David+Brown" class="w-10 h-10 rounded-full mr-3">
+                                            <div>
+                                                <p class="font-semibold">David Brown</p>
+                                                <p class="text-sm text-gray-500">david@example.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">Short Course - Preaching</td>
+                                    <td class="px-6 py-4">Sep 25, 2024</td>
+                                    <td class="px-6 py-4">
+                                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button class="text-blue-600 hover:text-blue-700 mr-3"><i class="fas fa-eye"></i></button>
+                                        <button class="text-green-600 hover:text-green-700 mr-3"><i class="fas fa-check"></i></button>
+                                        <button class="text-red-600 hover:text-red-700"><i class="fas fa-times"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="p-4 border-t flex justify-between items-center">
+                        <p class="text-sm text-gray-600">Showing 1 to 3 of 156 entries</p>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 border rounded-md hover:bg-gray-50">Previous</button>
+                            <button class="px-3 py-1 bg-blue-600 text-white rounded-md">1</button>
+                            <button class="px-3 py-1 border rounded-md hover:bg-gray-50">2</button>
+                            <button class="px-3 py-1 border rounded-md hover:bg-gray-50">3</button>
+                            <button class="px-3 py-1 border rounded-md hover:bg-gray-50">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        async function loadApplications() {
+            // Load from Firebase when configured
+            const db = window.db;
+            if (db) {
+                const querySnapshot = await getDocs(collection(db, "admissions"));
+                // Process and display applications
+            }
+        }
+
+        window.addEventListener('load', loadApplications);
+    </script>
+</body>
+</html>
