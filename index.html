@@ -190,19 +190,19 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <div>
-                    <div class="text-4xl md:text-5xl font-bold mb-2" data-count="1000">0</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="lives" data-count="1000">0</div>
                     <div class="text-lg text-blue-200">Lives Impacted</div>
                 </div>
                 <div>
-                    <div class="text-4xl md:text-5xl font-bold mb-2" data-count="50">0</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="ministries" data-count="50">0</div>
                     <div class="text-lg text-blue-200">Ministries</div>
                 </div>
                 <div>
-                    <div class="text-4xl md:text-5xl font-bold mb-2" data-count="200">0</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="students" data-count="200">0</div>
                     <div class="text-lg text-blue-200">Students Trained</div>
                 </div>
                 <div>
-                    <div class="text-4xl md:text-5xl font-bold mb-2" data-count="15">0</div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2" data-stat="years" data-count="15">0</div>
                     <div class="text-lg text-blue-200">Years of Service</div>
                 </div>
             </div>
@@ -240,33 +240,8 @@
                 <p class="text-lg text-gray-600">Serving God through diverse ministries</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-                    <img src="assets/images/ministry1.jpg" alt="Ministry 1" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">Building "His" Church</h3>
-                        <p class="text-gray-600 mb-4">Empowering young people to live purposeful lives in Christ.</p>
-                        <a href="ministry-detail.html?id=youth" class="text-blue-600 font-semibold hover:text-blue-700">Learn More →</a>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-                    <img src="assets/images/orphans.jpg" alt="Ministry 2" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">Supporting Orphanages</h3>
-                        <p class="text-gray-600 mb-4">Building strong, faith-filled women of God.</p>
-                        <a href="ministry-detail.html?id=women" class="text-blue-600 font-semibold hover:text-blue-700">Learn More →</a>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-                    <img src="assets/images/well.jpg" alt="Ministry 3" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">Drilling Water Wells</h3>
-                        <p class="text-gray-600 mb-4">Nurturing the next generation in God's love.</p>
-                        <a href="ministry-detail.html?id=children" class="text-blue-600 font-semibold hover:text-blue-700">Learn More →</a>
-                    </div>
-                </div>
+            <div id="ministries-preview" class="grid md:grid-cols-3 gap-8">
+                <!-- Dynamic content loaded from Firebase -->
             </div>
 
             <div class="text-center mt-12">
@@ -285,27 +260,8 @@
                 <p class="text-lg text-gray-600">Meet the dedicated leaders guiding our ministry</p>
             </div>
 
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="text-center">
-                    <img src="assets/images/roger.jpg" alt="Leader 1" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-lg font-bold text-gray-900">Rev. Roger D. Mattox</h3>
-                    <p class="text-gray-600">President</p>
-                </div>
-                <div class="text-center">
-                    <img src="assets/images/chris.jpg" alt="Leader 2" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-lg font-bold text-gray-900">Rev. Christian Essandoh</h3>
-                    <p class="text-gray-600">Associate Pastor</p>
-                </div>
-                <div class="text-center">
-                    <img src="assets/images/adom.jpg" alt="Leader 3" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-lg font-bold text-gray-900">Rev. David Adom Ampah</h3>
-                    <p class="text-gray-600">Head of Missions</p>
-                </div>
-                <div class="text-center">
-                    <img src="assets/images/leader4.jpg" alt="Leader 4" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
-                    <h3 class="text-lg font-bold text-gray-900">Deacon Mary Wilson</h3>
-                    <p class="text-gray-600">Deacon</p>
-                </div>
+            <div id="leadership-preview" class="grid md:grid-cols-4 gap-8">
+                <!-- Dynamic content loaded from Firebase -->
             </div>
 
             <div class="text-center mt-12">
