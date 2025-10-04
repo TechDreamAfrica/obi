@@ -14,29 +14,69 @@
             <div class="flex justify-between h-20">
                 <div class="flex items-center">
                     <a href="index.html" class="flex items-center">
-                        <img src="assets/images/logo.png" alt="Oasis IMG Logo" class="h-12 w-auto">
+                        <img src="assets/images/logo.jpg" alt="Oasis IMG Logo" class="h-12 w-auto">
                         <span class="ml-3 text-xl font-bold text-blue-900">Oasis IMG</span>
                     </a>
                 </div>
-                <div class="hidden lg:flex items-center space-x-8">
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-6">
                     <a href="index.html" class="text-gray-700 hover:text-blue-900 transition">Home</a>
-                    <a href="about.html" class="text-gray-700 hover:text-blue-900 transition">About Us</a>
-                    <a href="admissions.html" class="text-gray-700 hover:text-blue-900 transition">Admissions</a>
+
                     <div class="relative group">
-                        <button class="text-gray-700 hover:text-blue-900 transition flex items-center">
-                            Applications <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        <button class="text-blue-900 font-semibold border-b-2 border-blue-600 flex items-center">
+                            About <i class="fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
-                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 py-2 w-56">
-                            <a href="credential-application.html" class="block px-4 py-2 hover:bg-blue-50">Credential Application</a>
-                            <a href="sponsor-student.html" class="block px-4 py-2 hover:bg-blue-50">Sponsor a Student</a>
+                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 py-2 w-56 z-50">
+                            <a href="about.html" class="block px-4 py-2 hover:bg-blue-50">About Us</a>
+                            <a href="leadership.html" class="block px-4 py-2 hover:bg-blue-50">Leadership</a>
+                            <a href="ministries.html" class="block px-4 py-2 hover:bg-blue-50">Ministries</a>
                         </div>
                     </div>
-                    <a href="ministries.html" class="text-blue-900 font-semibold border-b-2 border-blue-600">Ministries</a>
-                    <a href="leadership.html" class="text-gray-700 hover:text-blue-900 transition">Leadership</a>
-                    <a href="contact.html" class="text-gray-700 hover:text-blue-900 transition">Contact</a>
+
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-blue-900 transition flex items-center">
+                            Programs <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 py-2 w-56 z-50">
+                            <a href="obi/index.html" class="block px-4 py-2 hover:bg-blue-50">Bible Institute</a>
+                            <a href="obi/admissions.html" class="block px-4 py-2 hover:bg-blue-50">OBI Admissions</a>
+                            <a href="admissions.html" class="block px-4 py-2 hover:bg-blue-50">Ministry Training</a>
+                        </div>
+                    </div>
+
+                    <div class="relative group">
+                        <button class="text-gray-700 hover:text-blue-900 transition flex items-center">
+                            Get Involved <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md mt-2 py-2 w-56 z-50">
+                            <a href="credential-application.html" class="block px-4 py-2 hover:bg-blue-50">Credential Application</a>
+                            <a href="sponsor-student.html" class="block px-4 py-2 hover:bg-blue-50">Sponsor a Student</a>
+                            <a href="contact.html" class="block px-4 py-2 hover:bg-blue-50">Contact Us</a>
+                        </div>
+                    </div>
+
                     <a href="gallery.html" class="text-gray-700 hover:text-blue-900 transition">Gallery</a>
-                    <a href="obi/index.html" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">Bible Institute</a>
+
+                    <div id="user-menu" class="hidden">
+                        <div class="relative group">
+                            <button class="flex items-center text-gray-700 hover:text-blue-900 transition">
+                                <i class="fas fa-user-circle text-2xl"></i>
+                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div class="absolute right-0 hidden group-hover:block bg-white shadow-lg rounded-md mt-2 py-2 w-48 z-50">
+                                <a href="dashboard/index.html" class="block px-4 py-2 hover:bg-blue-50">Dashboard</a>
+                                <button onclick="window.handleSignOut()" class="w-full text-left block px-4 py-2 hover:bg-blue-50 text-red-600">Sign Out</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="sign-in-btn" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
+                        Sign In
+                    </button>
                 </div>
+
+                <!-- Mobile menu button -->
                 <div class="lg:hidden flex items-center">
                     <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-900">
                         <i class="fas fa-bars text-2xl"></i>
@@ -44,18 +84,26 @@
                 </div>
             </div>
         </div>
+
+        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
             <div class="px-4 py-3 space-y-3">
                 <a href="index.html" class="block text-gray-700">Home</a>
                 <a href="about.html" class="block text-gray-700">About Us</a>
-                <a href="admissions.html" class="block text-gray-700">Admissions</a>
-                <a href="credential-application.html" class="block text-gray-700 pl-4">Credential Application</a>
-                <a href="sponsor-student.html" class="block text-gray-700 pl-4">Sponsor a Student</a>
-                <a href="ministries.html" class="block text-blue-900 font-semibold">Ministries</a>
-                <a href="leadership.html" class="block text-gray-700">Leadership</a>
-                <a href="contact.html" class="block text-gray-700">Contact</a>
+                <a href="leadership.html" class="block text-gray-700 pl-4">Leadership</a>
+                <a href="ministries.html" class="block text-blue-900 font-semibold pl-4">Ministries</a>
+                <a href="obi/index.html" class="block text-gray-700">Bible Institute</a>
+                <a href="obi/admissions.html" class="block text-gray-700 pl-4">OBI Admissions</a>
+                <a href="admissions.html" class="block text-gray-700 pl-4">Ministry Training</a>
+                <a href="credential-application.html" class="block text-gray-700">Credential Application</a>
+                <a href="sponsor-student.html" class="block text-gray-700 pl-4">Sponsor Student</a>
+                <a href="contact.html" class="block text-gray-700 pl-4">Contact</a>
                 <a href="gallery.html" class="block text-gray-700">Gallery</a>
-                <a href="obi/index.html" class="block bg-blue-600 text-white px-4 py-2 rounded-md text-center">Bible Institute</a>
+                <button id="mobile-sign-in-btn" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center mt-2">Sign In</button>
+                <div id="mobile-user-menu" class="hidden">
+                    <a href="dashboard/index.html" class="block text-gray-700 pl-4">Dashboard</a>
+                    <button onclick="window.handleSignOut()" class="w-full text-left text-red-600 px-4 py-2">Sign Out</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -197,77 +245,51 @@
     </footer>
 
     <script type="module" src="assets/js/main.js"></script>
-    <script>
-        const ministries = {
-            youth: {
-                title: "Youth Ministry",
-                image: "assets/images/ministry1.jpg",
-                description: "The Youth Ministry at Oasis IMG is dedicated to empowering young people aged 13-30 to discover their purpose in Christ and live impactful lives for God's kingdom. Through dynamic worship, biblical teaching, and mentorship, we help youth develop a strong foundation of faith that will sustain them throughout their lives.",
-                activities: [
-                    "Weekly youth services with contemporary worship and relevant teaching",
-                    "Bible study groups tailored for different age ranges",
-                    "Leadership development and discipleship programs",
-                    "Community service and outreach projects",
-                    "Annual youth camps and conferences",
-                    "Sports and recreational activities",
-                    "Talent development and creative arts"
-                ],
-                time: "Fridays, 6:00 PM",
-                leader: "Pastor David Mensah",
-                contact: "youth@oasisimg.org"
-            },
-            women: {
-                title: "Women's Ministry",
-                image: "assets/images/ministry2.jpg",
-                description: "The Women's Ministry creates a nurturing environment where women of all ages can grow spiritually, build meaningful relationships, and discover their God-given purpose. We focus on building strong, faith-filled women who impact their families, churches, and communities.",
-                activities: [
-                    "Weekly women's fellowship and Bible study",
-                    "Monthly prayer and fasting sessions",
-                    "Marriage enrichment seminars",
-                    "Skills training and entrepreneurship workshops",
-                    "Mentorship programs pairing younger and older women",
-                    "Community outreach to widows and vulnerable women",
-                    "Annual women's conference and retreats"
-                ],
-                time: "Saturdays, 9:00 AM",
-                leader: "Mrs. Grace Owusu",
-                contact: "women@oasisimg.org"
-            },
-            children: {
-                title: "Children's Ministry",
-                image: "assets/images/ministry3.jpg",
-                description: "The Children's Ministry provides a safe, fun, and engaging environment where children learn about Jesus and develop a personal relationship with God. Using age-appropriate methods, we teach biblical truths that shape character and faith.",
-                activities: [
-                    "Sunday School with interactive lessons",
-                    "Children's church during main service",
-                    "Vacation Bible School programs",
-                    "Scripture memorization competitions",
-                    "Music and drama presentations",
-                    "Special events and holiday celebrations",
-                    "Parent-child activities and resources"
-                ],
-                time: "Sundays, 9:00 AM",
-                leader: "Sister Mary Adu",
-                contact: "children@oasisimg.org"
+    <script type="module">
+        import { db } from './assets/js/main.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        async function loadMinistry() {
+            const ministryId = window.getUrlParameter('id');
+            if (!ministryId) {
+                window.location.href = 'ministries.html';
+                return;
             }
-        };
 
-        const ministryId = window.getUrlParameter('id') || 'youth';
-        const ministry = ministries[ministryId] || ministries.youth;
+            try {
+                const docRef = doc(db, 'ministries', ministryId);
+                const docSnap = await getDoc(docRef);
 
-        document.getElementById('ministry-title').textContent = ministry.title;
-        document.getElementById('ministry-breadcrumb').textContent = ministry.title;
-        document.getElementById('ministry-image').src = ministry.image;
-        document.getElementById('ministry-description').innerHTML = `<p>${ministry.description}</p>`;
+                if (docSnap.exists()) {
+                    const ministry = docSnap.data();
 
-        const activitiesList = ministry.activities.map(activity =>
-            `<li class="flex items-start"><i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i><span>${activity}</span></li>`
-        ).join('');
-        document.getElementById('ministry-activities').innerHTML = activitiesList;
+                    document.getElementById('ministry-title').textContent = ministry.name || ministry.title;
+                    document.getElementById('ministry-breadcrumb').textContent = ministry.name || ministry.title;
+                    document.getElementById('ministry-image').src = ministry.image || 'assets/images/placeholder.jpg';
+                    document.getElementById('ministry-description').innerHTML = `<p>${ministry.description || ministry.fullDescription || ''}</p>`;
 
-        document.getElementById('ministry-time').textContent = ministry.time;
-        document.getElementById('ministry-leader').textContent = ministry.leader;
-        document.getElementById('ministry-contact').textContent = ministry.contact;
+                    if (ministry.activities && ministry.activities.length > 0) {
+                        const activitiesList = ministry.activities.map(activity =>
+                            `<li class="flex items-start"><i class="fas fa-check-circle text-blue-600 mt-1 mr-3"></i><span>${activity}</span></li>`
+                        ).join('');
+                        document.getElementById('ministry-activities').innerHTML = activitiesList;
+                    }
+
+                    document.getElementById('ministry-time').textContent = ministry.meetingTime || ministry.time || 'Contact for details';
+                    document.getElementById('ministry-location').textContent = ministry.location || 'Main Sanctuary';
+                    document.getElementById('ministry-leader').textContent = ministry.leader || 'Contact for details';
+                    document.getElementById('ministry-contact').textContent = ministry.contact || ministry.email || 'info@oasisimg.org';
+                } else {
+                    console.error('Ministry not found');
+                    document.getElementById('ministry-description').innerHTML = '<p>Ministry not found.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading ministry:', error);
+                document.getElementById('ministry-description').innerHTML = '<p>Error loading ministry details.</p>';
+            }
+        }
+
+        window.addEventListener('load', loadMinistry);
     </script>
 </body>
 </html>

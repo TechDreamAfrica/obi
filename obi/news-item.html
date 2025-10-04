@@ -14,31 +14,96 @@
             <div class="flex justify-between h-20">
                 <div class="flex items-center">
                     <a href="index.html" class="flex items-center">
-                        <img src="../assets/images/logo.png" alt="OBI Logo" class="h-12 w-auto">
+                        <img src="../assets/images/logo.jpg" alt="OBI Logo" class="h-12 w-auto">
                         <span class="ml-3 text-xl font-bold text-white">Oasis Bible Institute</span>
                     </a>
                 </div>
-                <div class="hidden lg:flex items-center space-x-8">
+
+                <!-- Desktop Menu -->
+                <div class="hidden lg:flex items-center space-x-6">
                     <a href="index.html" class="text-teal-100 hover:text-white transition">Home</a>
-                    <a href="admissions.html" class="text-teal-100 hover:text-white transition">Admissions</a>
-                    <a href="events.html" class="text-teal-100 hover:text-white transition">Events</a>
-                    <a href="news.html" class="text-white font-semibold border-b-2 border-teal-400">News</a>
-                    <a href="../index.html" class="bg-teal-600 text-white px-4 py-2 rounded-md hover:bg-teal-700 transition">Main Site</a>
+
+                    <div class="relative group">
+                        <button class="text-teal-100 hover:text-white transition flex items-center">
+                            About <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md mt-2 py-2 w-56 z-50">
+                            <a href="../about.html" class="block px-4 py-2 hover:bg-teal-700 text-white">About Us</a>
+                            <a href="../leadership.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Leadership</a>
+                            <a href="../ministries.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Ministries</a>
+                        </div>
+                    </div>
+
+                    <div class="relative group">
+                        <button class="text-teal-100 hover:text-white transition flex items-center">
+                            Programs <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md mt-2 py-2 w-56 z-50">
+                            <a href="index.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Bible Institute</a>
+                            <a href="admissions.html" class="block px-4 py-2 hover:bg-teal-700 text-white">OBI Admissions</a>
+                            <a href="../admissions.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Ministry Training</a>
+                        </div>
+                    </div>
+
+                    <div class="relative group">
+                        <button class="text-teal-100 hover:text-white transition flex items-center">
+                            Get Involved <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </button>
+                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md mt-2 py-2 w-56 z-50">
+                            <a href="../credential-application.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Credential Application</a>
+                            <a href="../sponsor-student.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Sponsor a Student</a>
+                            <a href="../contact.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Contact Us</a>
+                        </div>
+                    </div>
+
+                    <a href="../gallery.html" class="text-teal-100 hover:text-white transition">Gallery</a>
+
+                    <div id="user-menu" class="hidden">
+                        <div class="relative group">
+                            <button class="flex items-center text-teal-100 hover:text-white transition">
+                                <i class="fas fa-user-circle text-2xl"></i>
+                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div class="absolute right-0 hidden group-hover:block bg-teal-800 shadow-lg rounded-md mt-2 py-2 w-48 z-50">
+                                <a href="../dashboard/index.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Dashboard</a>
+                                <button onclick="window.handleSignOut()" class="w-full text-left block px-4 py-2 hover:bg-teal-700 text-red-300">Sign Out</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="sign-in-btn" class="bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition">
+                        Sign In
+                    </button>
                 </div>
+
+                <!-- Mobile menu button -->
                 <div class="lg:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-white">
+                    <button id="mobile-menu-btn" class="text-white hover:text-teal-100">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
             </div>
         </div>
+
+        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden lg:hidden bg-teal-800 border-t border-teal-700">
             <div class="px-4 py-3 space-y-3">
                 <a href="index.html" class="block text-teal-100">Home</a>
-                <a href="admissions.html" class="block text-teal-100">Admissions</a>
-                <a href="events.html" class="block text-teal-100">Events</a>
-                <a href="news.html" class="block text-white font-semibold">News</a>
-                <a href="../index.html" class="block bg-teal-600 text-white px-4 py-2 rounded-md text-center">Main Site</a>
+                <a href="../about.html" class="block text-teal-100">About Us</a>
+                <a href="../leadership.html" class="block text-teal-100 pl-4">Leadership</a>
+                <a href="../ministries.html" class="block text-teal-100 pl-4">Ministries</a>
+                <a href="index.html" class="block text-teal-100">Bible Institute</a>
+                <a href="admissions.html" class="block text-teal-100 pl-4">OBI Admissions</a>
+                <a href="../admissions.html" class="block text-teal-100 pl-4">Ministry Training</a>
+                <a href="../credential-application.html" class="block text-teal-100">Credential Application</a>
+                <a href="../sponsor-student.html" class="block text-teal-100 pl-4">Sponsor Student</a>
+                <a href="../contact.html" class="block text-teal-100 pl-4">Contact</a>
+                <a href="../gallery.html" class="block text-teal-100">Gallery</a>
+                <button id="mobile-sign-in-btn" class="w-full bg-teal-600 text-white px-4 py-2 rounded-md text-center mt-2">Sign In</button>
+                <div id="mobile-user-menu" class="hidden">
+                    <a href="../dashboard/index.html" class="block text-teal-100 pl-4">Dashboard</a>
+                    <button onclick="window.handleSignOut()" class="w-full text-left text-red-300 px-4 py-2">Sign Out</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -120,60 +185,41 @@
     </footer>
 
     <script type="module" src="../assets/js/main.js"></script>
-    <script>
-        const newsData = {
-            1: {
-                title: "Applications Open for 2025",
-                date: "October 1, 2024",
-                author: "Admissions Office",
-                image: "../assets/images/news1.jpg",
-                content: `
-                    <p class="mb-4">We are excited to announce that applications are now open for the 2025 academic year at Oasis Bible Institute. This is an excellent opportunity for those called to ministry to receive quality theological education.</p>
-                    <p class="mb-4">Our programs include:</p>
-                    <ul class="list-disc pl-6 mb-4">
-                        <li>Diploma in Theology (3 years)</li>
-                        <li>Certificate Program (1 year)</li>
-                        <li>Short Courses (3-6 months)</li>
-                    </ul>
-                    <p class="mb-4">The application deadline is November 1, 2024. We encourage all interested candidates to submit their applications early.</p>
-                    <p class="mb-4">For more information and to apply, please visit our admissions page or contact our office at obi@oasisimg.org</p>
-                `
-            },
-            2: {
-                title: "Graduation Ceremony Success",
-                date: "September 15, 2024",
-                author: "OBI Communications",
-                image: "../assets/images/news2.jpg",
-                content: `
-                    <p class="mb-4">On September 15, 2024, Oasis Bible Institute celebrated the graduation of 45 students who completed their theological studies with excellence.</p>
-                    <p class="mb-4">The ceremony was attended by families, faculty members, and distinguished guests from various churches across Ghana. The keynote address was delivered by Rev. Dr. Emmanuel Asante, emphasizing the importance of faithful ministry in challenging times.</p>
-                    <p class="mb-4">Graduates will now serve in various capacities including pastoral ministry, teaching, missions, and church leadership roles.</p>
-                    <p class="mb-4">We congratulate all our graduates and pray God's blessings upon their ministries!</p>
-                `
-            },
-            3: {
-                title: "New Library Resources",
-                date: "September 1, 2024",
-                author: "Library Department",
-                image: "../assets/images/news3.jpg",
-                content: `
-                    <p class="mb-4">Our library has been significantly expanded with over 500 new theological books and digital resources to enhance student learning and research.</p>
-                    <p class="mb-4">The new collection includes commentaries, systematic theology texts, church history resources, and practical ministry guides from leading evangelical scholars.</p>
-                    <p class="mb-4">Additionally, students now have access to online theological journals and research databases.</p>
-                    <p class="mb-4">The library is open Monday through Saturday from 8:00 AM to 6:00 PM.</p>
-                `
+    <script type="module">
+        import { db } from '../assets/js/main.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        async function loadNewsArticle() {
+            const newsId = window.getUrlParameter('id');
+            if (!newsId) {
+                window.location.href = 'news.html';
+                return;
             }
-        };
 
-        const newsId = window.getUrlParameter('id') || '1';
-        const article = newsData[newsId] || newsData['1'];
+            try {
+                const docRef = doc(db, 'news', newsId);
+                const docSnap = await getDoc(docRef);
 
-        document.getElementById('news-title').textContent = article.title;
-        document.getElementById('news-breadcrumb').textContent = article.title;
-        document.getElementById('news-date').textContent = article.date;
-        document.getElementById('news-author').textContent = article.author;
-        document.getElementById('news-image').src = article.image;
-        document.getElementById('news-content').innerHTML = article.content;
+                if (docSnap.exists()) {
+                    const article = docSnap.data();
+
+                    document.getElementById('news-title').textContent = article.title;
+                    document.getElementById('news-breadcrumb').textContent = article.title;
+                    document.getElementById('news-image').src = article.image || '../assets/images/placeholder.jpg';
+                    document.getElementById('news-date').textContent = new Date(article.date).toLocaleDateString();
+                    document.getElementById('news-author').textContent = article.author || 'Admin';
+                    document.getElementById('news-content').innerHTML = article.content || article.excerpt || '<p>No content available.</p>';
+                } else {
+                    console.error('News article not found');
+                    document.getElementById('news-content').innerHTML = '<p>News article not found.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading news article:', error);
+                document.getElementById('news-content').innerHTML = '<p>Error loading news article.</p>';
+            }
+        }
+
+        window.addEventListener('load', loadNewsArticle);
     </script>
 </body>
 </html>

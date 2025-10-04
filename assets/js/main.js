@@ -1,7 +1,7 @@
 // Firebase Configuration
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, where, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
 // Firebase config - Replace with your actual config
 const firebaseConfig = {
@@ -336,7 +336,7 @@ async function loadStats() {
         }
         return {
             livesImpacted: 1000,
-            ministries: 50,
+            ministries: 5,
             studentsTrained: 200,
             yearsOfService: 15
         };
@@ -344,7 +344,7 @@ async function loadStats() {
         console.error('Error loading stats:', error);
         return {
             livesImpacted: 1000,
-            ministries: 50,
+            ministries: 5,
             studentsTrained: 200,
             yearsOfService: 15
         };
@@ -437,6 +437,82 @@ async function updateHomeMinistriesPreview() {
     });
 }
 
+// Update Full Leadership Page
+async function updateLeadershipPage() {
+    const seniorLeadership = document.getElementById('senior-leadership');
+    const boardMembers = document.getElementById('board-members');
+    const ministryLeaders = document.getElementById('ministry-leaders');
+
+    if (!seniorLeadership && !boardMembers && !ministryLeaders) return;
+
+    const leaders = await loadLeadership();
+    if (leaders.length === 0) return;
+
+    // Filter leaders by category
+    const senior = leaders.filter(l => l.category === 'senior' || l.category === 'executive');
+    const board = leaders.filter(l => l.category === 'board' || l.category === 'elder');
+    const ministry = leaders.filter(l => l.category === 'ministry');
+
+    // Render Senior Leadership
+    if (seniorLeadership && senior.length > 0) {
+        seniorLeadership.innerHTML = '';
+        senior.forEach(leader => {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-lg shadow-xl overflow-hidden';
+            card.innerHTML = `
+                <div class="md:flex">
+                    <div class="md:flex-shrink-0">
+                        <img src="${leader.image || 'assets/images/placeholder.jpg'}" alt="${leader.name}" class="h-full w-full md:w-48 object-cover">
+                    </div>
+                    <div class="p-8">
+                        <h4 class="text-2xl font-bold text-gray-900 mb-2">${leader.name}</h4>
+                        <p class="text-blue-600 font-semibold mb-4">${leader.title}</p>
+                        <p class="text-gray-600 mb-4">${leader.bio || ''}</p>
+                        ${leader.social ? `
+                        <div class="flex space-x-4">
+                            ${leader.social.twitter ? `<a href="${leader.social.twitter}" class="text-blue-600 hover:text-blue-700"><i class="fab fa-twitter text-xl"></i></a>` : ''}
+                            ${leader.social.facebook ? `<a href="${leader.social.facebook}" class="text-blue-600 hover:text-blue-700"><i class="fab fa-facebook text-xl"></i></a>` : ''}
+                            ${leader.social.linkedin ? `<a href="${leader.social.linkedin}" class="text-blue-600 hover:text-blue-700"><i class="fab fa-linkedin text-xl"></i></a>` : ''}
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+            seniorLeadership.appendChild(card);
+        });
+    }
+
+    // Render Board Members
+    if (boardMembers && board.length > 0) {
+        boardMembers.innerHTML = '';
+        board.forEach(leader => {
+            const card = document.createElement('div');
+            card.className = 'text-center';
+            card.innerHTML = `
+                <img src="${leader.image || 'assets/images/placeholder.jpg'}" alt="${leader.name}" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover shadow-lg">
+                <h4 class="text-lg font-bold text-gray-900">${leader.name}</h4>
+                <p class="text-gray-600">${leader.title}</p>
+            `;
+            boardMembers.appendChild(card);
+        });
+    }
+
+    // Render Ministry Leaders
+    if (ministryLeaders && ministry.length > 0) {
+        ministryLeaders.innerHTML = '';
+        ministry.forEach(leader => {
+            const card = document.createElement('div');
+            card.className = 'bg-white p-6 rounded-lg shadow-lg text-center';
+            card.innerHTML = `
+                <img src="${leader.image || 'assets/images/placeholder.jpg'}" alt="${leader.name}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+                <h4 class="font-bold text-gray-900">${leader.name}</h4>
+                <p class="text-sm text-gray-600">${leader.title}</p>
+            `;
+            ministryLeaders.appendChild(card);
+        });
+    }
+}
+
 // Update Leadership Preview on Home Page
 async function updateHomeLeadership() {
     const container = document.getElementById('leadership-preview');
@@ -458,7 +534,72 @@ async function updateHomeLeadership() {
     });
 }
 
-// Update News on OBI Page
+// Update Ministries Page
+async function updateMinistriesPage() {
+    const container = document.getElementById('ministries-list');
+    if (!container) return;
+
+    const ministries = await loadMinistries();
+    if (ministries.length === 0) return;
+
+    container.innerHTML = '';
+    ministries.forEach(ministry => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition';
+        card.innerHTML = `
+            <img src="${ministry.image}" alt="${ministry.name}" class="w-full h-48 object-cover">
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">${ministry.name}</h3>
+                <p class="text-gray-600 mb-4">${ministry.description}</p>
+                <a href="ministry-detail.html?id=${ministry.id}" class="text-blue-600 font-semibold hover:text-blue-700">Learn More →</a>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Update News on OBI News Page
+async function updateOBINewsPage() {
+    const container = document.getElementById('obi-news-list');
+    if (!container) return;
+
+    const news = await loadNews(12);
+    if (news.length === 0) return;
+
+    const categoryColors = {
+        'Admissions': 'bg-teal-100 text-teal-800',
+        'Events': 'bg-blue-100 text-blue-800',
+        'Facilities': 'bg-purple-100 text-purple-800',
+        'Academic': 'bg-green-100 text-green-800',
+        'Scholarship': 'bg-yellow-100 text-yellow-800',
+        'Achievement': 'bg-red-100 text-red-800',
+        'default': 'bg-gray-100 text-gray-800'
+    };
+
+    container.innerHTML = '';
+    news.forEach(item => {
+        const categoryClass = categoryColors[item.category] || categoryColors.default;
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
+        card.innerHTML = `
+            <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm text-teal-600">${new Date(item.date).toLocaleDateString()}</span>
+                    <span class="${categoryClass} text-xs px-2 py-1 rounded">${item.category || 'News'}</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">${item.title}</h3>
+                <p class="text-gray-600 mb-4">${item.excerpt || item.content?.substring(0, 100) || ''}...</p>
+                <a href="obi/news-item.html?id=${item.id}" class="text-teal-600 font-semibold hover:text-teal-700 inline-flex items-center">
+                    Read More <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Update News on OBI Page Preview
 async function updateOBINews() {
     const container = document.getElementById('obi-news-preview');
     if (!container) return;
@@ -475,12 +616,104 @@ async function updateOBINews() {
             <div class="p-6">
                 <div class="text-sm text-teal-600 mb-2">${new Date(item.date).toLocaleDateString()}</div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">${item.title}</h3>
-                <p class="text-gray-600 mb-4">${item.excerpt || item.content.substring(0, 100)}...</p>
+                <p class="text-gray-600 mb-4">${item.excerpt || item.content?.substring(0, 100) || ''}...</p>
                 <a href="news-item.html?id=${item.id}" class="text-teal-600 font-semibold hover:text-teal-700">Read More →</a>
             </div>
         `;
         container.appendChild(card);
     });
+}
+
+// Update Gallery Page
+async function updateGalleryPage() {
+    const container = document.getElementById('gallery-grid');
+    if (!container) return;
+
+    const images = await loadGalleryImages(12);
+    if (images.length === 0) return;
+
+    container.innerHTML = '';
+    images.forEach(img => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden group';
+        card.innerHTML = `
+            <div class="relative overflow-hidden">
+                <img src="${img.imageUrl || img.url}" alt="${img.title}" class="w-full h-64 object-cover group-hover:scale-110 transition duration-300">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                    <div class="text-white">
+                        <h3 class="text-xl font-bold mb-1">${img.title}</h3>
+                        <p class="text-sm">${img.category || new Date(img.timestamp).toLocaleDateString()}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-600 mb-4">${img.description || ''}</p>
+                ${img.albumUrl ? `<a href="${img.albumUrl}" target="_blank" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                    View Album <i class="fas fa-arrow-right ml-2"></i>
+                </a>` : ''}
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Update OBI Events Page
+async function updateOBIEventsPage() {
+    const upcomingContainer = document.getElementById('upcoming-events');
+    const pastContainer = document.getElementById('past-events');
+
+    if (!upcomingContainer && !pastContainer) return;
+
+    const events = await loadEvents(20);
+    if (events.length === 0) return;
+
+    const now = new Date();
+    const upcoming = events.filter(e => new Date(e.date) >= now);
+    const past = events.filter(e => new Date(e.date) < now);
+
+    // Render Upcoming Events
+    if (upcomingContainer && upcoming.length > 0) {
+        upcomingContainer.innerHTML = '';
+        upcoming.forEach(event => {
+            const eventDate = new Date(event.date);
+            const card = document.createElement('div');
+            card.className = 'bg-white p-6 rounded-lg shadow-lg flex flex-col md:flex-row';
+            card.innerHTML = `
+                <div class="bg-teal-600 text-white p-6 rounded-lg text-center md:mr-6 mb-4 md:mb-0">
+                    <div class="text-4xl font-bold">${eventDate.getDate()}</div>
+                    <div class="text-lg">${eventDate.toLocaleString('default', { month: 'short' }).toUpperCase()}</div>
+                    <div class="text-sm">${eventDate.getFullYear()}</div>
+                </div>
+                <div class="flex-1">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">${event.title}</h3>
+                    <p class="text-gray-600 mb-4">${event.description}</p>
+                    <div class="flex flex-wrap gap-4 text-sm text-gray-600">
+                        ${event.time ? `<span><i class="fas fa-clock text-teal-600 mr-2"></i>${event.time}</span>` : ''}
+                        ${event.location ? `<span><i class="fas fa-map-marker-alt text-teal-600 mr-2"></i>${event.location}</span>` : ''}
+                    </div>
+                </div>
+            `;
+            upcomingContainer.appendChild(card);
+        });
+    }
+
+    // Render Past Events
+    if (pastContainer && past.length > 0) {
+        pastContainer.innerHTML = '';
+        past.slice(0, 6).forEach(event => {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
+            card.innerHTML = `
+                <img src="${event.image || '../assets/images/placeholder.jpg'}" alt="${event.title}" class="w-full h-48 object-cover">
+                <div class="p-6">
+                    <div class="text-sm text-teal-600 mb-2">${new Date(event.date).toLocaleDateString()}</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">${event.title}</h3>
+                    <p class="text-gray-600">${event.description?.substring(0, 80) || ''}...</p>
+                </div>
+            `;
+            pastContainer.appendChild(card);
+        });
+    }
 }
 
 // Update Statistics
@@ -500,6 +733,183 @@ async function updateStatistics() {
     if (elements.yearsOfService) elements.yearsOfService.setAttribute('data-count', stats.yearsOfService);
 }
 
+// ============ AUTHENTICATION FUNCTIONS ============
+
+// Check auth state
+onAuthStateChanged(auth, (user) => {
+    const signInBtn = document.getElementById('sign-in-btn');
+    const mobileSignInBtn = document.getElementById('mobile-sign-in-btn');
+    const userMenu = document.getElementById('user-menu');
+    const mobileUserMenu = document.getElementById('mobile-user-menu');
+
+    if (user) {
+        // User is signed in
+        if (signInBtn) signInBtn.classList.add('hidden');
+        if (mobileSignInBtn) mobileSignInBtn.classList.add('hidden');
+        if (userMenu) userMenu.classList.remove('hidden');
+        if (mobileUserMenu) mobileUserMenu.classList.remove('hidden');
+
+        // Store user in window for access
+        window.currentUser = user;
+    } else {
+        // User is signed out
+        if (signInBtn) signInBtn.classList.remove('hidden');
+        if (mobileSignInBtn) mobileSignInBtn.classList.remove('hidden');
+        if (userMenu) userMenu.classList.add('hidden');
+        if (mobileUserMenu) mobileUserMenu.classList.add('hidden');
+
+        window.currentUser = null;
+    }
+});
+
+// Sign In Modal
+function showSignInModal() {
+    const modal = document.createElement('div');
+    modal.id = 'sign-in-modal';
+    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]';
+    modal.innerHTML = `
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Sign In</h2>
+                <button onclick="closeSignInModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <div id="sign-in-tabs" class="flex border-b mb-6">
+                <button onclick="switchTab('email')" id="email-tab" class="flex-1 pb-2 border-b-2 border-blue-600 text-blue-600 font-semibold">Email</button>
+                <button onclick="switchTab('register')" id="register-tab" class="flex-1 pb-2 text-gray-500">Register</button>
+            </div>
+
+            <div id="email-sign-in">
+                <form id="email-sign-in-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="sign-in-email" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="sign-in-password" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition font-semibold">
+                        Sign In
+                    </button>
+                </form>
+            </div>
+
+            <div id="register-form" class="hidden">
+                <form id="email-register-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="register-name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="register-email" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="register-password" required minlength="6" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition font-semibold">
+                        Create Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // Email Sign In
+    document.getElementById('email-sign-in-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('sign-in-email').value;
+        const password = document.getElementById('sign-in-password').value;
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            closeSignInModal();
+            showToast('Successfully signed in!', 'success');
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    });
+
+    // Email Registration
+    document.getElementById('email-register-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('register-name').value;
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCredential.user, { displayName: name });
+
+            // Save user profile to Firestore
+            await setDoc(doc(db, 'users', userCredential.user.uid), {
+                name: name,
+                email: email,
+                createdAt: new Date().toISOString(),
+                role: 'user'
+            });
+
+            closeSignInModal();
+            showToast('Account created successfully!', 'success');
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    });
+}
+
+function closeSignInModal() {
+    const modal = document.getElementById('sign-in-modal');
+    if (modal) modal.remove();
+}
+
+function switchTab(tab) {
+    const emailTab = document.getElementById('email-tab');
+    const registerTab = document.getElementById('register-tab');
+    const emailSignIn = document.getElementById('email-sign-in');
+    const registerForm = document.getElementById('register-form');
+
+    if (tab === 'email') {
+        emailTab.className = 'flex-1 pb-2 border-b-2 border-blue-600 text-blue-600 font-semibold';
+        registerTab.className = 'flex-1 pb-2 text-gray-500';
+        emailSignIn.classList.remove('hidden');
+        registerForm.classList.add('hidden');
+    } else {
+        registerTab.className = 'flex-1 pb-2 border-b-2 border-blue-600 text-blue-600 font-semibold';
+        emailTab.className = 'flex-1 pb-2 text-gray-500';
+        registerForm.classList.remove('hidden');
+        emailSignIn.classList.add('hidden');
+    }
+}
+
+// Sign Out
+async function handleSignOut() {
+    try {
+        await signOut(auth);
+        showToast('Signed out successfully', 'success');
+        window.location.href = 'index.html';
+    } catch (error) {
+        showToast(error.message, 'error');
+    }
+}
+
+// Attach sign-in handlers
+document.addEventListener('DOMContentLoaded', () => {
+    const signInBtn = document.getElementById('sign-in-btn');
+    const mobileSignInBtn = document.getElementById('mobile-sign-in-btn');
+
+    if (signInBtn) {
+        signInBtn.addEventListener('click', showSignInModal);
+    }
+    if (mobileSignInBtn) {
+        mobileSignInBtn.addEventListener('click', showSignInModal);
+    }
+});
+
 // Export functions for global use
 window.showToast = showToast;
 window.getUrlParameter = getUrlParameter;
@@ -510,6 +920,10 @@ window.loadLeadership = loadLeadership;
 window.loadNews = loadNews;
 window.loadEvents = loadEvents;
 window.loadStats = loadStats;
+window.showSignInModal = showSignInModal;
+window.closeSignInModal = closeSignInModal;
+window.switchTab = switchTab;
+window.handleSignOut = handleSignOut;
 
 // Auto-load dynamic content on page load
 window.addEventListener('load', async () => {
@@ -528,8 +942,28 @@ window.addEventListener('load', async () => {
         await updateHomeLeadership();
     }
 
+    if (document.getElementById('senior-leadership') || document.getElementById('board-members') || document.getElementById('ministry-leaders')) {
+        await updateLeadershipPage();
+    }
+
+    if (document.getElementById('ministries-list')) {
+        await updateMinistriesPage();
+    }
+
+    if (document.getElementById('gallery-grid')) {
+        await updateGalleryPage();
+    }
+
+    if (document.getElementById('obi-news-list')) {
+        await updateOBINewsPage();
+    }
+
     if (document.getElementById('obi-news-preview')) {
         await updateOBINews();
+    }
+
+    if (document.getElementById('upcoming-events') || document.getElementById('past-events')) {
+        await updateOBIEventsPage();
     }
 
     await updateStatistics();
