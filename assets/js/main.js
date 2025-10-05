@@ -718,34 +718,105 @@ async function updateHomeNewsPreview() {
     });
 }
 
+// Update Events Preview on Homepage
+async function updateHomeEventsPreview() {
+    const container = document.getElementById('events-preview');
+    if (!container) return;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Load all events first
+    const allEvents = await loadEvents(20);
+
+    // Filter for upcoming events only
+    const upcomingEvents = allEvents.filter(event => {
+        const eventDate = new Date(event.date || '1970-01-01');
+        return eventDate >= today;
+    }).slice(0, 3); // Take only 3 upcoming events
+
+    if (upcomingEvents.length === 0) {
+        container.innerHTML = `
+            <div class="text-center col-span-3 py-8">
+                <i class="fas fa-calendar text-5xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500">No upcoming events at the moment.</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = '';
+    upcomingEvents.forEach(event => {
+        const eventDate = new Date(event.date || '1970-01-01');
+        const imageUrl = convertGoogleDriveUrl(event.image) || 'assets/images/placeholder.jpg';
+        const excerpt = event.description?.substring(0, 120) + '...' || '';
+
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1';
+        card.innerHTML = `
+            <img src="${imageUrl}" alt="${event.title}" class="w-full h-48 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm text-blue-600">
+                        <i class="fas fa-calendar mr-1"></i>
+                        ${eventDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    </span>
+                    ${event.category ? `<span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">${event.category}</span>` : ''}
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">${event.title}</h3>
+                ${event.time ? `<p class="text-sm text-gray-500 mb-2"><i class="fas fa-clock mr-1"></i>${event.time}</p>` : ''}
+                ${event.location ? `<p class="text-sm text-gray-500 mb-3"><i class="fas fa-map-marker-alt mr-1"></i>${event.location}</p>` : ''}
+                <p class="text-gray-600 mb-4">${excerpt}</p>
+                ${event.featured ? '<span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded mb-2"><i class="fas fa-star mr-1"></i>Featured</span>' : ''}
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
 // Update Gallery Page
 async function updateGalleryPage() {
     const container = document.getElementById('gallery-grid');
     if (!container) return;
 
     const images = await loadGalleryImages(12);
-    if (images.length === 0) return;
+
+    if (images.length === 0) {
+        container.innerHTML = `
+            <div class="col-span-3 text-center py-12">
+                <i class="fas fa-images text-5xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500">No images available in the gallery yet.</p>
+            </div>
+        `;
+        return;
+    }
 
     container.innerHTML = '';
     images.forEach(img => {
+        // Convert Google Drive URL if needed
+        const imageUrl = convertGoogleDriveUrl(img.imageUrl || img.url || img.image) || 'assets/images/placeholder.jpg';
+        const uploadDate = img.uploadDate ? new Date(img.uploadDate).toLocaleDateString() : '';
+
         const card = document.createElement('div');
-        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden group';
+        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden group hover:shadow-xl transition';
         card.innerHTML = `
             <div class="relative overflow-hidden">
-                <img src="${img.imageUrl || img.url}" alt="${img.title}" class="w-full h-64 object-cover group-hover:scale-110 transition duration-300">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                <img src="${imageUrl}" alt="${img.title}" class="w-full h-64 object-cover group-hover:scale-110 transition duration-300" onerror="this.src='assets/images/placeholder.jpg'">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
                     <div class="text-white">
                         <h3 class="text-xl font-bold mb-1">${img.title}</h3>
-                        <p class="text-sm">${img.category || new Date(img.timestamp).toLocaleDateString()}</p>
+                        <div class="flex items-center space-x-3 text-sm">
+                            ${img.category ? `<span class="bg-white/20 px-2 py-1 rounded">${img.category}</span>` : ''}
+                            ${uploadDate ? `<span><i class="fas fa-calendar mr-1"></i>${uploadDate}</span>` : ''}
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="p-6">
-                <p class="text-gray-600 mb-4">${img.description || ''}</p>
-                ${img.albumUrl ? `<a href="${img.albumUrl}" target="_blank" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
-                    View Album <i class="fas fa-arrow-right ml-2"></i>
-                </a>` : ''}
-            </div>
+            ${img.description ? `
+                <div class="p-4">
+                    <p class="text-gray-600 text-sm">${img.description}</p>
+                </div>
+            ` : ''}
         `;
         container.appendChild(card);
     });
@@ -1038,6 +1109,10 @@ window.addEventListener('load', async () => {
 
     if (document.getElementById('news-preview')) {
         await updateHomeNewsPreview();
+    }
+
+    if (document.getElementById('events-preview')) {
+        await updateHomeEventsPreview();
     }
 
     if (document.getElementById('senior-leadership') || document.getElementById('board-members') || document.getElementById('ministry-leaders')) {

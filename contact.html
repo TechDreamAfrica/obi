@@ -9,9 +9,10 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="bg-gray-50">
+    <!-- Navigation -->
     <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
+            <div class="flex justify-between items-center h-20">
                 <div class="flex items-center">
                     <a href="index.html" class="flex items-center">
                         <img src="assets/images/logo.jpg" alt="Oasis IMG Logo" class="h-12 w-auto">
@@ -19,48 +20,53 @@
                     </a>
                 </div>
 
-                <!-- Desktop Menu -->
-                <div class="hidden lg:flex items-center space-x-6">
-                    <a href="index.html" class="text-gray-700 hover:text-blue-900 transition">Home</a>
+                <!-- Desktop Menu - Centered -->
+                <div class="hidden lg:flex items-center justify-center flex-1 mx-8">
+                    <div class="flex items-center space-x-6">
+                        <a href="index.html" class="text-gray-700 hover:text-blue-900 transition">Home</a>
 
-                    <div class="relative group">
-                        <button class="text-gray-700 hover:text-blue-900 transition flex items-center py-2">
-                            About <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                        </button>
-                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md pt-2 w-56 z-50 top-full">
-                            <a href="about.html" class="block px-4 py-2 hover:bg-blue-50">About Us</a>
-                            <a href="leadership.html" class="block px-4 py-2 hover:bg-blue-50">Leadership</a>
-                            <a href="ministries.html" class="block px-4 py-2 hover:bg-blue-50">Ministries</a>
+                        <div class="relative group">
+                            <button class="text-gray-700 hover:text-blue-900 transition flex items-center py-2">
+                                About <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md pt-2 w-56 z-50 top-full">
+                                <a href="about.html" class="block px-4 py-2 hover:bg-blue-50">About Us</a>
+                                <a href="leadership.html" class="block px-4 py-2 hover:bg-blue-50">Leadership</a>
+                                <a href="ministries.html" class="block px-4 py-2 hover:bg-blue-50">Ministries</a>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="relative group">
-                        <button class="text-gray-700 hover:text-blue-900 transition flex items-center py-2">
-                            Programs <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                        </button>
-                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md pt-2 w-56 z-50 top-full">
-                            <a href="obi/index.html" class="block px-4 py-2 hover:bg-blue-50">Bible Institute</a>
-                            <a href="obi/admissions.html" class="block px-4 py-2 hover:bg-blue-50">OBI Admissions</a>
-                            <a href="admissions.html" class="block px-4 py-2 hover:bg-blue-50">Ministry Training</a>
+                        <div class="relative group">
+                            <button class="text-gray-700 hover:text-blue-900 transition flex items-center py-2">
+                                Programs <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md pt-2 w-56 z-50 top-full">
+                                <a href="obi/index.html" class="block px-4 py-2 hover:bg-blue-50">Bible Institute</a>
+                                <a href="obi/admissions.html" class="block px-4 py-2 hover:bg-blue-50">OBI Admissions</a>
+                                <a href="admissions.html" class="block px-4 py-2 hover:bg-blue-50">Ministry Training</a>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="relative group">
-                        <button class="text-blue-900 font-semibold border-b-2 border-blue-600 flex items-center">
-                            Get Involved <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                        </button>
-                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md pt-2 w-56 z-50 top-full">
-                            <a href="credential-application.html" class="block px-4 py-2 hover:bg-blue-50">Credential Application</a>
-                            <a href="sponsor-student.html" class="block px-4 py-2 hover:bg-blue-50">Sponsor a Student</a>
-                            <a href="contact.html" class="block px-4 py-2 hover:bg-blue-50">Contact Us</a>
+                        <div class="relative group">
+                            <button class="text-gray-700 hover:text-blue-900 transition flex items-center py-2">
+                                Get Involved <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                            </button>
+                            <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md pt-2 w-56 z-50 top-full">
+                                <a href="credential-application.html" class="block px-4 py-2 hover:bg-blue-50">Credential Application</a>
+                                <a href="sponsor-student.html" class="block px-4 py-2 hover:bg-blue-50">Sponsor a Student</a>
+                                <a href="contact.html" class="block px-4 py-2 hover:bg-blue-50 bg-blue-100 font-semibold">Contact Us</a>
+                            </div>
                         </div>
+
+                        <a href="gallery.html" class="text-gray-700 hover:text-blue-900 transition">Gallery</a>
                     </div>
+                </div>
 
-                    <a href="gallery.html" class="text-gray-700 hover:text-blue-900 transition">Gallery</a>
-
+                <!-- Right Side - Auth Buttons -->
+                <div class="hidden lg:flex items-center space-x-4">
                     <div id="user-menu" class="hidden">
                         <div class="relative group">
-                            <button class="flex items-center text-gray-700 hover:text-blue-900 transition">
+                            <button class="flex items-center text-gray-700 hover:text-blue-900 transition py-2">
                                 <i class="fas fa-user-circle text-2xl"></i>
                                 <i class="fas fa-chevron-down ml-1 text-xs"></i>
                             </button>
@@ -322,5 +328,44 @@
     </footer>
 
     <script type="module" src="assets/js/main.js"></script>
+    <script type="module">
+        import { db } from './assets/js/firebase-config.js';
+        import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const contactForm = document.getElementById('contact-form');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Sending...';
+
+            try {
+                const formData = new FormData(contactForm);
+                const contactData = {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone') || '',
+                    subject: formData.get('subject'),
+                    message: formData.get('message'),
+                    status: 'unread',
+                    submittedAt: new Date().toISOString()
+                };
+
+                await addDoc(collection(db, 'contacts'), contactData);
+
+                alert('Thank you for contacting us! We will get back to you soon.');
+                contactForm.reset();
+            } catch (error) {
+                console.error('Error submitting contact form:', error);
+                alert('Error sending message. Please try again or contact us directly.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+    </script>
 </body>
 </html>

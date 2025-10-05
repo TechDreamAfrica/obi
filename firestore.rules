@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Applications - Public read, Authenticated write
+    match /applications/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Contacts - Public write, Authenticated read
+    match /contacts/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if true;
+    }
+
+    // News - Public read, Authenticated write
+    match /news/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Events - Public read, Authenticated write
+    match /events/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Courses - Public read, Authenticated write
+    match /courses/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Gallery - Public read, Authenticated write
+    match /gallery/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Leadership - Public read, Authenticated write
+    match /leadership/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Ministries - Public read, Authenticated write
+    match /ministries/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Statistics - Public read, Authenticated write
+    match /statistics/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+  }
+}

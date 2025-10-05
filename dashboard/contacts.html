@@ -24,6 +24,12 @@
                 <a href="news.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-newspaper mr-3"></i> News
                 </a>
+                <a href="courses.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-book mr-3"></i> Programs Offered
+                </a>
+                <a href="events.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-calendar mr-3"></i> Events
+                </a>
                 <a href="contacts.html" class="flex items-center px-6 py-3 bg-blue-600 text-white">
                     <i class="fas fa-envelope mr-3"></i> Contacts
                 </a>
@@ -44,129 +50,72 @@
                 <div class="flex justify-between items-center">
                     <h1 class="text-2xl font-bold text-gray-900">Contact Submissions</h1>
                     <div class="flex items-center space-x-4">
-                        <button class="text-gray-600 hover:text-gray-900">
-                            <i class="fas fa-filter mr-2"></i>Filter
-                        </button>
-                        <button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                            <i class="fas fa-download mr-2"></i>Export
+                        <button onclick="exportToCSV()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                            <i class="fas fa-download mr-2"></i>Export CSV
                         </button>
                     </div>
                 </div>
             </header>
 
+            <!-- Statistics -->
             <div class="p-6">
-                <div class="bg-white rounded-lg shadow">
-                    <div class="p-4 border-b flex justify-between">
-                        <div class="flex space-x-4">
-                            <button class="px-4 py-2 bg-blue-600 text-white rounded-md">All (89)</button>
-                            <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Unread (15)</button>
-                            <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Read (74)</button>
-                        </div>
-                        <input type="text" placeholder="Search..." class="px-4 py-2 border rounded-md">
-                    </div>
-
-                    <div class="divide-y">
-                        <div class="p-6 hover:bg-gray-50 cursor-pointer">
-                            <div class="flex items-start justify-between">
-                                <div class="flex items-start space-x-4">
-                                    <div class="bg-blue-100 text-blue-600 w-12 h-12 rounded-full flex items-center justify-center font-bold">
-                                        JD
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-center space-x-3 mb-2">
-                                            <h3 class="font-bold">John Doe</h3>
-                                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">New</span>
-                                        </div>
-                                        <p class="text-sm text-gray-600 mb-2">john.doe@example.com</p>
-                                        <p class="text-sm font-semibold text-gray-700 mb-2">Subject: Prayer Request</p>
-                                        <p class="text-gray-600">I would like to request prayer for my family's health...</p>
-                                        <p class="text-xs text-gray-500 mt-3">Oct 3, 2024 at 2:30 PM</p>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="text-green-600 hover:text-green-700 p-2" title="Mark as Read">
-                                        <i class="fas fa-check-circle"></i>
-                                    </button>
-                                    <button class="text-blue-600 hover:text-blue-700 p-2" title="Reply">
-                                        <i class="fas fa-reply"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-700 p-2" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Contacts</p>
+                                <p class="text-3xl font-bold text-gray-900" id="total-contacts">0</p>
                             </div>
-                        </div>
-
-                        <div class="p-6 hover:bg-gray-50 cursor-pointer bg-gray-50">
-                            <div class="flex items-start justify-between">
-                                <div class="flex items-start space-x-4">
-                                    <div class="bg-purple-100 text-purple-600 w-12 h-12 rounded-full flex items-center justify-center font-bold">
-                                        MS
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-center space-x-3 mb-2">
-                                            <h3 class="font-bold text-gray-500">Mary Smith</h3>
-                                            <span class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">Read</span>
-                                        </div>
-                                        <p class="text-sm text-gray-500 mb-2">mary.smith@example.com</p>
-                                        <p class="text-sm font-semibold text-gray-600 mb-2">Subject: Ministry Information</p>
-                                        <p class="text-gray-500">I'm interested in joining the women's ministry...</p>
-                                        <p class="text-xs text-gray-400 mt-3">Oct 2, 2024 at 10:15 AM</p>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="text-gray-400 p-2" title="Mark as Read">
-                                        <i class="fas fa-check-circle"></i>
-                                    </button>
-                                    <button class="text-blue-600 hover:text-blue-700 p-2" title="Reply">
-                                        <i class="fas fa-reply"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-700 p-2" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 hover:bg-gray-50 cursor-pointer">
-                            <div class="flex items-start justify-between">
-                                <div class="flex items-start space-x-4">
-                                    <div class="bg-green-100 text-green-600 w-12 h-12 rounded-full flex items-center justify-center font-bold">
-                                        DB
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-center space-x-3 mb-2">
-                                            <h3 class="font-bold">David Brown</h3>
-                                            <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">New</span>
-                                        </div>
-                                        <p class="text-sm text-gray-600 mb-2">david.b@example.com</p>
-                                        <p class="text-sm font-semibold text-gray-700 mb-2">Subject: Admission Inquiry</p>
-                                        <p class="text-gray-600">I would like to know more about the admission process...</p>
-                                        <p class="text-xs text-gray-500 mt-3">Oct 1, 2024 at 4:45 PM</p>
-                                    </div>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="text-green-600 hover:text-green-700 p-2" title="Mark as Read">
-                                        <i class="fas fa-check-circle"></i>
-                                    </button>
-                                    <button class="text-blue-600 hover:text-blue-700 p-2" title="Reply">
-                                        <i class="fas fa-reply"></i>
-                                    </button>
-                                    <button class="text-red-600 hover:text-red-700 p-2" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <i class="fas fa-envelope text-blue-600 text-2xl"></i>
                             </div>
                         </div>
                     </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Unread</p>
+                                <p class="text-3xl font-bold text-orange-600" id="unread-count">0</p>
+                            </div>
+                            <div class="bg-orange-100 p-3 rounded-lg">
+                                <i class="fas fa-envelope-open text-orange-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Read</p>
+                                <p class="text-3xl font-bold text-green-600" id="read-count">0</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <i class="fas fa-check-circle text-green-600 text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="p-4 border-t flex justify-between items-center">
-                        <p class="text-sm text-gray-600">Showing 1 to 3 of 89 messages</p>
+                <!-- Filters and Search -->
+                <div class="bg-white rounded-lg shadow mb-6">
+                    <div class="p-4 border-b flex flex-wrap gap-4 justify-between items-center">
                         <div class="flex space-x-2">
-                            <button class="px-3 py-1 border rounded-md hover:bg-gray-50">Previous</button>
-                            <button class="px-3 py-1 bg-blue-600 text-white rounded-md">1</button>
-                            <button class="px-3 py-1 border rounded-md hover:bg-gray-50">2</button>
-                            <button class="px-3 py-1 border rounded-md hover:bg-gray-50">Next</button>
+                            <button onclick="filterByStatus('all')" id="filter-all" class="px-4 py-2 bg-blue-600 text-white rounded-md">All</button>
+                            <button onclick="filterByStatus('unread')" id="filter-unread" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Unread</button>
+                            <button onclick="filterByStatus('read')" id="filter-read" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Read</button>
+                        </div>
+                        <input type="text" id="search-input" placeholder="Search by name, email, or subject..." class="px-4 py-2 border rounded-md w-64" onkeyup="handleSearch()">
+                    </div>
+
+                    <!-- Contact List -->
+                    <div id="contact-list" class="divide-y">
+                        <!-- Contacts will be loaded here -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="p-4 border-t flex justify-between items-center">
+                        <p class="text-sm text-gray-600" id="pagination-info">Showing 0 to 0 of 0 messages</p>
+                        <div class="flex space-x-2" id="pagination-buttons">
+                            <!-- Pagination buttons will be added here -->
                         </div>
                     </div>
                 </div>
@@ -174,9 +123,43 @@
         </main>
     </div>
 
+    <!-- View Contact Modal -->
+    <div id="view-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h2 class="text-2xl font-bold">Contact Details</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div id="modal-content" class="p-6">
+                <!-- Contact details will be loaded here -->
+            </div>
+            <div class="p-6 border-t flex justify-end space-x-3">
+                <button onclick="printContact()" class="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700">
+                    <i class="fas fa-print mr-2"></i>Print
+                </button>
+                <button onclick="deleteCurrentContact()" class="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700">
+                    <i class="fas fa-trash mr-2"></i>Delete
+                </button>
+                <button id="mark-status-btn" onclick="toggleStatus()" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                    <i class="fas fa-check mr-2"></i>Mark as Read
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
-        import { auth } from '../assets/js/firebase-config.js';
+        import { auth, db } from '../assets/js/firebase-config.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { collection, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        let allContacts = [];
+        let filteredContacts = [];
+        let currentFilter = 'all';
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let currentViewingContact = null;
 
         // Logout function
         window.handleLogout = async function() {
@@ -189,10 +172,441 @@
             }
         };
 
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
+        // Load all contacts
+        async function loadContacts() {
+            try {
+                const q = query(collection(db, 'contacts'), orderBy('submittedAt', 'desc'));
+                const snapshot = await getDocs(q);
+
+                allContacts = [];
+                snapshot.forEach(docSnap => {
+                    allContacts.push({
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    });
+                });
+
+                updateStatistics();
+                filterByStatus('all');
+            } catch (error) {
+                console.error('Error loading contacts:', error);
+                alert('Failed to load contacts: ' + error.message);
             }
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const unreadCount = allContacts.filter(c => c.status === 'unread').length;
+            const readCount = allContacts.filter(c => c.status === 'read').length;
+
+            document.getElementById('total-contacts').textContent = allContacts.length;
+            document.getElementById('unread-count').textContent = unreadCount;
+            document.getElementById('read-count').textContent = readCount;
+
+            // Update filter buttons
+            document.getElementById('filter-all').textContent = `All (${allContacts.length})`;
+            document.getElementById('filter-unread').textContent = `Unread (${unreadCount})`;
+            document.getElementById('filter-read').textContent = `Read (${readCount})`;
+        }
+
+        // Filter contacts by status
+        window.filterByStatus = function(status) {
+            currentFilter = status;
+            currentPage = 1;
+
+            // Update active button
+            document.querySelectorAll('[id^="filter-"]').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('text-gray-600', 'hover:bg-gray-100');
+            });
+            document.getElementById(`filter-${status}`).classList.remove('text-gray-600', 'hover:bg-gray-100');
+            document.getElementById(`filter-${status}`).classList.add('bg-blue-600', 'text-white');
+
+            if (status === 'all') {
+                filteredContacts = [...allContacts];
+            } else {
+                filteredContacts = allContacts.filter(c => c.status === status);
+            }
+
+            renderContacts();
+        };
+
+        // Search functionality
+        window.handleSearch = function() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+
+            if (searchTerm === '') {
+                filterByStatus(currentFilter);
+                return;
+            }
+
+            filteredContacts = allContacts.filter(contact => {
+                return (
+                    contact.name.toLowerCase().includes(searchTerm) ||
+                    contact.email.toLowerCase().includes(searchTerm) ||
+                    contact.subject.toLowerCase().includes(searchTerm) ||
+                    (contact.phone && contact.phone.toLowerCase().includes(searchTerm))
+                );
+            });
+
+            currentPage = 1;
+            renderContacts();
+        };
+
+        // Render contacts
+        function renderContacts() {
+            const contactList = document.getElementById('contact-list');
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedContacts = filteredContacts.slice(start, end);
+
+            if (paginatedContacts.length === 0) {
+                contactList.innerHTML = `
+                    <div class="p-12 text-center text-gray-500">
+                        <i class="fas fa-inbox text-6xl mb-4"></i>
+                        <p class="text-xl">No contacts found</p>
+                    </div>
+                `;
+            } else {
+                contactList.innerHTML = paginatedContacts.map(contact => {
+                    const initials = contact.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                    const isUnread = contact.status === 'unread';
+                    const bgColor = isUnread ? '' : 'bg-gray-50';
+                    const colors = ['blue', 'purple', 'green', 'yellow', 'red', 'indigo'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+
+                    return `
+                        <div class="p-6 hover:bg-gray-50 cursor-pointer ${bgColor}" onclick="viewContact('${contact.id}')">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start space-x-4 flex-1">
+                                    <div class="bg-${color}-100 text-${color}-600 w-12 h-12 rounded-full flex items-center justify-center font-bold flex-shrink-0">
+                                        ${initials}
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center space-x-3 mb-2">
+                                            <h3 class="font-bold ${isUnread ? 'text-gray-900' : 'text-gray-500'}">${contact.name}</h3>
+                                            <span class="bg-${isUnread ? 'blue' : 'gray'}-100 text-${isUnread ? 'blue' : 'gray'}-800 text-xs px-2 py-1 rounded">
+                                                ${isUnread ? 'New' : 'Read'}
+                                            </span>
+                                        </div>
+                                        <p class="text-sm ${isUnread ? 'text-gray-600' : 'text-gray-500'} mb-2">${contact.email}</p>
+                                        ${contact.phone ? `<p class="text-sm ${isUnread ? 'text-gray-600' : 'text-gray-500'} mb-2"><i class="fas fa-phone mr-2"></i>${contact.phone}</p>` : ''}
+                                        <p class="text-sm font-semibold ${isUnread ? 'text-gray-700' : 'text-gray-600'} mb-2">Subject: ${contact.subject}</p>
+                                        <p class="${isUnread ? 'text-gray-600' : 'text-gray-500'} truncate">${contact.message}</p>
+                                        <p class="text-xs ${isUnread ? 'text-gray-500' : 'text-gray-400'} mt-3">
+                                            ${new Date(contact.submittedAt).toLocaleString()}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2 ml-4">
+                                    <button onclick="event.stopPropagation(); toggleContactStatus('${contact.id}')"
+                                        class="text-${isUnread ? 'green' : 'gray'}-600 hover:text-${isUnread ? 'green' : 'gray'}-700 p-2"
+                                        title="${isUnread ? 'Mark as Read' : 'Mark as Unread'}">
+                                        <i class="fas fa-check-circle"></i>
+                                    </button>
+                                    <button onclick="event.stopPropagation(); deleteContact('${contact.id}')"
+                                        class="text-red-600 hover:text-red-700 p-2" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            renderPagination();
+        }
+
+        // Render pagination
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredContacts.length / itemsPerPage);
+            const start = (currentPage - 1) * itemsPerPage + 1;
+            const end = Math.min(currentPage * itemsPerPage, filteredContacts.length);
+
+            document.getElementById('pagination-info').textContent =
+                `Showing ${filteredContacts.length === 0 ? 0 : start} to ${end} of ${filteredContacts.length} messages`;
+
+            const paginationButtons = document.getElementById('pagination-buttons');
+            let buttonsHtml = '';
+
+            if (totalPages > 1) {
+                buttonsHtml += `
+                    <button onclick="changePage(${currentPage - 1})"
+                        ${currentPage === 1 ? 'disabled' : ''}
+                        class="px-3 py-1 border rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                        Previous
+                    </button>
+                `;
+
+                for (let i = 1; i <= totalPages; i++) {
+                    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                        buttonsHtml += `
+                            <button onclick="changePage(${i})"
+                                class="px-3 py-1 ${i === currentPage ? 'bg-blue-600 text-white' : 'border hover:bg-gray-50'} rounded-md">
+                                ${i}
+                            </button>
+                        `;
+                    } else if (i === currentPage - 2 || i === currentPage + 2) {
+                        buttonsHtml += `<span class="px-2">...</span>`;
+                    }
+                }
+
+                buttonsHtml += `
+                    <button onclick="changePage(${currentPage + 1})"
+                        ${currentPage === totalPages ? 'disabled' : ''}
+                        class="px-3 py-1 border rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                        Next
+                    </button>
+                `;
+            }
+
+            paginationButtons.innerHTML = buttonsHtml;
+        }
+
+        // Change page
+        window.changePage = function(page) {
+            const totalPages = Math.ceil(filteredContacts.length / itemsPerPage);
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                renderContacts();
+            }
+        };
+
+        // View contact details
+        window.viewContact = async function(contactId) {
+            const contact = allContacts.find(c => c.id === contactId);
+            if (!contact) return;
+
+            currentViewingContact = contact;
+
+            const modalContent = document.getElementById('modal-content');
+            modalContent.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-4 mb-6">
+                        <div class="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center font-bold text-2xl">
+                            ${contact.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold">${contact.name}</h3>
+                            <p class="text-gray-600">${contact.email}</p>
+                        </div>
+                    </div>
+
+                    ${contact.phone ? `
+                        <div class="border-t pt-4">
+                            <label class="text-sm font-semibold text-gray-500">Phone Number</label>
+                            <p class="text-gray-900">${contact.phone}</p>
+                        </div>
+                    ` : ''}
+
+                    <div class="border-t pt-4">
+                        <label class="text-sm font-semibold text-gray-500">Subject</label>
+                        <p class="text-gray-900">${contact.subject}</p>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <label class="text-sm font-semibold text-gray-500">Message</label>
+                        <p class="text-gray-900 whitespace-pre-wrap">${contact.message}</p>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <label class="text-sm font-semibold text-gray-500">Submitted At</label>
+                        <p class="text-gray-900">${new Date(contact.submittedAt).toLocaleString()}</p>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <label class="text-sm font-semibold text-gray-500">Status</label>
+                        <p class="inline-block bg-${contact.status === 'unread' ? 'blue' : 'gray'}-100 text-${contact.status === 'unread' ? 'blue' : 'gray'}-800 px-3 py-1 rounded-full text-sm">
+                            ${contact.status === 'unread' ? 'Unread' : 'Read'}
+                        </p>
+                    </div>
+                </div>
+            `;
+
+            // Update status button
+            const statusBtn = document.getElementById('mark-status-btn');
+            if (contact.status === 'unread') {
+                statusBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Mark as Read';
+            } else {
+                statusBtn.innerHTML = '<i class="fas fa-envelope mr-2"></i>Mark as Unread';
+            }
+
+            document.getElementById('view-modal').classList.remove('hidden');
+
+            // Auto-mark as read if unread
+            if (contact.status === 'unread') {
+                setTimeout(() => {
+                    toggleContactStatus(contactId, true);
+                }, 1000);
+            }
+        };
+
+        // Close modal
+        window.closeModal = function() {
+            document.getElementById('view-modal').classList.add('hidden');
+            currentViewingContact = null;
+        };
+
+        // Toggle contact status
+        window.toggleContactStatus = async function(contactId, silent = false) {
+            try {
+                const contact = allContacts.find(c => c.id === contactId);
+                if (!contact) return;
+
+                const newStatus = contact.status === 'unread' ? 'read' : 'unread';
+                const contactRef = doc(db, 'contacts', contactId);
+
+                await updateDoc(contactRef, {
+                    status: newStatus,
+                    updatedAt: new Date().toISOString()
+                });
+
+                contact.status = newStatus;
+                updateStatistics();
+                renderContacts();
+
+                if (currentViewingContact && currentViewingContact.id === contactId) {
+                    currentViewingContact.status = newStatus;
+                    const statusBtn = document.getElementById('mark-status-btn');
+                    if (newStatus === 'unread') {
+                        statusBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Mark as Read';
+                    } else {
+                        statusBtn.innerHTML = '<i class="fas fa-envelope mr-2"></i>Mark as Unread';
+                    }
+                }
+
+                if (!silent) {
+                    alert(`Contact marked as ${newStatus}`);
+                }
+            } catch (error) {
+                console.error('Error updating status:', error);
+                alert('Failed to update status: ' + error.message);
+            }
+        };
+
+        // Toggle status (for modal)
+        window.toggleStatus = function() {
+            if (currentViewingContact) {
+                toggleContactStatus(currentViewingContact.id);
+            }
+        };
+
+        // Delete contact
+        window.deleteContact = async function(contactId) {
+            if (!confirm('Are you sure you want to delete this contact?')) return;
+
+            try {
+                await deleteDoc(doc(db, 'contacts', contactId));
+
+                allContacts = allContacts.filter(c => c.id !== contactId);
+                updateStatistics();
+                filterByStatus(currentFilter);
+
+                alert('Contact deleted successfully');
+            } catch (error) {
+                console.error('Error deleting contact:', error);
+                alert('Failed to delete contact: ' + error.message);
+            }
+        };
+
+        // Delete current viewing contact
+        window.deleteCurrentContact = async function() {
+            if (currentViewingContact) {
+                await deleteContact(currentViewingContact.id);
+                closeModal();
+            }
+        };
+
+        // Print contact
+        window.printContact = function() {
+            if (!currentViewingContact) return;
+
+            const printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write(`
+                <html>
+                    <head>
+                        <title>Contact Details - ${currentViewingContact.name}</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; padding: 20px; }
+                            h1 { color: #1e40af; }
+                            .field { margin-bottom: 15px; }
+                            .label { font-weight: bold; color: #666; }
+                            .value { margin-top: 5px; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Contact Details</h1>
+                        <div class="field">
+                            <div class="label">Name:</div>
+                            <div class="value">${currentViewingContact.name}</div>
+                        </div>
+                        <div class="field">
+                            <div class="label">Email:</div>
+                            <div class="value">${currentViewingContact.email}</div>
+                        </div>
+                        ${currentViewingContact.phone ? `
+                            <div class="field">
+                                <div class="label">Phone:</div>
+                                <div class="value">${currentViewingContact.phone}</div>
+                            </div>
+                        ` : ''}
+                        <div class="field">
+                            <div class="label">Subject:</div>
+                            <div class="value">${currentViewingContact.subject}</div>
+                        </div>
+                        <div class="field">
+                            <div class="label">Message:</div>
+                            <div class="value">${currentViewingContact.message}</div>
+                        </div>
+                        <div class="field">
+                            <div class="label">Submitted At:</div>
+                            <div class="value">${new Date(currentViewingContact.submittedAt).toLocaleString()}</div>
+                        </div>
+                        <div class="field">
+                            <div class="label">Status:</div>
+                            <div class="value">${currentViewingContact.status}</div>
+                        </div>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        };
+
+        // Export to CSV
+        window.exportToCSV = function() {
+            const headers = ['Name', 'Email', 'Phone', 'Subject', 'Message', 'Status', 'Submitted At'];
+            const csvData = [
+                headers.join(','),
+                ...filteredContacts.map(contact => [
+                    `"${contact.name}"`,
+                    `"${contact.email}"`,
+                    `"${contact.phone || ''}"`,
+                    `"${contact.subject}"`,
+                    `"${contact.message.replace(/"/g, '""')}"`,
+                    contact.status,
+                    `"${new Date(contact.submittedAt).toLocaleString()}"`
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvData], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `contacts_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+
+        // Auth check and initialize
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                // Uncomment to enable login redirect
+                // window.location.href = 'login.html';
+                console.log('User not authenticated');
+            }
+            await loadContacts();
         });
     </script>
 </body>

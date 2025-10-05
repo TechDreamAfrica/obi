@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events - Oasis IMG Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <aside class="w-64 bg-gray-900 text-white">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold">Oasis IMG</h2>
+                <p class="text-sm text-gray-400">Admin Dashboard</p>
+            </div>
+            <nav class="mt-6">
+                <a href="index.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="admissions.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-user-graduate mr-3"></i> Admissions
+                </a>
+                <a href="news.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-newspaper mr-3"></i> News
+                </a>
+                <a href="courses.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-book mr-3"></i> Programs Offered
+                </a>
+                <a href="events.html" class="flex items-center px-6 py-3 bg-blue-600 text-white">
+                    <i class="fas fa-calendar mr-3"></i> Events
+                </a>
+                <a href="contacts.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-envelope mr-3"></i> Contacts
+                </a>
+                <a href="gallery.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-images mr-3"></i> Gallery
+                </a>
+                <a href="leadership.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-users mr-3"></i> Leadership
+                </a>
+                <button onclick="handleLogout()" class="w-full flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </button>
+            </nav>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto">
+            <header class="bg-white shadow-sm p-6">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">Events Management</h1>
+                    <button onclick="showAddModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-plus mr-2"></i>Add Event
+                    </button>
+                </div>
+            </header>
+
+            <div class="p-6">
+                <!-- Filter Tabs -->
+                <div class="mb-6 flex space-x-4">
+                    <button onclick="filterEvents('all')" id="filter-all" class="px-4 py-2 bg-blue-600 text-white rounded-md">All Events</button>
+                    <button onclick="filterEvents('upcoming')" id="filter-upcoming" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Upcoming</button>
+                    <button onclick="filterEvents('past')" id="filter-past" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">Past</button>
+                </div>
+
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-4 border-b flex justify-between items-center">
+                        <h2 class="text-lg font-bold">Event List</h2>
+                        <input type="text" id="search-input" placeholder="Search events..." class="px-4 py-2 border rounded-md w-64">
+                    </div>
+
+                    <div id="events-list" class="divide-y">
+                        <div class="p-12 text-center text-gray-500">
+                            <i class="fas fa-spinner fa-spin text-3xl mb-4"></i>
+                            <p>Loading events...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="eventModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="modal-title" class="text-2xl font-bold">Add Event</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+
+            <form id="eventForm" class="space-y-4">
+                <input type="hidden" id="event-id">
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Event Title *</label>
+                    <input type="text" id="event-title" name="title" required class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Category *</label>
+                        <select id="event-category" name="category" required class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                            <option value="">Select Category</option>
+                            <option value="Worship Service">Worship Service</option>
+                            <option value="Conference">Conference</option>
+                            <option value="Workshop">Workshop</option>
+                            <option value="Seminar">Seminar</option>
+                            <option value="Outreach">Outreach</option>
+                            <option value="Prayer Meeting">Prayer Meeting</option>
+                            <option value="Youth Event">Youth Event</option>
+                            <option value="Special Service">Special Service</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Location</label>
+                        <input type="text" id="event-location" name="location" placeholder="Church, Online, etc." class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Date *</label>
+                        <input type="date" id="event-date" name="date" required class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Time</label>
+                        <input type="time" id="event-time" name="time" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Description *</label>
+                    <textarea id="event-description" name="description" rows="4" required placeholder="Event details and information..." class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Image URL</label>
+                    <input type="text" id="event-image" name="image" placeholder="https://drive.google.com/file/d/FILE_ID/view or direct URL" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    <p class="text-xs text-gray-500 mt-1">Supports Google Drive links or direct image URLs</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Speaker/Host</label>
+                        <input type="text" id="event-speaker" name="speaker" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Max Attendees</label>
+                        <input type="number" id="event-capacity" name="capacity" min="0" placeholder="Leave blank for unlimited" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="event-featured" name="featured" class="mr-2">
+                        <label for="event-featured" class="text-sm font-medium">Featured Event</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="event-registration" name="registrationRequired" class="mr-2">
+                        <label for="event-registration" class="text-sm font-medium">Registration Required</label>
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-4 pt-4">
+                    <button type="button" onclick="closeModal()" class="px-6 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
+                    <button type="submit" id="submit-btn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        <i class="fas fa-save mr-2"></i>Save Event
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from '../assets/js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, serverTimestamp, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        let allEvents = [];
+        let currentFilter = 'all';
+        let editingId = null;
+
+        // Logout function
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Error signing out: ' + error.message);
+            }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                await loadEvents();
+            }
+        });
+
+        // Load all events
+        async function loadEvents() {
+            try {
+                const q = query(collection(db, 'events'));
+                const snapshot = await getDocs(q);
+                allEvents = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Sort by date descending
+                allEvents.sort((a, b) => {
+                    const dateA = new Date(a.date || '1970-01-01');
+                    const dateB = new Date(b.date || '1970-01-01');
+                    return dateB - dateA;
+                });
+
+                renderEvents();
+            } catch (error) {
+                console.error('Error loading events:', error);
+                document.getElementById('events-list').innerHTML = `
+                    <div class="p-12 text-center text-red-500">
+                        <i class="fas fa-exclamation-triangle text-3xl mb-4"></i>
+                        <p>Error loading events. Please refresh the page.</p>
+                        <p class="text-sm mt-2">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Filter events
+        window.filterEvents = function(filter) {
+            currentFilter = filter;
+
+            // Update button styles
+            document.querySelectorAll('[id^="filter-"]').forEach(btn => {
+                btn.className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300';
+            });
+            document.getElementById(`filter-${filter}`).className = 'px-4 py-2 bg-blue-600 text-white rounded-md';
+
+            renderEvents();
+        };
+
+        // Render events list
+        function renderEvents(searchTerm = '') {
+            const list = document.getElementById('events-list');
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            let filteredEvents = allEvents;
+
+            // Apply date filter
+            if (currentFilter === 'upcoming') {
+                filteredEvents = filteredEvents.filter(event => {
+                    const eventDate = new Date(event.date || '1970-01-01');
+                    return eventDate >= today;
+                });
+            } else if (currentFilter === 'past') {
+                filteredEvents = filteredEvents.filter(event => {
+                    const eventDate = new Date(event.date || '1970-01-01');
+                    return eventDate < today;
+                });
+            }
+
+            // Apply search filter
+            if (searchTerm) {
+                filteredEvents = filteredEvents.filter(event =>
+                    event.title?.toLowerCase().includes(searchTerm) ||
+                    event.category?.toLowerCase().includes(searchTerm) ||
+                    event.location?.toLowerCase().includes(searchTerm) ||
+                    event.speaker?.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            if (filteredEvents.length === 0) {
+                list.innerHTML = `
+                    <div class="p-12 text-center text-gray-500">
+                        <i class="fas fa-calendar text-5xl mb-4"></i>
+                        <p>No events found. ${currentFilter === 'all' ? 'Click "Add Event" to create one.' : ''}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = filteredEvents.map(event => {
+                const eventDate = new Date(event.date || '1970-01-01');
+                const isPast = eventDate < today;
+                const statusClass = isPast ? 'bg-gray-100 text-gray-800' : 'bg-green-100 text-green-800';
+                const statusText = isPast ? 'Past' : 'Upcoming';
+                const imageUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(event.image) : event.image;
+                const finalImageUrl = imageUrl || '../assets/images/placeholder.jpg';
+
+                return `
+                    <div class="p-6 hover:bg-gray-50">
+                        <div class="flex items-start space-x-4">
+                            <img src="${finalImageUrl}" class="w-24 h-24 object-cover rounded" alt="${event.title}" onerror="this.src='../assets/images/placeholder.jpg'">
+                            <div class="flex-1">
+                                <div class="flex items-start justify-between mb-2">
+                                    <div>
+                                        <h3 class="font-bold text-lg text-gray-900">${event.title}</h3>
+                                        <div class="flex items-center space-x-3 text-sm text-gray-600 mt-1">
+                                            <span><i class="fas fa-calendar mr-1 text-blue-600"></i>${eventDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                                            ${event.time ? `<span><i class="fas fa-clock mr-1 text-blue-600"></i>${event.time}</span>` : ''}
+                                            ${event.location ? `<span><i class="fas fa-map-marker-alt mr-1 text-blue-600"></i>${event.location}</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <span class="${statusClass} text-xs px-2 py-1 rounded">${statusText}</span>
+                                        ${event.featured ? '<span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Featured</span>' : ''}
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-600 mb-2">
+                                    <span><i class="fas fa-tag mr-1"></i>${event.category || 'General'}</span>
+                                    ${event.speaker ? `<span><i class="fas fa-user mr-1"></i>${event.speaker}</span>` : ''}
+                                    ${event.capacity ? `<span><i class="fas fa-users mr-1"></i>Max: ${event.capacity}</span>` : ''}
+                                    ${event.registrationRequired ? '<span class="text-blue-600"><i class="fas fa-clipboard-check mr-1"></i>Registration Required</span>' : ''}
+                                </div>
+                                <p class="text-gray-600">${event.description?.substring(0, 150)}${(event.description?.length || 0) > 150 ? '...' : ''}</p>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="editEvent('${event.id}')" class="text-blue-600 hover:text-blue-700 p-2" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteEvent('${event.id}')" class="text-red-600 hover:text-red-700 p-2" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            renderEvents(e.target.value.toLowerCase());
+        });
+
+        // Show add modal
+        window.showAddModal = function() {
+            editingId = null;
+            document.getElementById('modal-title').textContent = 'Add Event';
+            document.getElementById('eventForm').reset();
+            document.getElementById('event-id').value = '';
+            document.getElementById('eventModal').classList.remove('hidden');
+        };
+
+        // Edit event
+        window.editEvent = function(id) {
+            editingId = id;
+            const event = allEvents.find(e => e.id === id);
+            if (!event) return;
+
+            document.getElementById('modal-title').textContent = 'Edit Event';
+            document.getElementById('event-id').value = id;
+            document.getElementById('event-title').value = event.title || '';
+            document.getElementById('event-category').value = event.category || '';
+            document.getElementById('event-location').value = event.location || '';
+            document.getElementById('event-date').value = event.date || '';
+            document.getElementById('event-time').value = event.time || '';
+            document.getElementById('event-description').value = event.description || '';
+            document.getElementById('event-image').value = event.image || '';
+            document.getElementById('event-speaker').value = event.speaker || '';
+            document.getElementById('event-capacity').value = event.capacity || '';
+            document.getElementById('event-featured').checked = event.featured === true;
+            document.getElementById('event-registration').checked = event.registrationRequired === true;
+            document.getElementById('eventModal').classList.remove('hidden');
+        };
+
+        // Delete event
+        window.deleteEvent = async function(id) {
+            if (!confirm('Are you sure you want to delete this event?')) return;
+
+            try {
+                await deleteDoc(doc(db, 'events', id));
+                alert('Event deleted successfully!');
+                await loadEvents();
+            } catch (error) {
+                console.error('Error deleting event:', error);
+                alert('Error deleting event: ' + error.message);
+            }
+        };
+
+        // Close modal
+        window.closeModal = function() {
+            document.getElementById('eventModal').classList.add('hidden');
+            document.getElementById('eventForm').reset();
+            editingId = null;
+        };
+
+        // Form submit
+        document.getElementById('eventForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+
+            const formData = new FormData(e.target);
+            const data = {
+                title: formData.get('title'),
+                category: formData.get('category'),
+                location: formData.get('location') || '',
+                date: formData.get('date'),
+                time: formData.get('time') || '',
+                description: formData.get('description'),
+                image: formData.get('image') || '',
+                speaker: formData.get('speaker') || '',
+                capacity: parseInt(formData.get('capacity')) || null,
+                featured: document.getElementById('event-featured').checked,
+                registrationRequired: document.getElementById('event-registration').checked,
+                updatedAt: serverTimestamp()
+            };
+
+            try {
+                if (editingId) {
+                    await updateDoc(doc(db, 'events', editingId), data);
+                    alert('Event updated successfully!');
+                } else {
+                    data.createdAt = serverTimestamp();
+                    await addDoc(collection(db, 'events'), data);
+                    alert('Event added successfully!');
+                }
+
+                closeModal();
+                await loadEvents();
+            } catch (error) {
+                console.error('Error saving event:', error);
+                alert('Error saving event: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+    </script>
+</body>
+</html>

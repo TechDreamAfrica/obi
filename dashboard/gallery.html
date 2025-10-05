@@ -24,6 +24,12 @@
                 <a href="news.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-newspaper mr-3"></i> News
                 </a>
+                <a href="courses.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-book mr-3"></i> Programs Offered
+                </a>
+                <a href="events.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-calendar mr-3"></i> Events
+                </a>
                 <a href="contacts.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-envelope mr-3"></i> Contacts
                 </a>
@@ -43,110 +49,141 @@
             <header class="bg-white shadow-sm p-6">
                 <div class="flex justify-between items-center">
                     <h1 class="text-2xl font-bold text-gray-900">Gallery Management</h1>
-                    <button onclick="showUploadModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                        <i class="fas fa-cloud-upload-alt mr-2"></i>Upload Images
+                    <button onclick="showAddModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-plus mr-2"></i>Add Image
                     </button>
                 </div>
             </header>
 
             <div class="p-6">
-                <div class="bg-white rounded-lg shadow p-6 mb-6">
-                    <h2 class="text-lg font-bold mb-4">Google Drive Integration</h2>
-                    <div class="flex items-center space-x-4">
-                        <input type="text" placeholder="Google Drive Folder ID" class="flex-1 px-4 py-2 border rounded-md" value="1a2b3c4d5e6f7g8h9i0j">
-                        <button class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">
-                            <i class="fas fa-save mr-2"></i>Save
-                        </button>
-                        <button class="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700">
-                            <i class="fas fa-sync mr-2"></i>Sync
-                        </button>
+                <!-- Search Bar -->
+                <div class="bg-white rounded-lg shadow p-4 mb-6">
+                    <div class="flex items-center">
+                        <i class="fas fa-search text-gray-400 mr-3"></i>
+                        <input type="text" id="searchInput" placeholder="Search images by title or category..."
+                               class="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                               oninput="handleSearch()">
                     </div>
-                    <p class="text-sm text-gray-600 mt-3">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        Enter your Google Drive folder ID to display images on the gallery page
-                    </p>
                 </div>
 
+                <!-- Gallery Grid -->
                 <div class="bg-white rounded-lg shadow p-6">
-                    <h2 class="text-lg font-bold mb-4">Recent Images</h2>
-                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                        <div class="relative group">
-                            <img src="../assets/images/event1.jpg" class="w-full h-32 object-cover rounded">
-                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <button class="text-white p-2 hover:text-red-500">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="relative group">
-                            <img src="../assets/images/event2.jpg" class="w-full h-32 object-cover rounded">
-                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <button class="text-white p-2 hover:text-red-500">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="relative group">
-                            <img src="../assets/images/event3.jpg" class="w-full h-32 object-cover rounded">
-                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <button class="text-white p-2 hover:text-red-500">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="relative group">
-                            <img src="../assets/images/event4.jpg" class="w-full h-32 object-cover rounded">
-                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <button class="text-white p-2 hover:text-red-500">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="relative group">
-                            <img src="../assets/images/event5.jpg" class="w-full h-32 object-cover rounded">
-                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <button class="text-white p-2 hover:text-red-500">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="relative group">
-                            <img src="../assets/images/event6.jpg" class="w-full h-32 object-cover rounded">
-                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <button class="text-white p-2 hover:text-red-500">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
+                    <h2 class="text-lg font-bold mb-4">Gallery Images</h2>
+
+                    <!-- Loading State -->
+                    <div id="loadingState" class="text-center py-12">
+                        <i class="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
+                        <p class="text-gray-600">Loading gallery...</p>
                     </div>
+
+                    <!-- Empty State -->
+                    <div id="emptyState" class="hidden text-center py-12">
+                        <i class="fas fa-images text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-600 mb-4">No images in gallery</p>
+                        <button onclick="showAddModal()" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                            <i class="fas fa-plus mr-2"></i>Add First Image
+                        </button>
+                    </div>
+
+                    <!-- Gallery Grid -->
+                    <div id="galleryGrid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
                 </div>
             </div>
         </main>
     </div>
 
-    <div id="uploadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg max-w-lg w-full p-6">
+    <!-- Add/Edit Modal -->
+    <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Upload Images</h2>
-                <button onclick="closeUploadModal()" class="text-gray-500 hover:text-gray-700">
+                <h2 id="modalTitle" class="text-2xl font-bold">Add Image</h2>
+                <button onclick="closeImageModal()" class="text-gray-500 hover:text-gray-700">
                     <i class="fas fa-times text-2xl"></i>
                 </button>
             </div>
 
-            <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
-                <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"></i>
-                <p class="text-gray-600 mb-4">Drag and drop images here or click to browse</p>
-                <input type="file" multiple accept="image/*" class="hidden" id="fileInput">
-                <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
-                    Choose Files
-                </button>
-            </div>
+            <form id="imageForm" class="space-y-4">
+                <input type="hidden" id="imageId">
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Title <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="imageTitle" required
+                           class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                           placeholder="Enter image title">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Category <span class="text-red-500">*</span>
+                    </label>
+                    <select id="imageCategory" required
+                            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+                        <option value="">Select Category</option>
+                        <option value="Events">Events</option>
+                        <option value="Worship">Worship</option>
+                        <option value="Ministry">Ministry</option>
+                        <option value="Outreach">Outreach</option>
+                        <option value="Facilities">Facilities</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Image URL <span class="text-red-500">*</span>
+                    </label>
+                    <input type="url" id="imageUrl" required
+                           class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                           placeholder="Paste image URL or Google Drive link">
+                    <p class="text-sm text-gray-500 mt-1">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Supports direct image URLs and Google Drive share links
+                    </p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Description
+                    </label>
+                    <textarea id="imageDescription" rows="3"
+                              class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                              placeholder="Enter image description (optional)"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeImageModal()"
+                            class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" id="submitBtn"
+                            class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        <i class="fas fa-save mr-2"></i>Save Image
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script type="module">
-        import { auth } from '../assets/js/firebase-config.js';
+        import { auth, db } from '../assets/js/firebase-config.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import {
+            collection,
+            addDoc,
+            getDocs,
+            doc,
+            updateDoc,
+            deleteDoc,
+            query,
+            orderBy,
+            Timestamp
+        } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Global variables
+        let galleryData = [];
+        let filteredData = [];
 
         // Logout function
         window.handleLogout = async function() {
@@ -159,21 +196,248 @@
             }
         };
 
+        // Auth state check
         onAuthStateChanged(auth, (user) => {
             if (!user) {
                 window.location.href = 'login.html';
+            } else {
+                loadGallery();
             }
         });
 
-        function showUploadModal() {
-            document.getElementById('uploadModal').classList.remove('hidden');
-        }
-        function closeUploadModal() {
-            document.getElementById('uploadModal').classList.add('hidden');
+        // Load Gallery from Firestore
+        async function loadGallery() {
+            try {
+                const loadingState = document.getElementById('loadingState');
+                const emptyState = document.getElementById('emptyState');
+                const galleryGrid = document.getElementById('galleryGrid');
+
+                loadingState.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+                galleryGrid.classList.add('hidden');
+
+                const q = query(collection(db, 'gallery'), orderBy('uploadDate', 'desc'));
+                const querySnapshot = await getDocs(q);
+
+                galleryData = [];
+                querySnapshot.forEach((doc) => {
+                    galleryData.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+
+                filteredData = [...galleryData];
+                renderGallery();
+
+                loadingState.classList.add('hidden');
+
+                if (galleryData.length === 0) {
+                    emptyState.classList.remove('hidden');
+                } else {
+                    galleryGrid.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Error loading gallery:', error);
+                showToast('Error loading gallery: ' + error.message, 'error');
+                document.getElementById('loadingState').classList.add('hidden');
+            }
         }
 
-        window.showUploadModal = showUploadModal;
-        window.closeUploadModal = closeUploadModal;
+        // Render Gallery
+        function renderGallery() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filteredData.length === 0) {
+                galleryGrid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            galleryGrid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            galleryGrid.innerHTML = '';
+
+            filteredData.forEach(image => {
+                const imageUrl = window.convertGoogleDriveUrl ?
+                    window.convertGoogleDriveUrl(image.imageUrl) : image.imageUrl;
+
+                const uploadDate = image.uploadDate?.toDate ?
+                    image.uploadDate.toDate() : new Date(image.uploadDate);
+
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition';
+                card.innerHTML = `
+                    <div class="relative group">
+                        <img src="${imageUrl}" alt="${image.title}"
+                             class="w-full h-48 object-cover"
+                             onerror="this.src='../assets/images/placeholder.jpg'">
+                        <div class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition">
+                            <button onclick="editImage('${image.id}')"
+                                    class="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 shadow-lg">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteImage('${image.id}')"
+                                    class="bg-red-600 text-white p-2 rounded-full hover:bg-red-700 shadow-lg">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">${image.title}</h3>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                ${image.category}
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                <i class="fas fa-calendar mr-1"></i>
+                                ${uploadDate.toLocaleDateString()}
+                            </span>
+                        </div>
+                        ${image.description ? `
+                            <p class="text-sm text-gray-600 mt-2 line-clamp-2">${image.description}</p>
+                        ` : ''}
+                    </div>
+                `;
+                galleryGrid.appendChild(card);
+            });
+        }
+
+        // Search functionality
+        window.handleSearch = function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            if (searchTerm === '') {
+                filteredData = [...galleryData];
+            } else {
+                filteredData = galleryData.filter(image =>
+                    image.title.toLowerCase().includes(searchTerm) ||
+                    image.category.toLowerCase().includes(searchTerm) ||
+                    (image.description && image.description.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            renderGallery();
+        };
+
+        // Show Add Modal
+        window.showAddModal = function() {
+            document.getElementById('modalTitle').textContent = 'Add Image';
+            document.getElementById('imageForm').reset();
+            document.getElementById('imageId').value = '';
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save mr-2"></i>Save Image';
+            document.getElementById('imageModal').classList.remove('hidden');
+        };
+
+        // Show Edit Modal
+        window.editImage = async function(id) {
+            const image = galleryData.find(img => img.id === id);
+            if (!image) return;
+
+            document.getElementById('modalTitle').textContent = 'Edit Image';
+            document.getElementById('imageId').value = id;
+            document.getElementById('imageTitle').value = image.title;
+            document.getElementById('imageCategory').value = image.category;
+            document.getElementById('imageUrl').value = image.imageUrl;
+            document.getElementById('imageDescription').value = image.description || '';
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save mr-2"></i>Update Image';
+            document.getElementById('imageModal').classList.remove('hidden');
+        };
+
+        // Close Modal
+        window.closeImageModal = function() {
+            document.getElementById('imageModal').classList.add('hidden');
+            document.getElementById('imageForm').reset();
+        };
+
+        // Handle Form Submit
+        document.getElementById('imageForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+            submitBtn.disabled = true;
+
+            try {
+                const imageId = document.getElementById('imageId').value;
+                const imageData = {
+                    title: document.getElementById('imageTitle').value,
+                    category: document.getElementById('imageCategory').value,
+                    imageUrl: document.getElementById('imageUrl').value,
+                    description: document.getElementById('imageDescription').value,
+                    uploadDate: Timestamp.now()
+                };
+
+                if (imageId) {
+                    // Update existing image
+                    await updateDoc(doc(db, 'gallery', imageId), imageData);
+                    showToast('Image updated successfully!', 'success');
+                } else {
+                    // Add new image
+                    await addDoc(collection(db, 'gallery'), imageData);
+                    showToast('Image added successfully!', 'success');
+                }
+
+                closeImageModal();
+                await loadGallery();
+            } catch (error) {
+                console.error('Error saving image:', error);
+                showToast('Error saving image: ' + error.message, 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Delete Image
+        window.deleteImage = async function(id) {
+            const image = galleryData.find(img => img.id === id);
+            if (!image) return;
+
+            if (!confirm(`Are you sure you want to delete "${image.title}"?`)) {
+                return;
+            }
+
+            try {
+                await deleteDoc(doc(db, 'gallery', id));
+                showToast('Image deleted successfully!', 'success');
+                await loadGallery();
+            } catch (error) {
+                console.error('Error deleting image:', error);
+                showToast('Error deleting image: ' + error.message, 'error');
+            }
+        };
+
+        // Toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-600' :
+                           type === 'error' ? 'bg-red-600' : 'bg-blue-600';
+
+            toast.className = `fixed top-4 right-4 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center space-x-2`;
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                <span>${message}</span>
+            `;
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+
+        // Load Google Drive URL converter
+        const script = document.createElement('script');
+        script.src = '../assets/js/main.js';
+        script.type = 'module';
+        document.head.appendChild(script);
+
+        // Export functions
+        window.loadGallery = loadGallery;
     </script>
 </body>
 </html>

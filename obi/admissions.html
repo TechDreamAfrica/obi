@@ -3,165 +3,579 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admissions - Oasis Bible Institute</title>
+    <title>Application for Oasis Bible Institute - Oasis IMG Ministries Ghana</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body class="bg-gray-50">
-    <nav class="bg-teal-900 shadow-lg fixed w-full top-0 z-50">
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20">
                 <div class="flex items-center">
-                    <a href="index.html" class="flex items-center">
-                        <img src="../assets/images/logo.jpg" alt="OBI Logo" class="h-12 w-auto">
-                        <span class="ml-3 text-xl font-bold text-white">Oasis Bible Institute</span>
+                    <a href="../index.html" class="flex items-center">
+                        <img src="../assets/images/logo.jpg" alt="Oasis IMG Logo" class="h-12 w-auto">
+                        <span class="ml-3 text-xl font-bold text-blue-900">Oasis IMG</span>
                     </a>
                 </div>
 
-                <!-- Desktop Menu -->
                 <div class="hidden lg:flex items-center space-x-6">
-                    <a href="index.html" class="text-teal-100 hover:text-white transition">Home</a>
-
+                    <a href="../index.html" class="text-gray-700 hover:text-blue-900 transition">Home</a>
                     <div class="relative group">
-                        <button class="text-teal-100 hover:text-white transition flex items-center py-2">
+                        <button class="text-gray-700 hover:text-blue-900 transition flex items-center py-2">
                             About <i class="fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
-                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md pt-2 w-56 z-50 top-full">
-                            <a href="../about.html" class="block px-4 py-2 hover:bg-teal-700 text-white">About Us</a>
-                            <a href="../leadership.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Leadership</a>
-                            <a href="../ministries.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Ministries</a>
+                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md pt-2 w-56 z-50 top-full">
+                            <a href="../about.html" class="block px-4 py-2 hover:bg-blue-50">About Us</a>
+                            <a href="../leadership.html" class="block px-4 py-2 hover:bg-blue-50">Leadership</a>
+                            <a href="../ministries.html" class="block px-4 py-2 hover:bg-blue-50">Ministries</a>
                         </div>
                     </div>
-
                     <div class="relative group">
-                        <button class="text-white font-semibold border-b-2 border-teal-400 flex items-center py-2">
+                        <button class="text-blue-900 font-semibold border-b-2 border-blue-600 flex items-center py-2">
                             Programs <i class="fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
-                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md pt-2 w-56 z-50 top-full">
-                            <a href="index.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Bible Institute</a>
-                            <a href="admissions.html" class="block px-4 py-2 hover:bg-teal-700 text-white">OBI Admissions</a>
-                            <a href="../admissions.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Ministry Training</a>
+                        <div class="absolute hidden group-hover:block bg-white shadow-lg rounded-md pt-2 w-56 z-50 top-full">
+                            <a href="index.html" class="block px-4 py-2 hover:bg-blue-50">Bible Institute</a>
+                            <a href="admissions.html" class="block px-4 py-2 hover:bg-blue-50">OBI Admissions</a>
+                            <a href="../admissions.html" class="block px-4 py-2 hover:bg-blue-50">Ministry Training</a>
                         </div>
                     </div>
-
-                    <div class="relative group">
-                        <button class="text-teal-100 hover:text-white transition flex items-center py-2">
-                            Get Involved <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                        </button>
-                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md pt-2 w-56 z-50 top-full">
-                            <a href="../credential-application.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Credential Application</a>
-                            <a href="../sponsor-student.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Sponsor a Student</a>
-                            <a href="../contact.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Contact Us</a>
-                        </div>
-                    </div>
-
-                    <a href="../gallery.html" class="text-teal-100 hover:text-white transition">Gallery</a>
+                    <a href="../gallery.html" class="text-gray-700 hover:text-blue-900 transition">Gallery</a>
 
                     <div id="user-menu" class="hidden">
                         <div class="relative group">
-                            <button class="flex items-center text-teal-100 hover:text-white transition py-2">
+                            <button class="flex items-center text-gray-700 hover:text-blue-900 transition">
                                 <i class="fas fa-user-circle text-2xl"></i>
                                 <i class="fas fa-chevron-down ml-1 text-xs"></i>
                             </button>
-                            <div class="absolute right-0 hidden group-hover:block bg-teal-800 shadow-lg rounded-md pt-2 w-48 z-50 top-full">
-                                <a href="../dashboard/index.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Dashboard</a>
-                                <button onclick="window.handleSignOut()" class="w-full text-left block px-4 py-2 hover:bg-teal-700 text-red-300">Sign Out</button>
+                            <div class="absolute right-0 hidden group-hover:block bg-white shadow-lg rounded-md pt-2 w-48 z-50 top-full">
+                                <a href="../dashboard/index.html" class="block px-4 py-2 hover:bg-blue-50">Dashboard</a>
+                                <button onclick="window.handleSignOut()" class="w-full text-left block px-4 py-2 hover:bg-blue-50 text-red-600">Sign Out</button>
                             </div>
                         </div>
                     </div>
 
-                    <button id="sign-in-btn" class="bg-teal-600 text-white px-6 py-2 rounded-md hover:bg-teal-700 transition">
+                    <button id="sign-in-btn" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
                         Sign In
                     </button>
                 </div>
 
-                <!-- Mobile menu button -->
                 <div class="lg:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-white hover:text-teal-100">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-blue-900">
                         <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden lg:hidden bg-teal-800 border-t border-teal-700">
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t">
             <div class="px-4 py-3 space-y-3">
-                <a href="index.html" class="block text-teal-100">Home</a>
-                <a href="../about.html" class="block text-teal-100">About Us</a>
-                <a href="../leadership.html" class="block text-teal-100 pl-4">Leadership</a>
-                <a href="../ministries.html" class="block text-teal-100 pl-4">Ministries</a>
-                <a href="index.html" class="block text-teal-100">Bible Institute</a>
-                <a href="admissions.html" class="block text-white font-semibold pl-4">OBI Admissions</a>
-                <a href="../admissions.html" class="block text-teal-100 pl-4">Ministry Training</a>
-                <a href="../credential-application.html" class="block text-teal-100">Credential Application</a>
-                <a href="../sponsor-student.html" class="block text-teal-100 pl-4">Sponsor Student</a>
-                <a href="../contact.html" class="block text-teal-100 pl-4">Contact</a>
-                <a href="../gallery.html" class="block text-teal-100">Gallery</a>
-                <button id="mobile-sign-in-btn" class="w-full bg-teal-600 text-white px-4 py-2 rounded-md text-center mt-2">Sign In</button>
+                <a href="../index.html" class="block text-gray-700">Home</a>
+                <a href="../about.html" class="block text-gray-700">About Us</a>
+                <a href="admissions.html" class="block text-blue-900 font-semibold">Apply Now</a>
+                <a href="../gallery.html" class="block text-gray-700">Gallery</a>
+                <button id="mobile-sign-in-btn" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center mt-2">Sign In</button>
                 <div id="mobile-user-menu" class="hidden">
-                    <a href="../dashboard/index.html" class="block text-teal-100 pl-4">Dashboard</a>
-                    <button onclick="window.handleSignOut()" class="w-full text-left text-red-300 px-4 py-2">Sign Out</button>
+                    <a href="../dashboard/index.html" class="block text-gray-700 pl-4">Dashboard</a>
+                    <button onclick="window.handleSignOut()" class="w-full text-left text-red-600 px-4 py-2">Sign Out</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <section class="mt-20 bg-teal-900 text-white py-12">
+    <section class="mt-20 bg-blue-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h1 class="text-4xl font-bold mb-4">Admissions</h1>
-            <nav class="text-teal-200">
-                <a href="index.html" class="hover:text-white">Home</a>
-                <span class="mx-2">/</span>
-                <span>Admissions</span>
+            <h1 class="text-4xl font-bold mb-4">Application for Oasis Bible Institute</h1>
+            <nav class="breadcrumb text-blue-200">
+                <a href="../index.html" class="hover:text-white">Home</a>
+                <span class="breadcrumb-item">OBI Application</span>
             </nav>
         </div>
     </section>
 
-    <section class="py-20">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Application Form -->
+    <div id="application-form-section" class="py-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-white rounded-lg shadow-lg p-8">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6">Apply to OBI</h2>
-                <form id="admission-form" class="space-y-6">
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Full Name *</label>
-                            <input type="text" name="fullName" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-600">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Application for Oasis Bible Institute</h2>
+                    <p class="text-gray-600">Box SW 272, Agona Swedru - Ghana | E-mail: oasisimggh@gmail.com</p>
+                </div>
+
+                <form id="application-form" class="space-y-8">
+                    <!-- Personal Information -->
+                    <div class="border-b pb-8">
+                        <h3 class="text-xl font-bold text-blue-900 mb-6">Personal Information</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Name <span class="text-red-600">*</span></label>
+                                <input type="text" name="name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number <span class="text-red-600">*</span></label>
+                                <input type="tel" name="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Email *</label>
-                            <input type="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-600">
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Address <span class="text-red-600">*</span></label>
+                                <input type="text" name="address" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-600">*</span></label>
+                                <input type="email" name="email" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-3 gap-6 mt-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth <span class="text-red-600">*</span></label>
+                                <input type="date" id="dob" name="dob" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Age <span class="text-red-600">*</span></label>
+                                <input type="number" id="age" name="age" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Place of Birth <span class="text-red-600">*</span></label>
+                                <input type="text" name="birthplace" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Sex <span class="text-red-600">*</span></label>
+                                <div class="flex gap-6">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="sex" value="Male" required class="mr-2">
+                                        <span>Male</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="sex" value="Female" required class="mr-2">
+                                        <span>Female</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Marriage Status <span class="text-red-600">*</span></label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="maritalStatus" value="Married" required class="mr-2">
+                                        <span>Married</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="maritalStatus" value="Single" required class="mr-2">
+                                        <span>Single</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="maritalStatus" value="Divorced" required class="mr-2">
+                                        <span>Divorced</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="maritalStatus" value="Re-married" required class="mr-2">
+                                        <span>Re-married</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Phone *</label>
-                            <input type="tel" name="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-600">
+
+                    <!-- Educational Background -->
+                    <div class="border-b pb-8">
+                        <h3 class="text-xl font-bold text-blue-900 mb-6">Educational Background & Work Experience</h3>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Educational Level</label>
+                                <input type="text" name="educationLevel" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">School</label>
+                                <input type="text" name="school" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Program *</label>
-                            <select name="program" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-600">
-                                <option value="">Select Program</option>
-                                <option value="diploma">Diploma in Theology</option>
-                                <option value="certificate">Certificate Program</option>
-                                <option value="short">Short Course</option>
-                            </select>
+
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Other Education</label>
+                                <input type="text" name="otherEducation" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Do you have any Degrees?</label>
+                                <input type="text" name="degrees" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Where have you worked?</label>
+                            <input type="text" name="workExperience" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
                         </div>
                     </div>
+
+                    <!-- Spiritual Background -->
+                    <div class="border-b pb-8">
+                        <h3 class="text-xl font-bold text-blue-900 mb-6">Spiritual Background</h3>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">What church did you grow up in?</label>
+                                <input type="text" name="churchGrowUp" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">What Church are you Attending?</label>
+                                <input type="text" name="churchAttending" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Are you Saved?</label>
+                                    <input type="text" name="saved" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">When</label>
+                                    <input type="text" name="savedWhen" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Where</label>
+                                    <input type="text" name="savedWhere" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                            </div>
+
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Are you Water Baptized?</label>
+                                    <input type="text" name="baptized" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">When</label>
+                                    <input type="text" name="baptizedWhen" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Where</label>
+                                    <input type="text" name="baptizedWhere" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                            </div>
+
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Have you received The Baptism of the Holy Spirit?</label>
+                                    <input type="text" name="holySpirit" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">When</label>
+                                    <input type="text" name="holySpiritWhen" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Where</label>
+                                    <input type="text" name="holySpiritWhere" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Do you feel a call from God for your Life?</label>
+                                <input type="text" name="godCall" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Do you feel called to the ministry:</label>
+                                <div class="flex gap-6">
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="ministry" value="Pastor" class="mr-2">
+                                        <span>Pastor</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="ministry" value="Church Leader" class="mr-2">
+                                        <span>Church Leader</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" name="ministry" value="Other" class="mr-2">
+                                        <span>Other</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">List all Instruments you can play:</label>
+                                <input type="text" name="instruments" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Do you feel you have any Habits that you feel would hinder your Christian life?</label>
+                                <textarea name="habits" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Spiritual Life -->
+                    <div class="border-b pb-8">
+                        <h3 class="text-xl font-bold text-blue-900 mb-6">Your Spiritual Life</h3>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tell us about your devotional life:</label>
+                                <textarea name="devotionalLife" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">How much do you read and study the word of God?</label>
+                                <textarea name="bibleStudy" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tell us about your prayer life?</label>
+                                <textarea name="prayerLife" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                            </div>
+
+                            <div class="grid md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Have you held any positions in your church?</label>
+                                    <input type="text" name="churchPosition" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">What Position</label>
+                                    <input type="text" name="position" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">How long:</label>
+                                    <input type="text" name="positionDuration" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tell us a little about yourself?</label>
+                                <textarea name="aboutYourself" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Commitment to O.B.I -->
+                    <div class="border-b pb-8">
+                        <h3 class="text-xl font-bold text-blue-900 mb-6">Commitment to O.B.I</h3>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">If you are approved, will you be faithful to attend Chapel, classes, Prayer times and all services of O.B.I?</label>
+                                <div class="flex gap-6">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="attendance" value="Yes" required class="mr-2">
+                                        <span>Yes</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="attendance" value="No" required class="mr-2">
+                                        <span>No</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Will you be willing to assist a pastor while at O.B.I (if assigned)?</label>
+                                <div class="flex gap-6">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="assistPastor" value="Yes" required class="mr-2">
+                                        <span>Yes</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="assistPastor" value="No" required class="mr-2">
+                                        <span>No</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Will you respect all the leadership of O.B.I at all times? (Including Offices, lecturers, Administrations and Security)</label>
+                                <div class="flex gap-6">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="respectLeadership" value="Yes" required class="mr-2">
+                                        <span>Yes</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="respectLeadership" value="No" required class="mr-2">
+                                        <span>No</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statement of Faith -->
+                    <div class="border-b pb-8">
+                        <h3 class="text-xl font-bold text-blue-900 mb-6">Statement of Faith</h3>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Do you believe in the 14 Statements of Fundamental Truths below?</label>
+                                <div class="bg-gray-50 p-6 rounded-lg mb-4">
+                                    <ol class="list-decimal list-inside space-y-2 text-sm text-gray-700">
+                                        <li>The Bible is inspired by God and is the infallible, authoritative rule of faith and conduct.</li>
+                                        <li>There is only one true God who exists as a Trinity.</li>
+                                        <li>Jesus Christ is the Son of God and, as the second person of the Trinity, is God.</li>
+                                        <li>Man was created good by God but was separated from God through original sin.</li>
+                                        <li>Salvation "is received through repentance toward God and faith toward the Lord Jesus Christ".</li>
+                                        <li>There are two ordinances. Believer's baptism by immersion is a declaration to the world that the believer has died and been raised together with Christ, becoming a new creation. The Lord's Supper is a symbol expressing the believer's sharing in the divine nature of Christ, a memorial of Christ's suffering and death, and a prophecy of Christ's second coming.</li>
+                                        <li>Baptism in the Holy Spirit is a separate and subsequent experience following conversion. Spirit baptism brings empowerment to live an overcoming Christian life and to be an effective witness.</li>
+                                        <li>Speaking in tongues is the initial physical evidence of the baptism in the Holy Spirit of separation from that which is evil and of dedication unto God.</li>
+                                        <li>The Church's mission is to seek and save all who are lost in sin; the Church is the Body of Christ and consists of all people who accept Christ, regardless of Christian denomination.</li>
+                                        <li>Divinely called and scripturally-ordained ministers serve the Church.</li>
+                                        <li>Divine healing of the sick is provided for in the atonement.</li>
+                                        <li>The imminent and blessed hope of the Church is its rapture preceding the bodily return of Christ to earth.</li>
+                                    </ol>
+                                </div>
+                                <div class="flex gap-6">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="fundamentalTruths" value="Yes" required class="mr-2">
+                                        <span>Yes</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="fundamentalTruths" value="No" required class="mr-2">
+                                        <span>No</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Do you believe in our 4 core doctrines below?</label>
+                                <div class="bg-gray-50 p-6 rounded-lg mb-4">
+                                    <ul class="space-y-2 text-sm text-gray-700">
+                                        <li>• Jesus Christ is our Saviour</li>
+                                        <li>• Jesus Christ baptized us with the Holy Spirit</li>
+                                        <li>• Jesus Christ is our divine Healer</li>
+                                        <li>• Jesus Christ is our soon coming King</li>
+                                    </ul>
+                                </div>
+                                <div class="flex gap-6">
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="codeDoctrine" value="Yes" required class="mr-2">
+                                        <span>Yes</span>
+                                    </label>
+                                    <label class="inline-flex items-center">
+                                        <input type="radio" name="codeDoctrine" value="No" required class="mr-2">
+                                        <span>No</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personal Reference -->
+                    <div class="border-b pb-8">
+                        <h3 class="text-xl font-bold text-blue-900 mb-6">Personal Reference</h3>
+
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-semibold text-gray-700 mb-4">Pastor 1</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Name <span class="text-red-600">*</span></label>
+                                        <input type="text" name="pastor1" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone <span class="text-red-600">*</span></label>
+                                        <input type="tel" name="pastor1Phone" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    <input type="email" name="pastor1Email" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="font-semibold text-gray-700 mb-4">Pastor 2</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                        <input type="text" name="pastor2" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                                        <input type="tel" name="pastor2Phone" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                    </div>
+                                </div>
+                                <div class="mt-4">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    <input type="email" name="pastor2Email" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">How did you hear about O.B.I?</label>
+                                <textarea name="hearAbout" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Who referred you to O.B.I?</label>
+                                <input type="text" name="referredBy" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Signature -->
                     <div>
-                        <label class="block text-gray-700 font-semibold mb-2">Message</label>
-                        <textarea name="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-teal-600"></textarea>
+                        <h3 class="text-xl font-bold text-blue-900 mb-4">Signature</h3>
+                        <p class="text-sm text-gray-600 mb-6">By signing below, I certify that the information provided in this application is true and complete to the best of my knowledge.</p>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Signature <span class="text-red-600">*</span></label>
+                                <input type="text" name="signature" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Date <span class="text-red-600">*</span></label>
+                                <input type="date" name="signatureDate" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-600">
+                            </div>
+                        </div>
                     </div>
-                    <button type="submit" class="w-full bg-teal-600 text-white py-3 rounded-md font-semibold hover:bg-teal-700 transition">Submit Application</button>
+
+                    <div class="pt-6 border-t">
+                        <button type="submit" class="w-full md:w-auto bg-blue-600 text-white px-8 py-3 rounded-md font-semibold hover:bg-blue-700 transition">
+                            Submit Application
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
-    </section>
+    </div>
 
     <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; 2024 Oasis Bible Institute. All rights reserved.</p>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Oasis IMG</h4>
+                    <p class="text-gray-400">Transforming lives through the Gospel of Jesus Christ.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="../about.html" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="../ministries.html" class="text-gray-400 hover:text-white transition">Ministries</a></li>
+                        <li><a href="../leadership.html" class="text-gray-400 hover:text-white transition">Leadership</a></li>
+                        <li><a href="../contact.html" class="text-gray-400 hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition">Bible Institute</a></li>
+                        <li><a href="admissions.html" class="text-gray-400 hover:text-white transition">Admissions</a></li>
+                        <li><a href="../gallery.html" class="text-gray-400 hover:text-white transition">Gallery</a></li>
+                        <li><a href="../dashboard/login.html" class="text-gray-400 hover:text-white transition">Admin Login</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-bold mb-4">Connect</h4>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram text-2xl"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-youtube text-2xl"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Oasis IMG Ministries Ghana. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
@@ -170,11 +584,25 @@
         import { db } from '../assets/js/firebase-config.js';
         import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-        const form = document.getElementById('admission-form');
+        const applicationForm = document.getElementById('application-form');
+
+        // Auto-calculate age from date of birth
+        document.getElementById('dob').addEventListener('change', function() {
+            const dob = new Date(this.value);
+            const today = new Date();
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+
+            document.getElementById('age').value = age;
+        });
 
         // Wait for Firebase to initialize
         window.addEventListener('load', () => {
-            form.addEventListener('submit', async (e) => {
+            applicationForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
                 if (!db) {
@@ -182,25 +610,36 @@
                     return;
                 }
 
-                const formData = new FormData(form);
-                const data = {
-                    fullName: formData.get('fullName'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone'),
-                    program: formData.get('program'),
-                    message: formData.get('message') || '',
-                    status: 'pending',
-                    submittedAt: new Date().toISOString(),
-                    source: 'OBI Website'
-                };
+                const formData = new FormData(e.target);
+                const data = {};
 
-                const submitBtn = form.querySelector('button[type="submit"]');
+                // Handle multiple checkboxes for ministry
+                const ministryCheckboxes = [];
+                formData.forEach((value, key) => {
+                    if (key === 'ministry') {
+                        ministryCheckboxes.push(value);
+                    } else {
+                        data[key] = value;
+                    }
+                });
+
+                if (ministryCheckboxes.length > 0) {
+                    data.ministry = ministryCheckboxes;
+                }
+
+                // Add metadata
+                data.status = 'pending';
+                data.submittedAt = new Date().toISOString();
+                data.source = 'OBI Application';
+
+                const submitBtn = e.target.querySelector('button[type="submit"]');
                 const originalText = submitBtn.textContent;
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Submitting...';
 
                 try {
-                    await addDoc(collection(db, 'applications'), data);
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Submitting...';
+
+                    await addDoc(collection(db, 'obi-applications'), data);
 
                     if (window.showToast) {
                         window.showToast('Application submitted successfully! We will contact you soon.', 'success');
@@ -208,13 +647,13 @@
                         alert('Application submitted successfully! We will contact you soon.');
                     }
 
-                    form.reset();
+                    e.target.reset();
                 } catch (error) {
                     console.error('Error submitting application:', error);
                     if (window.showToast) {
-                        window.showToast(`Error submitting application: ${error.message}`, 'error');
+                        window.showToast('Error submitting application: ' + error.message, 'error');
                     } else {
-                        alert(`Error submitting application: ${error.message}`);
+                        alert('Error submitting application: ' + error.message);
                     }
                 } finally {
                     submitBtn.disabled = false;
