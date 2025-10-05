@@ -168,48 +168,11 @@
     <section class="py-20 bg-teal-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Programs Offered</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <div class="bg-teal-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-graduation-cap text-teal-600 text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Diploma in Theology</h3>
-                    <p class="text-gray-600 mb-4">3-year comprehensive program covering biblical studies, systematic theology, and practical ministry.</p>
-                    <ul class="space-y-2 text-gray-600 mb-6">
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Old & New Testament Studies</li>
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Systematic Theology</li>
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Church History</li>
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Practical Ministry</li>
-                    </ul>
-                </div>
-
-                <div class="bg-white p-8 rounded-lg shadow-lg border-2 border-teal-600">
-                    <div class="bg-teal-600 text-white px-3 py-1 rounded-full text-sm inline-block mb-4">Most Popular</div>
-                    <div class="bg-teal-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-certificate text-teal-600 text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Certificate Program</h3>
-                    <p class="text-gray-600 mb-4">1-year foundational program for biblical knowledge and ministry basics.</p>
-                    <ul class="space-y-2 text-gray-600 mb-6">
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Bible Overview</li>
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Christian Doctrine</li>
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Evangelism & Discipleship</li>
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Leadership Fundamentals</li>
-                    </ul>
-                </div>
-
-                <div class="bg-white p-8 rounded-lg shadow-lg">
-                    <div class="bg-teal-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
-                        <i class="fas fa-book-reader text-teal-600 text-3xl"></i>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Short Courses</h3>
-                    <p class="text-gray-600 mb-4">3-6 month specialized courses for specific ministry skills.</p>
-                    <ul class="space-y-2 text-gray-600 mb-6">
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Preaching & Teaching</li>
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Pastoral Counseling</li>
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Worship Leadership</li>
-                        <li><i class="fas fa-check text-teal-600 mr-2"></i>Youth Ministry</li>
-                    </ul>
+            <div id="programs-container" class="grid md:grid-cols-3 gap-8">
+                <!-- Dynamic content loaded from Firebase -->
+                <div class="col-span-3 text-center py-12">
+                    <i class="fas fa-spinner fa-spin text-6xl text-teal-600 mb-4"></i>
+                    <p class="text-gray-500">Loading programs...</p>
                 </div>
             </div>
         </div>
@@ -254,28 +217,11 @@
     <section class="py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Upcoming Events</h2>
-            <div class="grid md:grid-cols-2 gap-6">
-                <div class="bg-white p-6 rounded-lg shadow-lg flex">
-                    <div class="bg-teal-600 text-white p-4 rounded-lg text-center mr-6">
-                        <div class="text-3xl font-bold">15</div>
-                        <div class="text-sm">OCT</div>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Open Day</h3>
-                        <p class="text-gray-600 mb-2">Visit our campus and meet faculty members</p>
-                        <p class="text-sm text-teal-600"><i class="fas fa-clock mr-2"></i>10:00 AM - 3:00 PM</p>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow-lg flex">
-                    <div class="bg-teal-600 text-white p-4 rounded-lg text-center mr-6">
-                        <div class="text-3xl font-bold">20</div>
-                        <div class="text-sm">OCT</div>
-                    </div>
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Guest Lecture Series</h3>
-                        <p class="text-gray-600 mb-2">Dr. Samuel Asare on Church Leadership</p>
-                        <p class="text-sm text-teal-600"><i class="fas fa-clock mr-2"></i>6:00 PM - 8:00 PM</p>
-                    </div>
+            <div id="events-container" class="grid md:grid-cols-2 gap-6">
+                <!-- Dynamic content loaded from Firebase -->
+                <div class="col-span-2 text-center py-12">
+                    <i class="fas fa-spinner fa-spin text-6xl text-teal-600 mb-4"></i>
+                    <p class="text-gray-500">Loading events...</p>
                 </div>
             </div>
             <div class="text-center mt-8">
@@ -359,5 +305,132 @@
     </footer>
 
     <script type="module" src="../assets/js/main.js"></script>
+    <script type="module">
+        import { db } from '../assets/js/firebase-config.js';
+        import { collection, getDocs, query, orderBy, limit, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        // Load Programs
+        async function loadPrograms() {
+            try {
+                const programsContainer = document.getElementById('programs-container');
+
+                const q = query(
+                    collection(db, 'courses'),
+                    orderBy('createdAt', 'desc'),
+                    limit(3)
+                );
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    programsContainer.innerHTML = `
+                        <div class="col-span-3 text-center py-12">
+                            <i class="fas fa-graduation-cap text-6xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500">No programs available</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                programsContainer.innerHTML = '';
+                snapshot.forEach(docSnap => {
+                    const program = docSnap.data();
+
+                    programsContainer.innerHTML += `
+                        <div class="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition">
+                            <div class="bg-teal-100 w-16 h-16 rounded-lg flex items-center justify-center mb-6">
+                                <i class="fas fa-graduation-cap text-teal-600 text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">${program.title}</h3>
+                            <p class="text-gray-600 mb-4">${program.description || ''}</p>
+                            ${program.duration ? `
+                                <p class="text-sm text-teal-600 mb-4">
+                                    <i class="fas fa-clock mr-2"></i>Duration: ${program.duration}
+                                </p>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error loading programs:', error);
+                document.getElementById('programs-container').innerHTML = `
+                    <div class="col-span-3 text-center py-12">
+                        <p class="text-red-500">Error loading programs</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Load Events
+        async function loadEvents() {
+            try {
+                const eventsContainer = document.getElementById('events-container');
+                const currentDate = new Date().toISOString().split('T')[0];
+
+                const q = query(
+                    collection(db, 'events'),
+                    where('date', '>=', currentDate),
+                    orderBy('date', 'asc'),
+                    limit(2)
+                );
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    eventsContainer.innerHTML = `
+                        <div class="col-span-2 text-center py-12">
+                            <i class="fas fa-calendar-alt text-6xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500">No upcoming events</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                eventsContainer.innerHTML = '';
+                snapshot.forEach(docSnap => {
+                    const event = docSnap.data();
+                    const eventDate = new Date(event.date);
+                    const day = eventDate.getDate();
+                    const month = eventDate.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+
+                    eventsContainer.innerHTML += `
+                        <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition flex">
+                            <div class="bg-teal-600 text-white p-4 rounded-lg text-center mr-6 flex-shrink-0">
+                                <div class="text-3xl font-bold">${day}</div>
+                                <div class="text-sm">${month}</div>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-gray-900 mb-2">${event.title}</h3>
+                                <p class="text-gray-600 mb-2">${event.description || ''}</p>
+                                ${event.time ? `
+                                    <p class="text-sm text-teal-600">
+                                        <i class="fas fa-clock mr-2"></i>${event.time}
+                                    </p>
+                                ` : ''}
+                                ${event.location ? `
+                                    <p class="text-sm text-gray-500 mt-1">
+                                        <i class="fas fa-map-marker-alt mr-2"></i>${event.location}
+                                    </p>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error loading events:', error);
+                document.getElementById('events-container').innerHTML = `
+                    <div class="col-span-2 text-center py-12">
+                        <p class="text-red-500">Error loading events</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', async () => {
+            await Promise.all([
+                loadPrograms(),
+                loadEvents()
+            ]);
+        });
+    </script>
 </body>
 </html>

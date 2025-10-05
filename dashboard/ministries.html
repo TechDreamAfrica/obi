@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ministries - Oasis IMG Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="flex h-screen">
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden bg-gray-900 text-white p-3 rounded-md">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 w-64 bg-gray-900 text-white transition-transform duration-300 ease-in-out z-40">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold">Oasis IMG</h2>
+                <p class="text-sm text-gray-400">Admin Dashboard</p>
+            </div>
+            <nav class="mt-6 overflow-y-auto h-[calc(100vh-120px)]">
+                <a href="index.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="admissions.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-user-graduate mr-3"></i> Admissions
+                </a>
+                <a href="news.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-newspaper mr-3"></i> News
+                </a>
+                <a href="courses.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-book mr-3"></i> Programs Offered
+                </a>
+                <a href="events.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-calendar mr-3"></i> Events
+                </a>
+                <a href="ministries.html" class="flex items-center px-6 py-3 bg-blue-600 text-white">
+                    <i class="fas fa-church mr-3"></i> Ministries
+                </a>
+                <a href="contacts.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-envelope mr-3"></i> Contacts
+                </a>
+                <a href="gallery.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-images mr-3"></i> Gallery
+                </a>
+                <a href="leadership.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-users mr-3"></i> Leadership
+                </a>
+                <button onclick="handleLogout()" class="w-full flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Overlay for mobile -->
+        <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"></div>
+
+        <main class="flex-1 overflow-y-auto lg:ml-0">
+            <header class="bg-white shadow-sm p-6">
+                <div class="flex justify-between items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">Ministries Management</h1>
+                    <button onclick="openAddModal()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-plus mr-2"></i>Add Ministry
+                    </button>
+                </div>
+            </header>
+
+            <div class="p-6">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-4 border-b flex justify-between items-center">
+                        <h2 class="text-lg font-semibold">All Ministries</h2>
+                        <input type="text" id="search-input" placeholder="Search ministries..." class="px-4 py-2 border rounded-md" onkeyup="handleSearch()">
+                    </div>
+
+                    <div id="ministries-grid" class="p-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Ministries will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="ministry-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h2 id="modal-title" class="text-2xl font-bold">Add Ministry</h2>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <form id="ministry-form" class="p-6">
+                <input type="hidden" id="ministry-id">
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Ministry Name *</label>
+                    <input type="text" id="ministry-title" required class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Description *</label>
+                    <textarea id="ministry-description" rows="4" required class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Icon (Font Awesome class)</label>
+                    <input type="text" id="ministry-icon" placeholder="e.g., fa-church" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    <p class="text-sm text-gray-500 mt-1">Visit <a href="https://fontawesome.com/icons" target="_blank" class="text-blue-600">Font Awesome</a> for icons</p>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Image URL</label>
+                    <input type="url" id="ministry-image" placeholder="https://example.com/image.jpg" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 font-semibold mb-2">Leader/Contact</label>
+                    <input type="text" id="ministry-leader" placeholder="Ministry leader or contact person" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-6">
+                    <button type="button" onclick="closeModal()" class="px-6 py-2 border rounded-md hover:bg-gray-100">Cancel</button>
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                        <i class="fas fa-save mr-2"></i>Save Ministry
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from '../assets/js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        let allMinistries = [];
+        let editingId = null;
+
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Error signing out: ' + error.message);
+            }
+        };
+
+        async function loadMinistries() {
+            try {
+                const q = query(collection(db, 'ministries'), orderBy('createdAt', 'desc'));
+                const snapshot = await getDocs(q);
+
+                allMinistries = [];
+                snapshot.forEach(docSnap => {
+                    allMinistries.push({
+                        id: docSnap.id,
+                        ...docSnap.data()
+                    });
+                });
+
+                renderMinistries(allMinistries);
+            } catch (error) {
+                console.error('Error loading ministries:', error);
+                alert('Failed to load ministries: ' + error.message);
+            }
+        }
+
+        function renderMinistries(ministries) {
+            const grid = document.getElementById('ministries-grid');
+
+            if (ministries.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-3 text-center py-12">
+                        <i class="fas fa-church text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500">No ministries found</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = ministries.map(ministry => `
+                <div class="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition">
+                    ${ministry.imageUrl ? `
+                        <img src="${ministry.imageUrl}" alt="${ministry.title}" class="w-full h-48 object-cover">
+                    ` : `
+                        <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                            <i class="fas ${ministry.icon || 'fa-church'} text-6xl text-white"></i>
+                        </div>
+                    `}
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">${ministry.title}</h3>
+                        <p class="text-gray-600 mb-4">${ministry.description}</p>
+                        ${ministry.leader ? `
+                            <p class="text-sm text-gray-500 mb-4">
+                                <i class="fas fa-user mr-2"></i>${ministry.leader}
+                            </p>
+                        ` : ''}
+                        <div class="flex space-x-2 mt-4">
+                            <button onclick="editMinistry('${ministry.id}')" class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                                <i class="fas fa-edit mr-2"></i>Edit
+                            </button>
+                            <button onclick="deleteMinistry('${ministry.id}')" class="flex-1 bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
+                                <i class="fas fa-trash mr-2"></i>Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.handleSearch = function() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+
+            const filtered = allMinistries.filter(ministry =>
+                ministry.title.toLowerCase().includes(searchTerm) ||
+                ministry.description.toLowerCase().includes(searchTerm) ||
+                (ministry.leader && ministry.leader.toLowerCase().includes(searchTerm))
+            );
+
+            renderMinistries(filtered);
+        };
+
+        window.openAddModal = function() {
+            editingId = null;
+            document.getElementById('modal-title').textContent = 'Add Ministry';
+            document.getElementById('ministry-form').reset();
+            document.getElementById('ministry-id').value = '';
+            document.getElementById('ministry-modal').classList.remove('hidden');
+        };
+
+        window.editMinistry = function(id) {
+            const ministry = allMinistries.find(m => m.id === id);
+            if (!ministry) return;
+
+            editingId = id;
+            document.getElementById('modal-title').textContent = 'Edit Ministry';
+            document.getElementById('ministry-id').value = id;
+            document.getElementById('ministry-title').value = ministry.title;
+            document.getElementById('ministry-description').value = ministry.description;
+            document.getElementById('ministry-icon').value = ministry.icon || '';
+            document.getElementById('ministry-image').value = ministry.imageUrl || '';
+            document.getElementById('ministry-leader').value = ministry.leader || '';
+            document.getElementById('ministry-modal').classList.remove('hidden');
+        };
+
+        window.deleteMinistry = async function(id) {
+            if (!confirm('Are you sure you want to delete this ministry?')) return;
+
+            try {
+                await deleteDoc(doc(db, 'ministries', id));
+                allMinistries = allMinistries.filter(m => m.id !== id);
+                renderMinistries(allMinistries);
+                alert('Ministry deleted successfully');
+            } catch (error) {
+                console.error('Error deleting ministry:', error);
+                alert('Failed to delete ministry: ' + error.message);
+            }
+        };
+
+        window.closeModal = function() {
+            document.getElementById('ministry-modal').classList.add('hidden');
+            editingId = null;
+        };
+
+        document.getElementById('ministry-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const ministryData = {
+                title: document.getElementById('ministry-title').value,
+                description: document.getElementById('ministry-description').value,
+                icon: document.getElementById('ministry-icon').value,
+                imageUrl: document.getElementById('ministry-image').value,
+                leader: document.getElementById('ministry-leader').value,
+                updatedAt: new Date().toISOString()
+            };
+
+            try {
+                if (editingId) {
+                    await updateDoc(doc(db, 'ministries', editingId), ministryData);
+                    const index = allMinistries.findIndex(m => m.id === editingId);
+                    if (index !== -1) {
+                        allMinistries[index] = { id: editingId, ...ministryData };
+                    }
+                    alert('Ministry updated successfully');
+                } else {
+                    ministryData.createdAt = new Date().toISOString();
+                    const docRef = await addDoc(collection(db, 'ministries'), ministryData);
+                    allMinistries.unshift({ id: docRef.id, ...ministryData });
+                    alert('Ministry added successfully');
+                }
+
+                renderMinistries(allMinistries);
+                closeModal();
+            } catch (error) {
+                console.error('Error saving ministry:', error);
+                alert('Failed to save ministry: ' + error.message);
+            }
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                // Uncomment to enable login redirect
+                // window.location.href = 'login.html';
+                console.log('User not authenticated');
+            }
+            await loadMinistries();
+        });
+    </script>
+
+    <script>
+        // Mobile sidebar toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+    </script>
+</body>
+</html>

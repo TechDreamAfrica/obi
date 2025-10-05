@@ -9,12 +9,18 @@
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen">
-        <aside class="w-64 bg-gray-900 text-white">
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden bg-gray-900 text-white p-3 rounded-md">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 w-64 bg-gray-900 text-white transition-transform duration-300 ease-in-out z-40">
             <div class="p-6">
                 <h2 class="text-2xl font-bold">Oasis IMG</h2>
                 <p class="text-sm text-gray-400">Admin Dashboard</p>
             </div>
-            <nav class="mt-6">
+            <nav class="mt-6 overflow-y-auto h-[calc(100vh-120px)]">
                 <a href="index.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-home mr-3"></i> Dashboard
                 </a>
@@ -29,6 +35,9 @@
                 </a>
                 <a href="events.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-calendar mr-3"></i> Events
+                </a>
+                <a href="ministries.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-church mr-3"></i> Ministries
                 </a>
                 <a href="contacts.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-envelope mr-3"></i> Contacts
@@ -45,7 +54,10 @@
             </nav>
         </aside>
 
-        <main class="flex-1 overflow-y-auto">
+        <!-- Overlay for mobile -->
+        <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"></div>
+
+        <main class="flex-1 overflow-y-auto lg:ml-0">
             <header class="bg-white shadow-sm p-6">
                 <div class="flex justify-between items-center">
                     <h1 class="text-2xl font-bold text-gray-900">Gallery Management</h1>
@@ -438,6 +450,21 @@
 
         // Export functions
         window.loadGallery = loadGallery;
+    </script>
+
+    <script>
+        // Mobile sidebar toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
     </script>
 </body>
 </html>

@@ -202,5 +202,72 @@
     </footer>
 
     <script type="module" src="assets/js/main.js"></script>
+    <script type="module">
+        import { db } from './assets/js/firebase-config.js';
+        import { collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        async function loadMinistries() {
+            try {
+                const ministriesContainer = document.getElementById('ministries-list');
+                ministriesContainer.innerHTML = `
+                    <div class="col-span-3 text-center py-12">
+                        <i class="fas fa-spinner fa-spin text-6xl text-blue-600 mb-4"></i>
+                        <p class="text-gray-500">Loading ministries...</p>
+                    </div>
+                `;
+
+                const q = query(collection(db, 'ministries'), orderBy('createdAt', 'desc'));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    ministriesContainer.innerHTML = `
+                        <div class="col-span-3 text-center py-12">
+                            <i class="fas fa-church text-6xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500">No ministries available at the moment</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                ministriesContainer.innerHTML = '';
+                snapshot.forEach(docSnap => {
+                    const ministry = docSnap.data();
+
+                    ministriesContainer.innerHTML += `
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                            ${ministry.imageUrl ? `
+                                <img src="${ministry.imageUrl}" alt="${ministry.title}" class="w-full h-48 object-cover">
+                            ` : `
+                                <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                                    <i class="fas ${ministry.icon || 'fa-church'} text-6xl text-white"></i>
+                                </div>
+                            `}
+                            <div class="p-6">
+                                <h3 class="text-2xl font-bold text-gray-900 mb-3">${ministry.title}</h3>
+                                <p class="text-gray-600 mb-4">${ministry.description}</p>
+                                ${ministry.leader ? `
+                                    <div class="flex items-center text-sm text-gray-700 mt-4 pt-4 border-t">
+                                        <i class="fas fa-user mr-2 text-blue-600"></i>
+                                        <span class="font-semibold">Contact:</span>&nbsp;${ministry.leader}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error loading ministries:', error);
+                document.getElementById('ministries-list').innerHTML = `
+                    <div class="col-span-3 text-center py-12">
+                        <i class="fas fa-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+                        <p class="text-red-500">Error loading ministries</p>
+                        <p class="text-gray-500 mt-2">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        window.addEventListener('load', loadMinistries);
+    </script>
 </body>
 </html>

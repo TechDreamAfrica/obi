@@ -9,12 +9,18 @@
 </head>
 <body class="bg-gray-100">
     <div class="flex h-screen">
-        <aside class="w-64 bg-gray-900 text-white">
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden bg-gray-900 text-white p-3 rounded-md">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 w-64 bg-gray-900 text-white transition-transform duration-300 ease-in-out z-40">
             <div class="p-6">
                 <h2 class="text-2xl font-bold">Oasis IMG</h2>
                 <p class="text-sm text-gray-400">Admin Dashboard</p>
             </div>
-            <nav class="mt-6">
+            <nav class="mt-6 overflow-y-auto h-[calc(100vh-120px)]">
                 <a href="index.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-home mr-3"></i> Dashboard
                 </a>
@@ -29,6 +35,9 @@
                 </a>
                 <a href="events.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-calendar mr-3"></i> Events
+                </a>
+                <a href="ministries.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-church mr-3"></i> Ministries
                 </a>
                 <a href="contacts.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-envelope mr-3"></i> Contacts
@@ -45,7 +54,10 @@
             </nav>
         </aside>
 
-        <main class="flex-1 overflow-y-auto">
+        <!-- Overlay for mobile -->
+        <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"></div>
+
+        <main class="flex-1 overflow-y-auto lg:ml-0">
             <header class="bg-white shadow-sm p-6">
                 <div class="flex justify-between items-center">
                     <h1 class="text-2xl font-bold text-gray-900">Programs Offered Management</h1>
@@ -86,53 +98,52 @@
             <form id="courseForm" class="space-y-4">
                 <input type="hidden" id="course-id">
 
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Program Title *</label>
-                        <input type="text" id="course-title" name="title" required class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Program Code</label>
-                        <input type="text" id="course-code" name="code" placeholder="e.g., BIB101" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
-                    </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Program Title *</label>
+                    <input type="text" id="course-title" name="title" required placeholder="e.g., Diploma in Theology" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium mb-2">Program *</label>
-                        <select id="course-program" name="program" required class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
-                            <option value="">Select Program</option>
-                            <option value="Diploma in Theology">Diploma in Theology</option>
-                            <option value="Certificate Program">Certificate Program</option>
-                            <option value="Short Courses">Short Courses</option>
+                        <label class="block text-sm font-medium mb-2">Program Type *</label>
+                        <select id="course-type" name="type" required class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                            <option value="">Select Type</option>
+                            <option value="Diploma">Diploma</option>
+                            <option value="Certificate">Certificate</option>
+                            <option value="Short Course">Short Course</option>
                             <option value="Ministry Training">Ministry Training</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-2">Duration</label>
-                        <input type="text" id="course-duration" name="duration" placeholder="e.g., 3 months, 1 year" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
-                    </div>
-                </div>
-
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Credits</label>
-                        <input type="number" id="course-credits" name="credits" min="0" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Instructor</label>
-                        <input type="text" id="course-instructor" name="instructor" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                        <label class="block text-sm font-medium mb-2">Duration *</label>
+                        <input type="text" id="course-duration" name="duration" required placeholder="e.g., 3 years, 6 months" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium mb-2">Description *</label>
-                    <textarea id="course-description" name="description" rows="4" required placeholder="Program overview and objectives..." class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                    <textarea id="course-description" name="description" rows="4" required placeholder="Comprehensive description of the program, objectives, and what students will learn..." class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Tuition Fee</label>
+                        <input type="text" id="course-fee" name="fee" placeholder="e.g., GHS 5,000 per year" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Credits/Units</label>
+                        <input type="text" id="course-credits" name="credits" placeholder="e.g., 120 credits" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-2">Prerequisites</label>
-                    <textarea id="course-prerequisites" name="prerequisites" rows="2" placeholder="Required prior programs or knowledge..." class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                    <label class="block text-sm font-medium mb-2">Entry Requirements</label>
+                    <textarea id="course-requirements" name="requirements" rows="3" placeholder="List admission/entry requirements (e.g., WASSCE, Baptism, etc.)" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Key Subjects/Modules</label>
+                    <textarea id="course-subjects" name="subjects" rows="3" placeholder="List main subjects or modules covered (one per line)" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-4">
@@ -141,19 +152,24 @@
                         <input type="date" id="course-start" name="startDate" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-2">End Date</label>
-                        <input type="date" id="course-end" name="endDate" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                        <label class="block text-sm font-medium mb-2">Application Deadline</label>
+                        <input type="date" id="course-deadline" name="deadline" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
                     </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Image URL</label>
+                    <input type="url" id="course-image" name="imageUrl" placeholder="https://example.com/image.jpg" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
                 </div>
 
                 <div class="flex items-center space-x-6">
                     <div class="flex items-center">
                         <input type="checkbox" id="course-active" name="active" checked class="mr-2">
-                        <label for="course-active" class="text-sm font-medium">Active</label>
+                        <label for="course-active" class="text-sm font-medium">Active/Published</label>
                     </div>
                     <div class="flex items-center">
                         <input type="checkbox" id="course-enrollment" name="enrollmentOpen" class="mr-2">
-                        <label for="course-enrollment" class="text-sm font-medium">Enrollment Open</label>
+                        <label for="course-enrollment" class="text-sm font-medium">Accepting Applications</label>
                     </div>
                 </div>
 
@@ -164,6 +180,29 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- View Details Modal -->
+    <div id="viewModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h2 class="text-2xl font-bold">Program Details</h2>
+                <button onclick="closeViewModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            <div id="view-content" class="p-6">
+                <!-- Program details will be loaded here -->
+            </div>
+            <div class="p-6 border-t flex justify-end space-x-3">
+                <button onclick="printProgram()" class="bg-gray-600 text-white px-6 py-2 rounded-md hover:bg-gray-700">
+                    <i class="fas fa-print mr-2"></i>Print
+                </button>
+                <button onclick="closeViewModal()" class="border px-6 py-2 rounded-md hover:bg-gray-50">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
 
@@ -237,9 +276,9 @@
 
             list.innerHTML = coursesArray.map(course => {
                 const statusClass = course.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
-                const statusText = course.active ? 'Active' : 'Inactive';
+                const statusText = course.active ? 'Published' : 'Draft';
                 const enrollmentClass = course.enrollmentOpen ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800';
-                const enrollmentText = course.enrollmentOpen ? 'Enrollment Open' : 'Enrollment Closed';
+                const enrollmentText = course.enrollmentOpen ? 'Accepting Applications' : 'Applications Closed';
 
                 return `
                     <div class="p-6 hover:bg-gray-50">
@@ -248,7 +287,7 @@
                                 <div class="flex items-start justify-between mb-2">
                                     <div>
                                         <h3 class="font-bold text-lg text-gray-900">${course.title}</h3>
-                                        ${course.code ? `<p class="text-sm text-gray-500">Code: ${course.code}</p>` : ''}
+                                        ${course.type ? `<p class="text-sm text-gray-500">${course.type}</p>` : ''}
                                     </div>
                                     <div class="flex space-x-2">
                                         <span class="${statusClass} text-xs px-2 py-1 rounded">${statusText}</span>
@@ -256,21 +295,23 @@
                                     </div>
                                 </div>
                                 <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-600 mb-3">
-                                    <div><i class="fas fa-graduation-cap mr-2 text-blue-600"></i>${course.program || 'N/A'}</div>
                                     ${course.duration ? `<div><i class="fas fa-clock mr-2 text-blue-600"></i>${course.duration}</div>` : ''}
-                                    ${course.credits ? `<div><i class="fas fa-award mr-2 text-blue-600"></i>${course.credits} Credits</div>` : ''}
-                                    ${course.instructor ? `<div><i class="fas fa-user mr-2 text-blue-600"></i>${course.instructor}</div>` : ''}
+                                    ${course.credits ? `<div><i class="fas fa-award mr-2 text-blue-600"></i>${course.credits}</div>` : ''}
+                                    ${course.fee ? `<div><i class="fas fa-money-bill mr-2 text-blue-600"></i>${course.fee}</div>` : ''}
+                                    ${course.startDate ? `<div><i class="fas fa-calendar mr-2 text-blue-600"></i>Starts: ${new Date(course.startDate).toLocaleDateString()}</div>` : ''}
                                 </div>
                                 <p class="text-gray-600 mb-2">${course.description?.substring(0, 150)}${(course.description?.length || 0) > 150 ? '...' : ''}</p>
-                                ${course.startDate || course.endDate ? `
-                                    <p class="text-sm text-gray-500">
-                                        <i class="fas fa-calendar mr-1"></i>
-                                        ${course.startDate ? new Date(course.startDate).toLocaleDateString() : 'TBD'} -
-                                        ${course.endDate ? new Date(course.endDate).toLocaleDateString() : 'TBD'}
+                                ${course.deadline ? `
+                                    <p class="text-sm text-orange-600">
+                                        <i class="fas fa-exclamation-circle mr-1"></i>
+                                        Application Deadline: ${new Date(course.deadline).toLocaleDateString()}
                                     </p>
                                 ` : ''}
                             </div>
                             <div class="flex items-center space-x-2 ml-4">
+                                <button onclick="viewCourse('${course.id}')" class="text-green-600 hover:text-green-700 p-2" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </button>
                                 <button onclick="editCourse('${course.id}')" class="text-blue-600 hover:text-blue-700 p-2" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
@@ -315,18 +356,125 @@
             document.getElementById('modal-title').textContent = 'Edit Program';
             document.getElementById('course-id').value = id;
             document.getElementById('course-title').value = course.title || '';
-            document.getElementById('course-code').value = course.code || '';
-            document.getElementById('course-program').value = course.program || '';
+            document.getElementById('course-type').value = course.type || '';
             document.getElementById('course-duration').value = course.duration || '';
-            document.getElementById('course-credits').value = course.credits || '';
-            document.getElementById('course-instructor').value = course.instructor || '';
             document.getElementById('course-description').value = course.description || '';
-            document.getElementById('course-prerequisites').value = course.prerequisites || '';
+            document.getElementById('course-fee').value = course.fee || '';
+            document.getElementById('course-credits').value = course.credits || '';
+            document.getElementById('course-requirements').value = course.requirements || '';
+            document.getElementById('course-subjects').value = course.subjects || '';
             document.getElementById('course-start').value = course.startDate || '';
-            document.getElementById('course-end').value = course.endDate || '';
+            document.getElementById('course-deadline').value = course.deadline || '';
+            document.getElementById('course-image').value = course.imageUrl || '';
             document.getElementById('course-active').checked = course.active !== false;
             document.getElementById('course-enrollment').checked = course.enrollmentOpen === true;
             document.getElementById('courseModal').classList.remove('hidden');
+        };
+
+        // View course details
+        window.viewCourse = function(id) {
+            const course = allCourses.find(c => c.id === id);
+            if (!course) return;
+
+            const viewContent = document.getElementById('view-content');
+            const subjectsList = course.subjects ? course.subjects.split('\n').filter(s => s.trim()).map(s => `<li class="flex items-start"><i class="fas fa-check-circle text-blue-600 mr-2 mt-1"></i><span>${s.trim()}</span></li>`).join('') : '';
+
+            viewContent.innerHTML = `
+                <div class="space-y-6">
+                    ${course.imageUrl ? `
+                        <div class="mb-6">
+                            <img src="${course.imageUrl}" alt="${course.title}" class="w-full h-64 object-cover rounded-lg">
+                        </div>
+                    ` : ''}
+
+                    <div>
+                        <h3 class="text-3xl font-bold text-gray-900 mb-2">${course.title}</h3>
+                        ${course.type ? `<p class="text-lg text-blue-600 font-semibold mb-4">${course.type}</p>` : ''}
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        ${course.duration ? `
+                            <div class="border-l-4 border-blue-600 pl-4">
+                                <p class="text-sm text-gray-500 mb-1">Duration</p>
+                                <p class="font-semibold text-gray-900">${course.duration}</p>
+                            </div>
+                        ` : ''}
+                        ${course.credits ? `
+                            <div class="border-l-4 border-blue-600 pl-4">
+                                <p class="text-sm text-gray-500 mb-1">Credits/Units</p>
+                                <p class="font-semibold text-gray-900">${course.credits}</p>
+                            </div>
+                        ` : ''}
+                        ${course.fee ? `
+                            <div class="border-l-4 border-blue-600 pl-4">
+                                <p class="text-sm text-gray-500 mb-1">Tuition Fee</p>
+                                <p class="font-semibold text-gray-900">${course.fee}</p>
+                            </div>
+                        ` : ''}
+                        ${course.startDate ? `
+                            <div class="border-l-4 border-blue-600 pl-4">
+                                <p class="text-sm text-gray-500 mb-1">Start Date</p>
+                                <p class="font-semibold text-gray-900">${new Date(course.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            </div>
+                        ` : ''}
+                        ${course.deadline ? `
+                            <div class="border-l-4 border-orange-600 pl-4">
+                                <p class="text-sm text-gray-500 mb-1">Application Deadline</p>
+                                <p class="font-semibold text-orange-600">${new Date(course.deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <span class="bg-${course.active ? 'green' : 'gray'}-100 text-${course.active ? 'green' : 'gray'}-800 px-4 py-2 rounded-full text-sm font-semibold">
+                            ${course.active ? 'Published' : 'Draft'}
+                        </span>
+                        <span class="bg-${course.enrollmentOpen ? 'blue' : 'gray'}-100 text-${course.enrollmentOpen ? 'blue' : 'gray'}-800 px-4 py-2 rounded-full text-sm font-semibold">
+                            ${course.enrollmentOpen ? 'Accepting Applications' : 'Applications Closed'}
+                        </span>
+                    </div>
+
+                    ${course.description ? `
+                        <div class="border-t pt-6">
+                            <h4 class="text-xl font-bold text-gray-900 mb-3">Description</h4>
+                            <p class="text-gray-700 whitespace-pre-wrap leading-relaxed">${course.description}</p>
+                        </div>
+                    ` : ''}
+
+                    ${course.requirements ? `
+                        <div class="border-t pt-6">
+                            <h4 class="text-xl font-bold text-gray-900 mb-3">Entry Requirements</h4>
+                            <p class="text-gray-700 whitespace-pre-wrap leading-relaxed">${course.requirements}</p>
+                        </div>
+                    ` : ''}
+
+                    ${course.subjects ? `
+                        <div class="border-t pt-6">
+                            <h4 class="text-xl font-bold text-gray-900 mb-3">Key Subjects/Modules</h4>
+                            <ul class="space-y-2 text-gray-700">
+                                ${subjectsList}
+                            </ul>
+                        </div>
+                    ` : ''}
+
+                    <div class="border-t pt-6 text-sm text-gray-500">
+                        <p>Created: ${course.createdAt ? new Date(course.createdAt).toLocaleString() : 'N/A'}</p>
+                        <p>Last Updated: ${course.updatedAt ? new Date(course.updatedAt).toLocaleString() : 'N/A'}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('viewModal').classList.remove('hidden');
+        };
+
+        // Close view modal
+        window.closeViewModal = function() {
+            document.getElementById('viewModal').classList.add('hidden');
+        };
+
+        // Print program
+        window.printProgram = function() {
+            window.print();
         };
 
         // Delete course
@@ -362,18 +510,19 @@
             const formData = new FormData(e.target);
             const data = {
                 title: formData.get('title'),
-                code: formData.get('code') || '',
-                program: formData.get('program'),
-                duration: formData.get('duration') || '',
-                credits: parseInt(formData.get('credits')) || 0,
-                instructor: formData.get('instructor') || '',
+                type: formData.get('type'),
+                duration: formData.get('duration'),
                 description: formData.get('description'),
-                prerequisites: formData.get('prerequisites') || '',
+                fee: formData.get('fee') || '',
+                credits: formData.get('credits') || '',
+                requirements: formData.get('requirements') || '',
+                subjects: formData.get('subjects') || '',
                 startDate: formData.get('startDate') || '',
-                endDate: formData.get('endDate') || '',
+                deadline: formData.get('deadline') || '',
+                imageUrl: formData.get('imageUrl') || '',
                 active: document.getElementById('course-active').checked,
                 enrollmentOpen: document.getElementById('course-enrollment').checked,
-                updatedAt: serverTimestamp()
+                updatedAt: new Date().toISOString()
             };
 
             try {
@@ -381,7 +530,7 @@
                     await updateDoc(doc(db, 'courses', editingId), data);
                     alert('Program updated successfully!');
                 } else {
-                    data.createdAt = serverTimestamp();
+                    data.createdAt = new Date().toISOString();
                     await addDoc(collection(db, 'courses'), data);
                     alert('Program added successfully!');
                 }
@@ -396,6 +545,21 @@
                 submitBtn.innerHTML = originalText;
             }
         });
+    </script>
+
+    <script>
+        // Mobile sidebar toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
     </script>
 </body>
 </html>
