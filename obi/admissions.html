@@ -24,10 +24,10 @@
                     <a href="index.html" class="text-teal-100 hover:text-white transition">Home</a>
 
                     <div class="relative group">
-                        <button class="text-teal-100 hover:text-white transition flex items-center">
+                        <button class="text-teal-100 hover:text-white transition flex items-center py-2">
                             About <i class="fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
-                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md mt-2 py-2 w-56 z-50">
+                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md pt-2 w-56 z-50 top-full">
                             <a href="../about.html" class="block px-4 py-2 hover:bg-teal-700 text-white">About Us</a>
                             <a href="../leadership.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Leadership</a>
                             <a href="../ministries.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Ministries</a>
@@ -35,10 +35,10 @@
                     </div>
 
                     <div class="relative group">
-                        <button class="text-white font-semibold border-b-2 border-teal-400 flex items-center">
+                        <button class="text-white font-semibold border-b-2 border-teal-400 flex items-center py-2">
                             Programs <i class="fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
-                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md mt-2 py-2 w-56 z-50">
+                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md pt-2 w-56 z-50 top-full">
                             <a href="index.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Bible Institute</a>
                             <a href="admissions.html" class="block px-4 py-2 hover:bg-teal-700 text-white">OBI Admissions</a>
                             <a href="../admissions.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Ministry Training</a>
@@ -46,10 +46,10 @@
                     </div>
 
                     <div class="relative group">
-                        <button class="text-teal-100 hover:text-white transition flex items-center">
+                        <button class="text-teal-100 hover:text-white transition flex items-center py-2">
                             Get Involved <i class="fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
-                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md mt-2 py-2 w-56 z-50">
+                        <div class="absolute hidden group-hover:block bg-teal-800 shadow-lg rounded-md pt-2 w-56 z-50 top-full">
                             <a href="../credential-application.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Credential Application</a>
                             <a href="../sponsor-student.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Sponsor a Student</a>
                             <a href="../contact.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Contact Us</a>
@@ -60,11 +60,11 @@
 
                     <div id="user-menu" class="hidden">
                         <div class="relative group">
-                            <button class="flex items-center text-teal-100 hover:text-white transition">
+                            <button class="flex items-center text-teal-100 hover:text-white transition py-2">
                                 <i class="fas fa-user-circle text-2xl"></i>
                                 <i class="fas fa-chevron-down ml-1 text-xs"></i>
                             </button>
-                            <div class="absolute right-0 hidden group-hover:block bg-teal-800 shadow-lg rounded-md mt-2 py-2 w-48 z-50">
+                            <div class="absolute right-0 hidden group-hover:block bg-teal-800 shadow-lg rounded-md pt-2 w-48 z-50 top-full">
                                 <a href="../dashboard/index.html" class="block px-4 py-2 hover:bg-teal-700 text-white">Dashboard</a>
                                 <button onclick="window.handleSignOut()" class="w-full text-left block px-4 py-2 hover:bg-teal-700 text-red-300">Sign Out</button>
                             </div>
@@ -166,5 +166,62 @@
     </footer>
 
     <script type="module" src="../assets/js/main.js"></script>
+    <script type="module">
+        import { db } from '../assets/js/firebase-config.js';
+        import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const form = document.getElementById('admission-form');
+
+        // Wait for Firebase to initialize
+        window.addEventListener('load', () => {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                if (!db) {
+                    alert('Firebase is not initialized. Please refresh the page and try again.');
+                    return;
+                }
+
+                const formData = new FormData(form);
+                const data = {
+                    fullName: formData.get('fullName'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    program: formData.get('program'),
+                    message: formData.get('message') || '',
+                    status: 'pending',
+                    submittedAt: new Date().toISOString(),
+                    source: 'OBI Website'
+                };
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
+
+                try {
+                    await addDoc(collection(db, 'applications'), data);
+
+                    if (window.showToast) {
+                        window.showToast('Application submitted successfully! We will contact you soon.', 'success');
+                    } else {
+                        alert('Application submitted successfully! We will contact you soon.');
+                    }
+
+                    form.reset();
+                } catch (error) {
+                    console.error('Error submitting application:', error);
+                    if (window.showToast) {
+                        window.showToast(`Error submitting application: ${error.message}`, 'error');
+                    } else {
+                        alert(`Error submitting application: ${error.message}`);
+                    }
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
+            });
+        });
+    </script>
 </body>
 </html>

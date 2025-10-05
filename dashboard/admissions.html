@@ -33,9 +33,9 @@
                 <a href="leadership.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-users mr-3"></i> Leadership
                 </a>
-                <a href="login.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                <button onclick="handleLogout()" class="w-full flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
                     <i class="fas fa-sign-out-alt mr-3"></i> Logout
-                </a>
+                </button>
             </nav>
         </aside>
 
@@ -56,12 +56,12 @@
                 <div class="bg-white rounded-lg shadow mb-6">
                     <div class="p-4 border-b flex justify-between items-center">
                         <div class="flex space-x-4">
-                            <button class="px-4 py-2 bg-blue-600 text-white rounded-md">All (156)</button>
-                            <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Pending (23)</button>
-                            <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Approved (98)</button>
-                            <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Rejected (35)</button>
+                            <button onclick="filterApplications('all')" id="filter-all" class="px-4 py-2 bg-blue-600 text-white rounded-md">All (<span id="count-all">0</span>)</button>
+                            <button onclick="filterApplications('pending')" id="filter-pending" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Pending (<span id="count-pending">0</span>)</button>
+                            <button onclick="filterApplications('approved')" id="filter-approved" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Approved (<span id="count-approved">0</span>)</button>
+                            <button onclick="filterApplications('rejected')" id="filter-rejected" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md">Rejected (<span id="count-rejected">0</span>)</button>
                         </div>
-                        <input type="text" placeholder="Search applications..." class="px-4 py-2 border rounded-md">
+                        <input type="text" id="search-input" placeholder="Search applications..." class="px-4 py-2 border rounded-md">
                     </div>
 
                     <div class="overflow-x-auto">
@@ -76,69 +76,7 @@
                                 </tr>
                             </thead>
                             <tbody id="applications-table" class="divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center">
-                                            <img src="https://ui-avatars.com/api/?name=John+Doe" class="w-10 h-10 rounded-full mr-3">
-                                            <div>
-                                                <p class="font-semibold">John Doe</p>
-                                                <p class="text-sm text-gray-500">john@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4">Diploma in Theology</td>
-                                    <td class="px-6 py-4">Oct 1, 2024</td>
-                                    <td class="px-6 py-4">
-                                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <button class="text-blue-600 hover:text-blue-700 mr-3"><i class="fas fa-eye"></i></button>
-                                        <button class="text-green-600 hover:text-green-700 mr-3"><i class="fas fa-check"></i></button>
-                                        <button class="text-red-600 hover:text-red-700"><i class="fas fa-times"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center">
-                                            <img src="https://ui-avatars.com/api/?name=Jane+Smith" class="w-10 h-10 rounded-full mr-3">
-                                            <div>
-                                                <p class="font-semibold">Jane Smith</p>
-                                                <p class="text-sm text-gray-500">jane@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4">Certificate Program</td>
-                                    <td class="px-6 py-4">Sep 28, 2024</td>
-                                    <td class="px-6 py-4">
-                                        <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Approved</span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <button class="text-blue-600 hover:text-blue-700 mr-3"><i class="fas fa-eye"></i></button>
-                                        <button class="text-gray-400"><i class="fas fa-check"></i></button>
-                                        <button class="text-gray-400"><i class="fas fa-times"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4">
-                                        <div class="flex items-center">
-                                            <img src="https://ui-avatars.com/api/?name=David+Brown" class="w-10 h-10 rounded-full mr-3">
-                                            <div>
-                                                <p class="font-semibold">David Brown</p>
-                                                <p class="text-sm text-gray-500">david@example.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4">Short Course - Preaching</td>
-                                    <td class="px-6 py-4">Sep 25, 2024</td>
-                                    <td class="px-6 py-4">
-                                        <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Pending</span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <button class="text-blue-600 hover:text-blue-700 mr-3"><i class="fas fa-eye"></i></button>
-                                        <button class="text-green-600 hover:text-green-700 mr-3"><i class="fas fa-check"></i></button>
-                                        <button class="text-red-600 hover:text-red-700"><i class="fas fa-times"></i></button>
-                                    </td>
-                                </tr>
+                                <!-- Dynamic content -->
                             </tbody>
                         </table>
                     </div>
@@ -159,18 +97,203 @@
     </div>
 
     <script type="module">
-        import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { db, auth } from '../assets/js/firebase-config.js';
+        import { collection, getDocs, doc, updateDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        let allApplications = [];
+        let currentFilter = 'all';
+
+        // Logout function
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Error signing out: ' + error.message);
+            }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                await loadApplications();
+            }
+        });
 
         async function loadApplications() {
-            // Load from Firebase when configured
-            const db = window.db;
-            if (db) {
-                const querySnapshot = await getDocs(collection(db, "admissions"));
-                // Process and display applications
+            try {
+                const q = query(collection(db, 'applications'), orderBy('submittedAt', 'desc'));
+                const snapshot = await getDocs(q);
+
+                allApplications = [];
+                snapshot.forEach(doc => {
+                    allApplications.push({ id: doc.id, ...doc.data() });
+                });
+
+                updateCounts();
+                renderApplications();
+            } catch (error) {
+                console.error('Error loading applications:', error);
+                document.getElementById('applications-table').innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-500">Error loading applications</td></tr>';
             }
         }
 
-        window.addEventListener('load', loadApplications);
+        function updateCounts() {
+            const all = allApplications.length;
+            const pending = allApplications.filter(app => app.status === 'pending').length;
+            const approved = allApplications.filter(app => app.status === 'approved').length;
+            const rejected = allApplications.filter(app => app.status === 'rejected').length;
+
+            document.getElementById('count-all').textContent = all;
+            document.getElementById('count-pending').textContent = pending;
+            document.getElementById('count-approved').textContent = approved;
+            document.getElementById('count-rejected').textContent = rejected;
+        }
+
+        function renderApplications() {
+            const filtered = currentFilter === 'all'
+                ? allApplications
+                : allApplications.filter(app => app.status === currentFilter);
+
+            const tbody = document.getElementById('applications-table');
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-500">No applications found</td></tr>';
+                return;
+            }
+
+            filtered.forEach(app => {
+                const statusColors = {
+                    pending: 'bg-yellow-100 text-yellow-800',
+                    approved: 'bg-green-100 text-green-800',
+                    rejected: 'bg-red-100 text-red-800'
+                };
+                const statusClass = statusColors[app.status] || statusColors.pending;
+                const date = app.submittedAt ? new Date(app.submittedAt).toLocaleDateString() : 'N/A';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(app.fullName || 'User')}" class="w-10 h-10 rounded-full mr-3">
+                            <div>
+                                <p class="font-semibold">${app.fullName || 'N/A'}</p>
+                                <p class="text-sm text-gray-500">${app.email || 'N/A'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">${app.program || 'N/A'}</td>
+                    <td class="px-6 py-4">${date}</td>
+                    <td class="px-6 py-4">
+                        <span class="${statusClass} text-xs px-2 py-1 rounded-full capitalize">${app.status || 'pending'}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button onclick="viewApplication('${app.id}')" class="text-blue-600 hover:text-blue-700 mr-3" title="View"><i class="fas fa-eye"></i></button>
+                        <button onclick="updateStatus('${app.id}', 'approved')" class="text-green-600 hover:text-green-700 mr-3" title="Approve"><i class="fas fa-check"></i></button>
+                        <button onclick="updateStatus('${app.id}', 'rejected')" class="text-red-600 hover:text-red-700" title="Reject"><i class="fas fa-times"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        window.filterApplications = function(status) {
+            currentFilter = status;
+
+            document.querySelectorAll('[id^="filter-"]').forEach(btn => {
+                btn.className = 'px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-md';
+            });
+            document.getElementById(`filter-${status}`).className = 'px-4 py-2 bg-blue-600 text-white rounded-md';
+
+            renderApplications();
+        };
+
+        window.updateStatus = async function(appId, newStatus) {
+            if (!confirm(`Are you sure you want to ${newStatus === 'approved' ? 'approve' : 'reject'} this application?`)) {
+                return;
+            }
+
+            try {
+                const appRef = doc(db, 'applications', appId);
+                await updateDoc(appRef, {
+                    status: newStatus,
+                    updatedAt: new Date().toISOString()
+                });
+
+                const app = allApplications.find(a => a.id === appId);
+                if (app) app.status = newStatus;
+
+                updateCounts();
+                renderApplications();
+                alert(`Application ${newStatus} successfully!`);
+            } catch (error) {
+                console.error('Error updating status:', error);
+                alert('Error updating application status');
+            }
+        };
+
+        window.viewApplication = function(appId) {
+            const app = allApplications.find(a => a.id === appId);
+            if (app) {
+                alert(`Applicant: ${app.fullName}\nEmail: ${app.email}\nProgram: ${app.program}\nStatus: ${app.status}\n\nPhone: ${app.phone}\nAddress: ${app.address}`);
+            }
+        };
+
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = (currentFilter === 'all' ? allApplications : allApplications.filter(app => app.status === currentFilter))
+                .filter(app =>
+                    app.fullName?.toLowerCase().includes(searchTerm) ||
+                    app.email?.toLowerCase().includes(searchTerm) ||
+                    app.program?.toLowerCase().includes(searchTerm)
+                );
+
+            const tbody = document.getElementById('applications-table');
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-500">No matching applications</td></tr>';
+                return;
+            }
+
+            filtered.forEach(app => {
+                const statusColors = {
+                    pending: 'bg-yellow-100 text-yellow-800',
+                    approved: 'bg-green-100 text-green-800',
+                    rejected: 'bg-red-100 text-red-800'
+                };
+                const statusClass = statusColors[app.status] || statusColors.pending;
+                const date = app.submittedAt ? new Date(app.submittedAt).toLocaleDateString() : 'N/A';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(app.fullName || 'User')}" class="w-10 h-10 rounded-full mr-3">
+                            <div>
+                                <p class="font-semibold">${app.fullName || 'N/A'}</p>
+                                <p class="text-sm text-gray-500">${app.email || 'N/A'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4">${app.program || 'N/A'}</td>
+                    <td class="px-6 py-4">${date}</td>
+                    <td class="px-6 py-4">
+                        <span class="${statusClass} text-xs px-2 py-1 rounded-full capitalize">${app.status || 'pending'}</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <button onclick="viewApplication('${app.id}')" class="text-blue-600 hover:text-blue-700 mr-3"><i class="fas fa-eye"></i></button>
+                        <button onclick="updateStatus('${app.id}', 'approved')" class="text-green-600 hover:text-green-700 mr-3"><i class="fas fa-check"></i></button>
+                        <button onclick="updateStatus('${app.id}', 'rejected')" class="text-red-600 hover:text-red-700"><i class="fas fa-times"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        });
     </script>
 </body>
 </html>

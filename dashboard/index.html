@@ -33,9 +33,9 @@
                 <a href="leadership.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-users mr-3"></i> Leadership
                 </a>
-                <a href="login.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                <button onclick="handleLogout()" class="w-full flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
                     <i class="fas fa-sign-out-alt mr-3"></i> Logout
-                </a>
+                </button>
             </nav>
         </aside>
 
@@ -130,13 +130,79 @@
     </div>
 
     <script type="module">
-        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
+        import { db, auth } from '../assets/js/firebase-config.js';
+        import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Logout function
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Error signing out: ' + error.message);
+            }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 window.location.href = 'login.html';
+            } else {
+                await loadDashboardData();
             }
         });
+
+        async function loadDashboardData() {
+            try {
+                const applicationsSnapshot = await getDocs(collection(db, 'applications'));
+                const totalApps = applicationsSnapshot.size;
+                const pendingApps = applicationsSnapshot.docs.filter(doc => doc.data().status === 'pending').length;
+
+                const contactsSnapshot = await getDocs(collection(db, 'contacts'));
+                const totalContacts = contactsSnapshot.size;
+
+                const newsSnapshot = await getDocs(collection(db, 'news'));
+                const totalNews = newsSnapshot.size;
+
+                document.getElementById('total-applications').textContent = totalApps;
+                document.getElementById('pending-applications').textContent = pendingApps;
+                document.getElementById('total-contacts').textContent = totalContacts;
+                document.getElementById('total-news').textContent = totalNews;
+
+                const recentAppsQuery = query(collection(db, 'applications'), orderBy('submittedAt', 'desc'), limit(5));
+                const recentAppsSnapshot = await getDocs(recentAppsQuery);
+                const recentAppsContainer = document.getElementById('recent-applications');
+                recentAppsContainer.innerHTML = '';
+
+                if (recentAppsSnapshot.empty) {
+                    recentAppsContainer.innerHTML = '<p class="text-gray-500 text-sm">No applications yet</p>';
+                } else {
+                    recentAppsSnapshot.forEach(doc => {
+                        const app = doc.data();
+                        const statusColors = {
+                            pending: 'bg-yellow-100 text-yellow-800',
+                            approved: 'bg-green-100 text-green-800',
+                            rejected: 'bg-red-100 text-red-800'
+                        };
+                        const statusClass = statusColors[app.status] || statusColors.pending;
+
+                        const div = document.createElement('div');
+                        div.className = 'flex justify-between items-center p-3 bg-gray-50 rounded';
+                        div.innerHTML = `
+                            <div>
+                                <p class="font-semibold">${app.fullName || 'N/A'}</p>
+                                <p class="text-sm text-gray-600">${app.program || 'N/A'}</p>
+                            </div>
+                            <span class="${statusClass} text-xs px-2 py-1 rounded capitalize">${app.status || 'pending'}</span>
+                        `;
+                        recentAppsContainer.appendChild(div);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
     </script>
 </body>
 </html>

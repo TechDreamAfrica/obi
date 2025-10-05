@@ -33,9 +33,9 @@
                 <a href="leadership.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-users mr-3"></i> Leadership
                 </a>
-                <a href="login.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                <button onclick="handleLogout()" class="w-full flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
                     <i class="fas fa-sign-out-alt mr-3"></i> Logout
-                </a>
+                </button>
             </nav>
         </aside>
 
@@ -144,13 +144,36 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { auth } from '../assets/js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        // Logout function
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Error signing out: ' + error.message);
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        });
+
         function showUploadModal() {
             document.getElementById('uploadModal').classList.remove('hidden');
         }
         function closeUploadModal() {
             document.getElementById('uploadModal').classList.add('hidden');
         }
+
+        window.showUploadModal = showUploadModal;
+        window.closeUploadModal = closeUploadModal;
     </script>
 </body>
 </html>

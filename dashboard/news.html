@@ -33,9 +33,9 @@
                 <a href="leadership.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-users mr-3"></i> Leadership
                 </a>
-                <a href="login.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                <button onclick="handleLogout()" class="w-full flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
                     <i class="fas fa-sign-out-alt mr-3"></i> Logout
-                </a>
+                </button>
             </nav>
         </aside>
 
@@ -52,42 +52,14 @@
             <div class="p-6">
                 <div class="bg-white rounded-lg shadow">
                     <div class="p-4 border-b">
-                        <input type="text" placeholder="Search news..." class="px-4 py-2 border rounded-md w-full max-w-md">
+                        <input type="text" id="search-input" placeholder="Search news..." class="px-4 py-2 border rounded-md w-full max-w-md">
                     </div>
 
-                    <div class="divide-y">
-                        <div class="p-6 flex items-start space-x-4">
-                            <img src="../assets/images/news1.jpg" class="w-24 h-24 object-cover rounded">
-                            <div class="flex-1">
-                                <h3 class="font-bold text-lg mb-2">Applications Open for 2025</h3>
-                                <p class="text-gray-600 mb-3">We are now accepting applications for the 2025 academic year...</p>
-                                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                                    <span><i class="fas fa-calendar mr-1"></i>Oct 1, 2024</span>
-                                    <span><i class="fas fa-user mr-1"></i>Admin</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded">Published</span>
-                                </div>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button class="text-blue-600 hover:text-blue-700 p-2"><i class="fas fa-edit"></i></button>
-                                <button class="text-red-600 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-
-                        <div class="p-6 flex items-start space-x-4">
-                            <img src="../assets/images/news2.jpg" class="w-24 h-24 object-cover rounded">
-                            <div class="flex-1">
-                                <h3 class="font-bold text-lg mb-2">Graduation Ceremony Success</h3>
-                                <p class="text-gray-600 mb-3">45 students graduated with honors from our programs...</p>
-                                <div class="flex items-center space-x-4 text-sm text-gray-500">
-                                    <span><i class="fas fa-calendar mr-1"></i>Sep 15, 2024</span>
-                                    <span><i class="fas fa-user mr-1"></i>Admin</span>
-                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded">Published</span>
-                                </div>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button class="text-blue-600 hover:text-blue-700 p-2"><i class="fas fa-edit"></i></button>
-                                <button class="text-red-600 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
-                            </div>
+                    <div id="news-list" class="divide-y">
+                        <!-- Dynamic news items will be loaded here -->
+                        <div class="p-12 text-center text-gray-500">
+                            <i class="fas fa-spinner fa-spin text-3xl mb-4"></i>
+                            <p>Loading news...</p>
                         </div>
                     </div>
                 </div>
@@ -95,52 +67,279 @@
         </main>
     </div>
 
-    <div id="addModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg max-w-2xl w-full p-6">
+    <!-- Add/Edit Modal -->
+    <div id="newsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-lg max-w-2xl w-full p-6 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold">Add News Article</h2>
+                <h2 id="modal-title" class="text-2xl font-bold">Add News Article</h2>
                 <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
                     <i class="fas fa-times text-2xl"></i>
                 </button>
             </div>
 
             <form id="newsForm" class="space-y-4">
+                <input type="hidden" id="news-id">
+
                 <div>
-                    <label class="block text-sm font-medium mb-2">Title</label>
-                    <input type="text" name="title" required class="w-full px-4 py-2 border rounded-md">
+                    <label class="block text-sm font-medium mb-2">Title *</label>
+                    <input type="text" id="news-title" name="title" required class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
                 </div>
+
                 <div>
                     <label class="block text-sm font-medium mb-2">Category</label>
-                    <select name="category" class="w-full px-4 py-2 border rounded-md">
-                        <option>Admissions</option>
-                        <option>Events</option>
-                        <option>Academic</option>
-                        <option>General</option>
+                    <select id="news-category" name="category" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                        <option value="Admissions">Admissions</option>
+                        <option value="Events">Events</option>
+                        <option value="Academic">Academic</option>
+                        <option value="General">General</option>
+                        <option value="Announcement">Announcement</option>
                     </select>
                 </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Author</label>
+                    <input type="text" id="news-author" name="author" value="Admin" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                </div>
+
                 <div>
                     <label class="block text-sm font-medium mb-2">Image URL</label>
-                    <input type="url" name="image" class="w-full px-4 py-2 border rounded-md">
+                    <input type="text" id="news-image" name="image" placeholder="https://drive.google.com/file/d/FILE_ID/view or direct URL" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    <p class="text-xs text-gray-500 mt-1">Supports Google Drive links or direct image URLs. Leave blank for default image.</p>
                 </div>
+
                 <div>
-                    <label class="block text-sm font-medium mb-2">Content</label>
-                    <textarea name="content" rows="6" required class="w-full px-4 py-2 border rounded-md"></textarea>
+                    <label class="block text-sm font-medium mb-2">Excerpt</label>
+                    <textarea id="news-excerpt" name="excerpt" rows="2" placeholder="Short summary..." class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
                 </div>
-                <div class="flex justify-end space-x-4">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Publish</button>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Content *</label>
+                    <textarea id="news-content" name="content" rows="8" required placeholder="Full article content..." class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600"></textarea>
+                </div>
+
+                <div class="flex items-center">
+                    <input type="checkbox" id="news-published" name="published" checked class="mr-2">
+                    <label for="news-published" class="text-sm font-medium">Published</label>
+                </div>
+
+                <div class="flex justify-end space-x-4 pt-4">
+                    <button type="button" onclick="closeModal()" class="px-6 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
+                    <button type="submit" id="submit-btn" class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                        <i class="fas fa-save mr-2"></i>Publish
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <script>
-        function showAddModal() {
-            document.getElementById('addModal').classList.remove('hidden');
+    <script type="module">
+        import { auth, db } from '../assets/js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        let allNews = [];
+        let editingId = null;
+
+        // Logout function
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Error signing out: ' + error.message);
+            }
+        };
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                await loadNews();
+            }
+        });
+
+        // Load all news
+        async function loadNews() {
+            try {
+                const q = query(collection(db, 'news'));
+                const snapshot = await getDocs(q);
+                allNews = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                // Sort by publishedAt descending
+                allNews.sort((a, b) => {
+                    const dateA = a.publishedAt?.toDate?.() || new Date(0);
+                    const dateB = b.publishedAt?.toDate?.() || new Date(0);
+                    return dateB - dateA;
+                });
+
+                renderNews();
+            } catch (error) {
+                console.error('Error loading news:', error);
+                document.getElementById('news-list').innerHTML = `
+                    <div class="p-12 text-center text-red-500">
+                        <i class="fas fa-exclamation-triangle text-3xl mb-4"></i>
+                        <p>Error loading news. Please refresh the page.</p>
+                        <p class="text-sm mt-2">${error.message}</p>
+                    </div>
+                `;
+            }
         }
-        function closeModal() {
-            document.getElementById('addModal').classList.add('hidden');
+
+        // Render news list
+        function renderNews(newsArray = allNews) {
+            const newsList = document.getElementById('news-list');
+
+            if (newsArray.length === 0) {
+                newsList.innerHTML = `
+                    <div class="p-12 text-center text-gray-500">
+                        <i class="fas fa-newspaper text-5xl mb-4"></i>
+                        <p>No news articles yet. Click "Add News" to create one.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            newsList.innerHTML = newsArray.map(news => {
+                const date = news.publishedAt?.toDate?.() || new Date();
+                const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+                const statusClass = news.published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+                const statusText = news.published ? 'Published' : 'Draft';
+
+                // Convert Google Drive URL if needed
+                const imageUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(news.image) : news.image;
+                const finalImageUrl = imageUrl || '../assets/images/placeholder.jpg';
+                const excerpt = news.excerpt || news.content?.substring(0, 100) + '...';
+
+                return `
+                    <div class="p-6 flex items-start space-x-4">
+                        <img src="${finalImageUrl}" class="w-24 h-24 object-cover rounded" alt="${news.title}" onerror="this.src='../assets/images/placeholder.jpg'">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-lg mb-2">${news.title}</h3>
+                            <p class="text-gray-600 mb-3">${excerpt}</p>
+                            <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                <span><i class="fas fa-calendar mr-1"></i>${formattedDate}</span>
+                                <span><i class="fas fa-user mr-1"></i>${news.author || 'Admin'}</span>
+                                <span><i class="fas fa-tag mr-1"></i>${news.category || 'General'}</span>
+                                <span class="${statusClass} px-2 py-1 rounded">${statusText}</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="editNews('${news.id}')" class="text-blue-600 hover:text-blue-700 p-2">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteNews('${news.id}')" class="text-red-600 hover:text-red-700 p-2">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = allNews.filter(news =>
+                news.title?.toLowerCase().includes(searchTerm) ||
+                news.content?.toLowerCase().includes(searchTerm) ||
+                news.category?.toLowerCase().includes(searchTerm)
+            );
+            renderNews(filtered);
+        });
+
+        // Show add modal
+        window.showAddModal = function() {
+            editingId = null;
+            document.getElementById('modal-title').textContent = 'Add News Article';
+            document.getElementById('newsForm').reset();
+            document.getElementById('news-id').value = '';
+            document.getElementById('news-published').checked = true;
+            document.getElementById('newsModal').classList.remove('hidden');
+        };
+
+        // Edit news
+        window.editNews = function(id) {
+            editingId = id;
+            const news = allNews.find(n => n.id === id);
+            if (!news) return;
+
+            document.getElementById('modal-title').textContent = 'Edit News Article';
+            document.getElementById('news-id').value = id;
+            document.getElementById('news-title').value = news.title || '';
+            document.getElementById('news-category').value = news.category || 'General';
+            document.getElementById('news-author').value = news.author || 'Admin';
+            document.getElementById('news-image').value = news.image || '';
+            document.getElementById('news-excerpt').value = news.excerpt || '';
+            document.getElementById('news-content').value = news.content || '';
+            document.getElementById('news-published').checked = news.published !== false;
+            document.getElementById('newsModal').classList.remove('hidden');
+        };
+
+        // Delete news
+        window.deleteNews = async function(id) {
+            if (!confirm('Are you sure you want to delete this news article?')) return;
+
+            try {
+                await deleteDoc(doc(db, 'news', id));
+                alert('News article deleted successfully!');
+                await loadNews();
+            } catch (error) {
+                console.error('Error deleting news:', error);
+                alert('Error deleting news: ' + error.message);
+            }
+        };
+
+        // Close modal
+        window.closeModal = function() {
+            document.getElementById('newsModal').classList.add('hidden');
+            document.getElementById('newsForm').reset();
+            editingId = null;
+        };
+
+        // Form submit
+        document.getElementById('newsForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+
+            const formData = new FormData(e.target);
+            const data = {
+                title: formData.get('title'),
+                category: formData.get('category'),
+                author: formData.get('author') || 'Admin',
+                image: formData.get('image') || '',
+                excerpt: formData.get('excerpt') || '',
+                content: formData.get('content'),
+                published: document.getElementById('news-published').checked,
+                publishedAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
+            };
+
+            try {
+                if (editingId) {
+                    // Update existing news
+                    await updateDoc(doc(db, 'news', editingId), data);
+                    alert('News article updated successfully!');
+                } else {
+                    // Add new news
+                    await addDoc(collection(db, 'news'), data);
+                    alert('News article published successfully!');
+                }
+
+                closeModal();
+                await loadNews();
+            } catch (error) {
+                console.error('Error saving news:', error);
+                alert('Error saving news: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
     </script>
 </body>
 </html>

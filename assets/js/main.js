@@ -1,26 +1,46 @@
 // Firebase Configuration
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, where, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-
-// Firebase config - Replace with your actual config
-const firebaseConfig = {
-    apiKey: "AIzaSyC3O06GUcRgAdNQ4A8pXxkzlsYzGvtlKhg",
-    authDomain: "oasis-c0682.firebaseapp.com",
-    projectId: "oasis-c0682",
-    storageBucket: "oasis-c0682.firebasestorage.app",
-    messagingSenderId: "1094274857981",
-    appId: "1:1094274857981:web:8334fa229fb0706786b794"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+import { db, auth } from './firebase-config.js';
+import { collection, addDoc, getDocs, query, orderBy, limit, where, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 
 // Export for use in other modules
 window.db = db;
 window.auth = auth;
+export { db, auth };
+
+// Helper function to convert Google Drive share links to direct image URLs
+function convertGoogleDriveUrl(url) {
+    if (!url) return null;
+
+    // Check if it's a Google Drive link
+    if (url.includes('drive.google.com')) {
+        // Extract file ID from various Google Drive URL formats
+        let fileId = null;
+
+        // Format: https://drive.google.com/file/d/FILE_ID/view
+        const match1 = url.match(/\/file\/d\/([^\/]+)/);
+        if (match1) {
+            fileId = match1[1];
+        }
+
+        // Format: https://drive.google.com/open?id=FILE_ID
+        const match2 = url.match(/[?&]id=([^&]+)/);
+        if (match2) {
+            fileId = match2[1];
+        }
+
+        // If we found a file ID, return the direct thumbnail URL
+        if (fileId) {
+            return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+        }
+    }
+
+    // Return original URL if it's not a Google Drive link or direct image URL
+    return url;
+}
+
+// Export helper function
+window.convertGoogleDriveUrl = convertGoogleDriveUrl;
 
 // Mobile Menu Toggle
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -298,13 +318,31 @@ async function loadLeadership(limit = null) {
 // Load News
 async function loadNews(limit = 3) {
     try {
-        const q = query(collection(db, 'news'), orderBy('date', 'desc'), limit(limit));
+        // Query all news, then filter and sort in JavaScript to avoid composite index requirement
+        const q = query(collection(db, 'news'));
         const snapshot = await getDocs(q);
         const news = [];
+
         snapshot.forEach(doc => {
-            news.push({ id: doc.id, ...doc.data() });
+            const data = doc.data();
+            // Only include published articles
+            if (data.published !== false) {
+                news.push({
+                    id: doc.id,
+                    ...data,
+                    date: data.publishedAt?.toDate?.() || new Date()
+                });
+            }
         });
-        return news;
+
+        // Sort by publishedAt descending and limit
+        news.sort((a, b) => {
+            const dateA = a.publishedAt?.toDate?.() || new Date(0);
+            const dateB = b.publishedAt?.toDate?.() || new Date(0);
+            return dateB - dateA;
+        });
+
+        return news.slice(0, limit);
     } catch (error) {
         console.error('Error loading news:', error);
         return [];
@@ -579,10 +617,11 @@ async function updateOBINewsPage() {
     container.innerHTML = '';
     news.forEach(item => {
         const categoryClass = categoryColors[item.category] || categoryColors.default;
+        const imageUrl = convertGoogleDriveUrl(item.image) || 'assets/images/placeholder.jpg';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
         card.innerHTML = `
-            <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-cover" onerror="this.src='../assets/images/placeholder.jpg'">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-3">
                     <span class="text-sm text-teal-600">${new Date(item.date).toLocaleDateString()}</span>
@@ -590,7 +629,7 @@ async function updateOBINewsPage() {
                 </div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">${item.title}</h3>
                 <p class="text-gray-600 mb-4">${item.excerpt || item.content?.substring(0, 100) || ''}...</p>
-                <a href="obi/news-item.html?id=${item.id}" class="text-teal-600 font-semibold hover:text-teal-700 inline-flex items-center">
+                <a href="news-item.html?id=${item.id}" class="text-teal-600 font-semibold hover:text-teal-700 inline-flex items-center">
                     Read More <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
@@ -609,15 +648,70 @@ async function updateOBINews() {
 
     container.innerHTML = '';
     news.forEach(item => {
+        const imageUrl = convertGoogleDriveUrl(item.image) || 'assets/images/placeholder.jpg';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
         card.innerHTML = `
-            <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
             <div class="p-6">
                 <div class="text-sm text-teal-600 mb-2">${new Date(item.date).toLocaleDateString()}</div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">${item.title}</h3>
                 <p class="text-gray-600 mb-4">${item.excerpt || item.content?.substring(0, 100) || ''}...</p>
                 <a href="news-item.html?id=${item.id}" class="text-teal-600 font-semibold hover:text-teal-700">Read More →</a>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Update News Preview on Homepage
+async function updateHomeNewsPreview() {
+    const container = document.getElementById('news-preview');
+    if (!container) return;
+
+    const news = await loadNews(3);
+
+    if (news.length === 0) {
+        container.innerHTML = `
+            <div class="text-center col-span-3 py-8">
+                <i class="fas fa-newspaper text-5xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500">No news articles available at the moment.</p>
+            </div>
+        `;
+        return;
+    }
+
+    const categoryColors = {
+        'Admissions': 'bg-blue-100 text-blue-800',
+        'Events': 'bg-green-100 text-green-800',
+        'Academic': 'bg-purple-100 text-purple-800',
+        'General': 'bg-gray-100 text-gray-800',
+        'Announcement': 'bg-yellow-100 text-yellow-800'
+    };
+
+    container.innerHTML = '';
+    news.forEach(item => {
+        const categoryClass = categoryColors[item.category] || categoryColors['General'];
+        const imageUrl = convertGoogleDriveUrl(item.image) || 'assets/images/placeholder.jpg';
+        const excerpt = item.excerpt || item.content?.substring(0, 120) + '...' || '';
+
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1';
+        card.innerHTML = `
+            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm text-blue-600">
+                        <i class="fas fa-calendar mr-1"></i>
+                        ${new Date(item.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    </span>
+                    <span class="${categoryClass} text-xs px-2 py-1 rounded">${item.category || 'General'}</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">${item.title}</h3>
+                <p class="text-gray-600 mb-4">${excerpt}</p>
+                <a href="obi/news-item.html?id=${item.id}" class="text-blue-600 font-semibold hover:text-blue-700 inline-flex items-center">
+                    Read More <i class="fas fa-arrow-right ml-2"></i>
+                </a>
             </div>
         `;
         container.appendChild(card);
@@ -940,6 +1034,10 @@ window.addEventListener('load', async () => {
 
     if (document.getElementById('leadership-preview')) {
         await updateHomeLeadership();
+    }
+
+    if (document.getElementById('news-preview')) {
+        await updateHomeNewsPreview();
     }
 
     if (document.getElementById('senior-leadership') || document.getElementById('board-members') || document.getElementById('ministry-leaders')) {
