@@ -8,9 +8,59 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @media print {
+            * {
+                overflow: visible !important;
+            }
             .no-print { display: none !important; }
-            body { background: white; }
+            body {
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            html, body {
+                height: auto !important;
+                overflow: visible !important;
+            }
+            .print-only { display: block !important; }
+            #viewModal {
+                position: static !important;
+                display: block !important;
+                background: white !important;
+                max-width: 100% !important;
+                max-height: none !important;
+                width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                inset: auto !important;
+                transform: none !important;
+            }
+            #viewModal > div {
+                max-width: 100% !important;
+                max-height: none !important;
+                height: auto !important;
+                overflow: visible !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                transform: none !important;
+            }
+            #viewModal .sticky {
+                position: static !important;
+            }
+            #modal-content {
+                overflow: visible !important;
+                max-height: none !important;
+                height: auto !important;
+            }
+            .grid {
+                page-break-inside: avoid;
+            }
+            .space-y-4 {
+                page-break-inside: avoid;
+            }
         }
+        .print-only { display: none; }
         .status-badge-pending { background-color: #fef3c7; color: #92400e; }
         .status-badge-approved { background-color: #d1fae5; color: #065f46; }
         .status-badge-rejected { background-color: #fee2e2; color: #991b1b; }
@@ -195,9 +245,9 @@
     </div>
 
     <!-- View Modal -->
-    <div id="viewModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 no-print">
-        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="sticky top-0 bg-white border-b p-6 flex justify-between items-center">
+    <div id="viewModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 print:bg-transparent print:block print:static print:p-0">
+        <div id="modal-inner" class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto print:max-w-full print:max-h-none print:overflow-visible print:rounded-none">
+            <div class="sticky top-0 bg-white border-b p-6 flex justify-between items-center no-print">
                 <h2 class="text-2xl font-bold text-gray-900">Application Details</h2>
                 <div class="flex space-x-2">
                     <button onclick="printApplication()" class="text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md transition">
@@ -208,10 +258,14 @@
                     </button>
                 </div>
             </div>
-            <div id="modal-content" class="p-6">
+            <div class="print-only p-6 border-b">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">OBI Application Details</h2>
+                <p class="text-sm text-gray-500">Oasis Bible Institute</p>
+            </div>
+            <div id="modal-content" class="p-6 print:overflow-visible">
                 <!-- Dynamic content -->
             </div>
-            <div class="sticky bottom-0 bg-gray-50 border-t p-6 flex justify-between items-center">
+            <div class="sticky bottom-0 bg-gray-50 border-t p-6 flex justify-between items-center no-print">
                 <div class="flex space-x-3">
                     <button onclick="updateApplicationStatus('approved')" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">
                         <i class="fas fa-check mr-2"></i>Approve
@@ -435,7 +489,23 @@
             const modal = document.getElementById('viewModal');
             const content = document.getElementById('modal-content');
 
+            const statusClass = app.status === 'approved' ? 'status-badge-approved' :
+                              app.status === 'rejected' ? 'status-badge-rejected' :
+                              'status-badge-pending';
+
             content.innerHTML = `
+                <div class="mb-6 pb-4 border-b">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm text-gray-500">Application ID: ${app.id}</p>
+                            <p class="text-sm text-gray-500">Submitted: ${app.submittedAt ? new Date(app.submittedAt).toLocaleString() : 'N/A'}</p>
+                        </div>
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full ${statusClass}">
+                            ${(app.status || 'pending').toUpperCase()}
+                        </span>
+                    </div>
+                </div>
+
                 <div class="grid md:grid-cols-2 gap-6">
                     <div class="space-y-4">
                         <h3 class="text-lg font-bold text-gray-900 border-b pb-2">Personal Information</h3>
@@ -568,8 +638,45 @@
         };
 
         window.printApplication = function() {
-            if (!currentViewingApp) return;
-            window.print();
+            if (!currentViewingApp) {
+                alert('No application selected for printing');
+                return;
+            }
+
+            // Show the modal if it's hidden (ensures content is rendered)
+            const modal = document.getElementById('viewModal');
+            const modalInner = document.getElementById('modal-inner');
+            const wasHidden = modal.classList.contains('hidden');
+
+            if (wasHidden) {
+                modal.classList.remove('hidden');
+            }
+
+            // Force remove scroll constraints for print
+            const originalMaxHeight = modalInner.style.maxHeight;
+            const originalOverflow = modalInner.style.overflow;
+
+            // Store original styles
+            modalInner.style.maxHeight = 'none';
+            modalInner.style.overflow = 'visible';
+            modalInner.style.height = 'auto';
+
+            // Give the browser a moment to render the modal content
+            setTimeout(() => {
+                window.print();
+
+                // Restore original styles after print
+                setTimeout(() => {
+                    modalInner.style.maxHeight = originalMaxHeight;
+                    modalInner.style.overflow = originalOverflow;
+                    modalInner.style.height = '';
+
+                    // Hide modal again if it was hidden before
+                    if (wasHidden) {
+                        modal.classList.add('hidden');
+                    }
+                }, 100);
+            }, 100);
         };
 
         function setupSearchListener() {

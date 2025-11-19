@@ -1068,10 +1068,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileSignInBtn = document.getElementById('mobile-sign-in-btn');
 
     if (signInBtn) {
-        signInBtn.addEventListener('click', showSignInModal);
+        signInBtn.addEventListener('click', () => {
+            window.location.href = 'dashboard/login.html';
+        });
     }
     if (mobileSignInBtn) {
-        mobileSignInBtn.addEventListener('click', showSignInModal);
+        mobileSignInBtn.addEventListener('click', () => {
+            window.location.href = 'dashboard/login.html';
+        });
     }
 });
 
