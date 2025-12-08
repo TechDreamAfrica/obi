@@ -13,6 +13,24 @@ service cloud.firestore {
       allow write: if isAuthenticated();
     }
 
+    // OBI Applications - Public read, Authenticated write
+    match /obi-applications/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Students - Authenticated only
+    match /students/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Site Settings - Public read, Authenticated write
+    match /site-settings/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
     // Contacts - Public write, Authenticated read
     match /contacts/{document=**} {
       allow read: if isAuthenticated();
