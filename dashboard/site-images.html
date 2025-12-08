@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Images - Oasis IMG Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 text-center">
+            <i class="fas fa-spinner fa-spin text-4xl text-blue-600 mb-4"></i>
+            <p class="text-gray-700">Loading images...</p>
+        </div>
+    </div>
+
+    <div class="flex h-screen">
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="fixed top-4 left-4 z-50 lg:hidden bg-gray-900 text-white p-3 rounded-md">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 transform -translate-x-full lg:translate-x-0 w-64 bg-gray-900 text-white transition-transform duration-300 ease-in-out z-40">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold">Oasis IMG</h2>
+                <p class="text-sm text-gray-400">Admin Dashboard</p>
+            </div>
+            <nav class="mt-6 overflow-y-auto h-[calc(100vh-120px)]">
+                <a href="index.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-home mr-3"></i> Dashboard
+                </a>
+                <a href="admissions.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-user-graduate mr-3"></i> Admissions
+                </a>
+                <a href="students.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-users mr-3"></i> Student Records
+                </a>
+                <a href="news.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-newspaper mr-3"></i> News
+                </a>
+                <a href="courses.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-book mr-3"></i> Programs Offered
+                </a>
+                <a href="events.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-calendar mr-3"></i> Events
+                </a>
+                <a href="ministries.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-church mr-3"></i> Ministries
+                </a>
+                <a href="contacts.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-envelope mr-3"></i> Contacts
+                </a>
+                <a href="gallery.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-images mr-3"></i> Gallery
+                </a>
+                <a href="leadership.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-users mr-3"></i> Leadership
+                </a>
+                <a href="site-images.html" class="flex items-center px-6 py-3 bg-blue-600 text-white">
+                    <i class="fas fa-photo-video mr-3"></i> Site Images
+                </a>
+                <button onclick="handleLogout()" class="w-full flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800 mt-auto">
+                    <i class="fas fa-sign-out-alt mr-3"></i> Logout
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Overlay for mobile -->
+        <div id="sidebar-overlay" class="hidden fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"></div>
+
+        <main class="flex-1 overflow-y-auto lg:ml-0">
+            <header class="bg-white shadow-sm p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Site Images Manager</h1>
+                        <p class="text-sm text-gray-600 mt-1">Manage all images displayed on your website using Google Drive links</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-6">
+                <!-- Instructions Card -->
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-6 mb-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-blue-900 mb-2">
+                        <i class="fas fa-info-circle mr-2"></i>How to Use Google Drive Links
+                    </h3>
+                    <ol class="list-decimal list-inside space-y-2 text-blue-800">
+                        <li>Upload your image to Google Drive</li>
+                        <li>Right-click the image and select "Get link"</li>
+                        <li>Change sharing to "Anyone with the link"</li>
+                        <li>Copy the full Google Drive link (e.g., https://drive.google.com/file/d/FILE_ID/view)</li>
+                        <li>Paste it below - the system will automatically convert it to work on your website</li>
+                    </ol>
+                </div>
+
+                <!-- Site Images Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Logo -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-image text-blue-600 mr-2"></i>Logo
+                        </h3>
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="preview-logo" src="" alt="Logo Preview" class="max-h-full max-w-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="text-center text-gray-400 hidden flex-col items-center justify-center w-full h-full">
+                                <i class="fas fa-image text-4xl mb-2"></i>
+                                <p class="text-sm">No image set</p>
+                            </div>
+                        </div>
+                        <input type="text" id="image-logo" placeholder="Google Drive link" class="w-full px-3 py-2 border rounded-md mb-3 text-sm">
+                        <button onclick="saveImage('logo')" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                    </div>
+
+                    <!-- Hero Image - Certificate -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-image text-blue-600 mr-2"></i>Certificate Image
+                        </h3>
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="preview-cert" src="" alt="Certificate Preview" class="max-h-full max-w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="text-center text-gray-400 hidden flex-col items-center justify-center w-full h-full">
+                                <i class="fas fa-image text-4xl mb-2"></i>
+                                <p class="text-sm">No image set</p>
+                            </div>
+                        </div>
+                        <input type="text" id="image-cert" placeholder="Google Drive link" class="w-full px-3 py-2 border rounded-md mb-3 text-sm">
+                        <button onclick="saveImage('cert')" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                    </div>
+
+                    <!-- Students Image -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-image text-blue-600 mr-2"></i>Students Image
+                        </h3>
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="preview-students" src="" alt="Students Preview" class="max-h-full max-w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="text-center text-gray-400 hidden flex-col items-center justify-center w-full h-full">
+                                <i class="fas fa-image text-4xl mb-2"></i>
+                                <p class="text-sm">No image set</p>
+                            </div>
+                        </div>
+                        <input type="text" id="image-students" placeholder="Google Drive link" class="w-full px-3 py-2 border rounded-md mb-3 text-sm">
+                        <button onclick="saveImage('students')" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                    </div>
+
+                    <!-- Building Image -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-image text-blue-600 mr-2"></i>Building Image
+                        </h3>
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="preview-building" src="" alt="Building Preview" class="max-h-full max-w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="text-center text-gray-400 hidden flex-col items-center justify-center w-full h-full">
+                                <i class="fas fa-image text-4xl mb-2"></i>
+                                <p class="text-sm">No image set</p>
+                            </div>
+                        </div>
+                        <input type="text" id="image-building" placeholder="Google Drive link" class="w-full px-3 py-2 border rounded-md mb-3 text-sm">
+                        <button onclick="saveImage('building')" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                    </div>
+
+                    <!-- Class Image -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-image text-blue-600 mr-2"></i>Class Image
+                        </h3>
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="preview-class" src="" alt="Class Preview" class="max-h-full max-w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="text-center text-gray-400 hidden flex-col items-center justify-center w-full h-full">
+                                <i class="fas fa-image text-4xl mb-2"></i>
+                                <p class="text-sm">No image set</p>
+                            </div>
+                        </div>
+                        <input type="text" id="image-class" placeholder="Google Drive link" class="w-full px-3 py-2 border rounded-md mb-3 text-sm">
+                        <button onclick="saveImage('class')" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                    </div>
+
+                    <!-- Leadership Image -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-image text-blue-600 mr-2"></i>Leadership Image
+                        </h3>
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="preview-leadership" src="" alt="Leadership Preview" class="max-h-full max-w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="text-center text-gray-400 hidden flex-col items-center justify-center w-full h-full">
+                                <i class="fas fa-image text-4xl mb-2"></i>
+                                <p class="text-sm">No image set</p>
+                            </div>
+                        </div>
+                        <input type="text" id="image-leadership" placeholder="Google Drive link" class="w-full px-3 py-2 border rounded-md mb-3 text-sm">
+                        <button onclick="saveImage('leadership')" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                    </div>
+
+                    <!-- About Image -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-image text-blue-600 mr-2"></i>About Us Image
+                        </h3>
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="preview-abt" src="" alt="About Preview" class="max-h-full max-w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="text-center text-gray-400 hidden flex-col items-center justify-center w-full h-full">
+                                <i class="fas fa-image text-4xl mb-2"></i>
+                                <p class="text-sm">No image set</p>
+                            </div>
+                        </div>
+                        <input type="text" id="image-abt" placeholder="Google Drive link" class="w-full px-3 py-2 border rounded-md mb-3 text-sm">
+                        <button onclick="saveImage('abt')" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                    </div>
+
+                    <!-- Story Image -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-image text-blue-600 mr-2"></i>Our Story Image
+                        </h3>
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="preview-story" src="" alt="Story Preview" class="max-h-full max-w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="text-center text-gray-400 hidden flex-col items-center justify-center w-full h-full">
+                                <i class="fas fa-image text-4xl mb-2"></i>
+                                <p class="text-sm">No image set</p>
+                            </div>
+                        </div>
+                        <input type="text" id="image-story" placeholder="Google Drive link" class="w-full px-3 py-2 border rounded-md mb-3 text-sm">
+                        <button onclick="saveImage('story')" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                    </div>
+
+                    <!-- Placeholder Image -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                            <i class="fas fa-image text-blue-600 mr-2"></i>Default/Placeholder Image
+                        </h3>
+                        <div class="aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="preview-placeholder" src="" alt="Placeholder Preview" class="max-h-full max-w-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                            <div class="text-center text-gray-400 hidden flex-col items-center justify-center w-full h-full">
+                                <i class="fas fa-image text-4xl mb-2"></i>
+                                <p class="text-sm">No image set</p>
+                            </div>
+                        </div>
+                        <input type="text" id="image-placeholder" placeholder="Google Drive link" class="w-full px-3 py-2 border rounded-md mb-3 text-sm">
+                        <button onclick="saveImage('placeholder')" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                            <i class="fas fa-save mr-2"></i>Save
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bulk Update Section -->
+                <div class="mt-8 bg-white rounded-lg shadow p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        <i class="fas fa-sync text-blue-600 mr-2"></i>Bulk Update
+                    </h3>
+                    <p class="text-gray-600 mb-4">Update multiple images at once by providing links in the format: <code class="bg-gray-100 px-2 py-1 rounded">imageName=googleDriveLink</code></p>
+                    <textarea id="bulk-update" rows="6" class="w-full px-4 py-2 border rounded-md font-mono text-sm" placeholder="logo=https://drive.google.com/file/d/...&#10;cert=https://drive.google.com/file/d/...&#10;students=https://drive.google.com/file/d/..."></textarea>
+                    <button onclick="bulkUpdateImages()" class="mt-3 bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">
+                        <i class="fas fa-upload mr-2"></i>Bulk Update
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { db, auth } from '../assets/js/firebase-config.js';
+        import { doc, getDoc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+        const imageKeys = ['logo', 'cert', 'students', 'building', 'class', 'leadership', 'abt', 'story', 'placeholder'];
+
+        // Logout function
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Error signing out: ' + error.message);
+            }
+        };
+
+        // Auth check
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            } else {
+                loadImages();
+            }
+        });
+
+        // Convert Google Drive link to direct image URL
+        function convertGoogleDriveUrl(url) {
+            if (!url) return '';
+            
+            // If already converted, return as is
+            if (url.includes('drive.google.com/uc?')) {
+                return url;
+            }
+            
+            // Extract file ID from various Google Drive URL formats
+            let fileId = null;
+            
+            // Format: https://drive.google.com/file/d/FILE_ID/view
+            const match1 = url.match(/\/file\/d\/([^\/]+)/);
+            if (match1) fileId = match1[1];
+            
+            // Format: https://drive.google.com/open?id=FILE_ID
+            const match2 = url.match(/[?&]id=([^&]+)/);
+            if (match2) fileId = match2[1];
+            
+            if (fileId) {
+                return `https://drive.google.com/uc?export=view&id=${fileId}`;
+            }
+            
+            return url; // Return original if no match
+        }
+
+        // Load images from Firestore
+        async function loadImages() {
+            try {
+                document.getElementById('loading-overlay').classList.remove('hidden');
+                
+                const docRef = doc(db, 'site-settings', 'images');
+                const docSnap = await getDoc(docRef);
+                
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    imageKeys.forEach(key => {
+                        if (data[key]) {
+                            const originalUrl = data[key];
+                            const convertedUrl = convertGoogleDriveUrl(originalUrl);
+                            document.getElementById(`image-${key}`).value = originalUrl;
+                            const preview = document.getElementById(`preview-${key}`);
+                            preview.src = convertedUrl;
+                            preview.style.display = 'block';
+                            preview.nextElementSibling.style.display = 'none';
+                        }
+                    });
+                }
+                
+                document.getElementById('loading-overlay').classList.add('hidden');
+            } catch (error) {
+                console.error('Error loading images:', error);
+                document.getElementById('loading-overlay').classList.add('hidden');
+                alert('Error loading images: ' + error.message);
+            }
+        }
+
+        // Save individual image
+        window.saveImage = async function(imageKey) {
+            const input = document.getElementById(`image-${imageKey}`);
+            const url = input.value.trim();
+            
+            if (!url) {
+                alert('Please enter a Google Drive link');
+                return;
+            }
+            
+            try {
+                document.getElementById('loading-overlay').classList.remove('hidden');
+                
+                const docRef = doc(db, 'site-settings', 'images');
+                const convertedUrl = convertGoogleDriveUrl(url);
+                
+                await setDoc(docRef, {
+                    [imageKey]: url,
+                    [`${imageKey}_converted`]: convertedUrl,
+                    [`${imageKey}_updated`]: new Date().toISOString()
+                }, { merge: true });
+                
+                // Update preview
+                const preview = document.getElementById(`preview-${imageKey}`);
+                preview.src = convertedUrl;
+                preview.style.display = 'block';
+                preview.nextElementSibling.style.display = 'none';
+                
+                document.getElementById('loading-overlay').classList.add('hidden');
+                alert(`${imageKey} image saved successfully!`);
+            } catch (error) {
+                console.error('Error saving image:', error);
+                document.getElementById('loading-overlay').classList.add('hidden');
+                alert('Error saving image: ' + error.message);
+            }
+        };
+
+        // Bulk update images
+        window.bulkUpdateImages = async function() {
+            const textarea = document.getElementById('bulk-update');
+            const lines = textarea.value.split('\n').filter(line => line.trim());
+            
+            if (lines.length === 0) {
+                alert('Please enter at least one image link');
+                return;
+            }
+            
+            try {
+                document.getElementById('loading-overlay').classList.remove('hidden');
+                
+                const updates = {};
+                let validLines = 0;
+                
+                lines.forEach(line => {
+                    const [key, url] = line.split('=').map(s => s.trim());
+                    if (key && url && imageKeys.includes(key)) {
+                        updates[key] = url;
+                        updates[`${key}_converted`] = convertGoogleDriveUrl(url);
+                        updates[`${key}_updated`] = new Date().toISOString();
+                        validLines++;
+                    }
+                });
+                
+                if (validLines === 0) {
+                    alert('No valid image entries found. Format: imageName=googleDriveLink');
+                    document.getElementById('loading-overlay').classList.add('hidden');
+                    return;
+                }
+                
+                const docRef = doc(db, 'site-settings', 'images');
+                await setDoc(docRef, updates, { merge: true });
+                
+                // Reload to show updates
+                await loadImages();
+                textarea.value = '';
+                
+                document.getElementById('loading-overlay').classList.add('hidden');
+                alert(`Successfully updated ${validLines} image(s)!`);
+            } catch (error) {
+                console.error('Error bulk updating images:', error);
+                document.getElementById('loading-overlay').classList.add('hidden');
+                alert('Error updating images: ' + error.message);
+            }
+        };
+
+        // Mobile sidebar toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+    </script>
+</body>
+</html>

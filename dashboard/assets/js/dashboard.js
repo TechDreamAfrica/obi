@@ -164,16 +164,104 @@ export async function deleteContact(id) {
     }
 }
 
+// ============ STUDENT MANAGEMENT ============
+
+// Add Student
+export async function addStudent(data) {
+    try {
+        const studentData = {
+            ...data,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+
+        const docRef = await addDoc(collection(db, 'students'), studentData);
+        return { success: true, id: docRef.id };
+    } catch (error) {
+        console.error('Error adding student:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Update Student
+export async function updateStudent(id, data) {
+    try {
+        const studentRef = doc(db, 'students', id);
+        await updateDoc(studentRef, { ...data, updatedAt: new Date().toISOString() });
+        return { success: true };
+    } catch (error) {
+        console.error('Error updating student:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Delete Student
+export async function deleteStudent(id) {
+    try {
+        await deleteDoc(doc(db, 'students', id));
+        return { success: true };
+    } catch (error) {
+        console.error('Error deleting student:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// Load Students with Real-time Updates
+export function loadStudentsRealtime(callback) {
+    const q = query(collection(db, 'students'), orderBy('enrollmentDate', 'desc'));
+
+    return onSnapshot(q, (snapshot) => {
+        const students = [];
+        snapshot.forEach(doc => {
+            students.push({ id: doc.id, ...doc.data() });
+        });
+        callback(students);
+    });
+}
+
+// Create Student from Approved Application
+export async function createStudentFromApplication(applicationData) {
+    try {
+        const studentData = {
+            fullName: applicationData.fullName || applicationData.name,
+            studentId: `OBI${Date.now().toString().slice(-6)}`, // Generate unique ID
+            email: applicationData.email,
+            phone: applicationData.phone,
+            dob: applicationData.dob || applicationData.dateOfBirth,
+            gender: applicationData.gender,
+            program: applicationData.program,
+            enrollmentDate: new Date().toISOString().split('T')[0],
+            status: 'active',
+            church: applicationData.church || applicationData.churchName,
+            address: applicationData.address,
+            notes: `Admitted from application on ${new Date().toLocaleDateString()}`,
+            applicationId: applicationData.id,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+
+        const docRef = await addDoc(collection(db, 'students'), studentData);
+        return { success: true, id: docRef.id, studentData };
+    } catch (error) {
+        console.error('Error creating student from application:', error);
+        return { success: false, error: error.message };
+    }
+}
+
 // ============ STATISTICS ============
 
 // Get Dashboard Statistics
 export async function getDashboardStats() {
     try {
-        const [admissions, contacts, news, leadership] = await Promise.all([
+        const [admissions, students, contacts, news, leadership, events, courses, ministries] = await Promise.all([
             getDocs(collection(db, 'admissions')),
+            getDocs(collection(db, 'students')),
             getDocs(collection(db, 'contacts')),
             getDocs(collection(db, 'news')),
-            getDocs(collection(db, 'leadership'))
+            getDocs(collection(db, 'leadership')),
+            getDocs(collection(db, 'events')),
+            getDocs(collection(db, 'courses')),
+            getDocs(collection(db, 'ministries'))
         ]);
 
         const pendingApps = await getDocs(
@@ -183,18 +271,26 @@ export async function getDashboardStats() {
         return {
             totalApplications: admissions.size,
             pendingApplications: pendingApps.size,
+            totalStudents: students.size,
             totalContacts: contacts.size,
             activeNews: news.size,
-            totalLeaders: leadership.size
+            totalLeaders: leadership.size,
+            totalEvents: events.size,
+            totalCourses: courses.size,
+            totalMinistries: ministries.size
         };
     } catch (error) {
         console.error('Error getting stats:', error);
         return {
             totalApplications: 0,
             pendingApplications: 0,
+            totalStudents: 0,
             totalContacts: 0,
             activeNews: 0,
-            totalLeaders: 0
+            totalLeaders: 0,
+            totalEvents: 0,
+            totalCourses: 0,
+            totalMinistries: 0
         };
     }
 }
@@ -319,3 +415,8 @@ window.markContactAsRead = markContactAsRead;
 window.deleteContact = deleteContact;
 window.addNewsArticle = addNewsArticle;
 window.addLeader = addLeader;
+window.addStudent = addStudent;
+window.updateStudent = updateStudent;
+window.deleteStudent = deleteStudent;
+window.loadStudentsRealtime = loadStudentsRealtime;
+window.createStudentFromApplication = createStudentFromApplication;

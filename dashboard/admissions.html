@@ -6,6 +6,8 @@
     <title>OBI Admissions - Oasis IMG Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         @media print {
             * {
@@ -93,6 +95,9 @@
                 </a>
                 <a href="admissions.html" class="flex items-center px-6 py-3 bg-blue-600 text-white">
                     <i class="fas fa-user-graduate mr-3"></i> Admissions
+                </a>
+                <a href="students.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
+                    <i class="fas fa-users mr-3"></i> Student Records
                 </a>
                 <a href="news.html" class="flex items-center px-6 py-3 text-gray-300 hover:bg-gray-800">
                     <i class="fas fa-newspaper mr-3"></i> News
@@ -287,6 +292,8 @@
     <script type="module">
         import { db } from '../assets/js/firebase-config.js';
         import { collection, getDocs, doc, updateDoc, query, orderBy, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { initEmailJS, sendAdmissionNotification, sendWelcomeEmail } from './assets/js/email-service.js';
+        import { createStudentFromApplication } from './assets/js/dashboard.js';
 
         let allApplications = [];
         let filteredApplications = [];
@@ -297,6 +304,9 @@
 
         // Initialize
         window.addEventListener('DOMContentLoaded', async () => {
+            // Initialize EmailJS
+            initEmailJS();
+            
             await loadApplications();
             setupSearchListener();
         });
@@ -577,11 +587,38 @@
                 const app = allApplications.find(a => a.id === currentViewingApp.id);
                 if (app) app.status = newStatus;
 
+                // Send email notifications to both admin and applicant
+                console.log('Sending email notifications...');
+                const emailResult = await sendAdmissionNotification(currentViewingApp, newStatus);
+                
+                if (emailResult.success) {
+                    console.log('Email notification sent:', emailResult.message);
+                } else {
+                    console.error('Email notification failed:', emailResult.error);
+                }
+
+                // If approved, create student record
+                if (newStatus === 'approved') {
+                    console.log('Creating student record...');
+                    const studentResult = await createStudentFromApplication(currentViewingApp);
+                    
+                    if (studentResult.success) {
+                        console.log('Student record created:', studentResult.id);
+                        // Send welcome email to new student
+                        await sendWelcomeEmail(studentResult.studentData);
+                        showSuccess(`Application approved! Student record created with ID: ${studentResult.studentData.studentId}`);
+                    } else {
+                        console.error('Failed to create student record:', studentResult.error);
+                        showSuccess(`Application approved! Note: Student record creation failed - please create manually.`);
+                    }
+                } else {
+                    showSuccess(`Application ${newStatus} successfully! Notifications sent.`);
+                }
+
                 updateStatistics();
                 renderTable();
                 closeModal();
                 hideLoading();
-                showSuccess(`Application ${newStatus} successfully!`);
 
             } catch (error) {
                 console.error('Error updating status:', error);

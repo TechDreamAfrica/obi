@@ -2,11 +2,15 @@
 import { db, auth } from './firebase-config.js';
 import { collection, addDoc, getDocs, query, orderBy, limit, where, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import { initSiteImages } from './site-images.js';
 
 // Export for use in other modules
 window.db = db;
 window.auth = auth;
 export { db, auth };
+
+// Initialize site images on page load
+initSiteImages();
 
 // Helper function to convert Google Drive share links to direct image URLs
 function convertGoogleDriveUrl(url) {
