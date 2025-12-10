@@ -619,7 +619,7 @@
                             showSuccess(`Application ${newStatus} successfully! Student record already exists.`);
                         } else {
                             console.error('Failed to create student record:', studentResult.error);
-                            showSuccess(`Application ${newStatus} successfully! Note: Student record creation failed - please create manually.`);
+                            showSuccess(`Application ${newStatus} successfully! Note: Student record creation failed - ${studentResult.error || 'please create manually'}.`);
                         }
                     }
                 } else {

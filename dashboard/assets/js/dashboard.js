@@ -1,7 +1,6 @@
 // Dashboard Real-time Data Management
 import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, where, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-
-const db = window.db;
+import { db } from '../../assets/js/firebase-config.js';
 
 // ============ DASHBOARD DATA LOADERS ============
 
@@ -231,25 +230,28 @@ export async function createStudentFromApplication(applicationData) {
             return { success: false, error: 'Student record already exists for this application' };
         }
 
+        // Map application data to student data, handling both regular and OBI applications
         const studentData = {
-            fullName: applicationData.fullName || applicationData.name,
+            fullName: applicationData.fullName || applicationData.name || 'N/A',
             studentId: `OBI${Date.now().toString().slice(-6)}`, // Generate unique ID
-            email: applicationData.email,
-            phone: applicationData.phone,
-            dob: applicationData.dob || applicationData.dateOfBirth,
-            gender: applicationData.gender,
-            program: applicationData.program,
+            email: applicationData.email || '',
+            phone: applicationData.phone || '',
+            dob: applicationData.dob || applicationData.dateOfBirth || '',
+            gender: applicationData.gender || applicationData.sex || '',
+            program: applicationData.program || 'Bible Institute',
             enrollmentDate: new Date().toISOString().split('T')[0],
             status: 'active',
-            church: applicationData.church || applicationData.churchName,
-            address: applicationData.address,
+            church: applicationData.church || applicationData.churchName || applicationData.churchAttending || '',
+            address: applicationData.address || '',
             notes: `Admitted from application on ${new Date().toLocaleDateString()}`,
             applicationId: applicationData.id,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
         };
 
+        console.log('Creating student with data:', studentData);
         const docRef = await addDoc(collection(db, 'students'), studentData);
+        console.log('Student created successfully:', docRef.id);
         return { success: true, id: docRef.id, studentData };
     } catch (error) {
         console.error('Error creating student from application:', error);

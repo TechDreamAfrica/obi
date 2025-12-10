@@ -73,7 +73,7 @@ export async function getSiteImages() {
                 leadership: 'assets/images/leadership.jpg',
                 abt: 'assets/images/abt.jpg',
                 story: 'assets/images/story.jpg',
-                placeholder: 'assets/images/placeholder.jpg'
+                placeholder: 'assets/images/logo.jpg'
             };
         } catch (error) {
             console.error('Error fetching site images:', error);
@@ -87,7 +87,7 @@ export async function getSiteImages() {
                 leadership: 'assets/images/leadership.jpg',
                 abt: 'assets/images/abt.jpg',
                 story: 'assets/images/story.jpg',
-                placeholder: 'assets/images/placeholder.jpg'
+                placeholder: 'assets/images/logo.jpg'
             };
         } finally {
             isLoading = false;
@@ -228,7 +228,7 @@ export async function replacePageImages() {
         });
         
         // Replace placeholder images
-        document.querySelectorAll('img[src*="placeholder.jpg"]').forEach(img => {
+        document.querySelectorAll('img[src*="logo.jpg"]').forEach(img => {
             if (images.placeholder) {
                 img.src = convertGoogleDriveUrl(images.placeholder);
             }

@@ -232,12 +232,12 @@
 
                 // Convert Google Drive URL if needed
                 const imageUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(news.image) : news.image;
-                const finalImageUrl = imageUrl || '../assets/images/placeholder.jpg';
+                const finalImageUrl = imageUrl || '../assets/images/logo.jpg';
                 const excerpt = news.excerpt || news.content?.substring(0, 100) + '...';
 
                 return `
                     <div class="p-6 flex items-start space-x-4">
-                        <img src="${finalImageUrl}" class="w-24 h-24 object-cover rounded" alt="${news.title}" onerror="this.src='../assets/images/placeholder.jpg'">
+                        <img src="${finalImageUrl}" class="w-24 h-24 object-cover rounded" alt="${news.title}" onerror="this.src='../assets/images/logo.jpg'">
                         <div class="flex-1">
                             <h3 class="font-bold text-lg mb-2">${news.title}</h3>
                             <p class="text-gray-600 mb-3">${excerpt}</p>

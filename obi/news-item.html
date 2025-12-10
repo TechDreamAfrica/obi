@@ -211,8 +211,8 @@
 
                     document.getElementById('news-title').textContent = article.title;
                     document.getElementById('news-breadcrumb').textContent = article.title;
-                    document.getElementById('news-image').src = imageUrl || '../assets/images/placeholder.jpg';
-                    document.getElementById('news-image').onerror = function() { this.src = '../assets/images/placeholder.jpg'; };
+                    document.getElementById('news-image').src = imageUrl || '../assets/images/logo.jpg';
+                    document.getElementById('news-image').onerror = function() { this.src = '../assets/images/logo.jpg'; };
                     document.getElementById('news-date').textContent = publishedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                     document.getElementById('news-author').textContent = article.author || 'Admin';
 

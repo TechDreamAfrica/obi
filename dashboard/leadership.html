@@ -253,12 +253,12 @@
 
             list.innerHTML = leadersArray.map(leader => {
                 const imageUrl = convertGoogleDriveUrl(leader.image);
-                const finalImageUrl = imageUrl || '../assets/images/placeholder.jpg';
+                const finalImageUrl = imageUrl || '../assets/images/logo.jpg';
 
                 return `
                     <div class="p-6 flex items-center justify-between">
                         <div class="flex items-center space-x-4">
-                            <img src="${finalImageUrl}" class="w-16 h-16 rounded-full object-cover" alt="${leader.name}" onerror="this.src='../assets/images/placeholder.jpg'">
+                            <img src="${finalImageUrl}" class="w-16 h-16 rounded-full object-cover" alt="${leader.name}" onerror="this.src='../assets/images/logo.jpg'">
                             <div>
                                 <h3 class="font-bold text-lg">${leader.name}</h3>
                                 <p class="text-gray-600">${leader.title}</p>

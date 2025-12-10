@@ -307,12 +307,12 @@
                 const statusClass = isPast ? 'bg-gray-100 text-gray-800' : 'bg-green-100 text-green-800';
                 const statusText = isPast ? 'Past' : 'Upcoming';
                 const imageUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(event.image) : event.image;
-                const finalImageUrl = imageUrl || '../assets/images/placeholder.jpg';
+                const finalImageUrl = imageUrl || '../assets/images/logo.jpg';
 
                 return `
                     <div class="p-6 hover:bg-gray-50">
                         <div class="flex items-start space-x-4">
-                            <img src="${finalImageUrl}" class="w-24 h-24 object-cover rounded" alt="${event.title}" onerror="this.src='../assets/images/placeholder.jpg'">
+                            <img src="${finalImageUrl}" class="w-24 h-24 object-cover rounded" alt="${event.title}" onerror="this.src='../assets/images/logo.jpg'">
                             <div class="flex-1">
                                 <div class="flex items-start justify-between mb-2">
                                     <div>

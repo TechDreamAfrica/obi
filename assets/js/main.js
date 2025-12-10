@@ -14,33 +14,41 @@ initSiteImages();
 
 // Helper function to convert Google Drive share links to direct image URLs
 function convertGoogleDriveUrl(url) {
-    if (!url) return null;
+    if (!url || typeof url !== 'string') {
+        return null;
+    }
 
+    const trimmedUrl = url.trim();
+    
     // Check if it's a Google Drive link
-    if (url.includes('drive.google.com')) {
+    if (trimmedUrl.includes('drive.google.com')) {
         // Extract file ID from various Google Drive URL formats
         let fileId = null;
 
         // Format: https://drive.google.com/file/d/FILE_ID/view or /view?usp=sharing
-        const match1 = url.match(/\/file\/d\/([^\/\?]+)/);
+        const match1 = trimmedUrl.match(/\/file\/d\/([^\/\?&]+)/);
         if (match1) {
             fileId = match1[1];
         }
 
         // Format: https://drive.google.com/open?id=FILE_ID
-        const match2 = url.match(/[?&]id=([^&]+)/);
-        if (match2) {
-            fileId = match2[1];
+        if (!fileId) {
+            const match2 = trimmedUrl.match(/[?&]id=([^&]+)/);
+            if (match2) {
+                fileId = match2[1];
+            }
         }
 
         // If we found a file ID, return the direct image URL (using /uc?export=view for better compatibility)
-        if (fileId) {
-            return `https://drive.google.com/uc?export=view&id=${fileId}`;
+        if (fileId && fileId.trim()) {
+            const convertedUrl = `https://drive.google.com/uc?export=view&id=${fileId.trim()}`;
+            console.log('Converted Google Drive URL:', { original: url, converted: convertedUrl });
+            return convertedUrl;
         }
     }
 
     // Return original URL if it's not a Google Drive link or direct image URL
-    return url;
+    return trimmedUrl;
 }
 
 // Export helper function
@@ -403,11 +411,13 @@ async function updateCarousel() {
 
     carousel.innerHTML = '';
     images.forEach((img, index) => {
+        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(img.imageUrl || img.url || img.image) : (img.imageUrl || img.url);
+        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
         const slide = document.createElement('div');
         slide.className = `carousel-slide absolute w-full h-full transition-opacity duration-1000 ${index === 0 ? '' : 'opacity-0'}`;
         slide.innerHTML = `
             <div class="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-600/60"></div>
-            <img src="${img.imageUrl || img.url}" alt="${img.title}" class="w-full h-full object-cover">
+            <img src="${imageUrl}" alt="${img.title}" class="w-full h-full object-cover" onerror="this.src='assets/images/logo.jpg'">
             <div class="absolute inset-0 flex items-center justify-center">
                 <div class="text-center text-white px-4">
                     <h1 class="text-5xl md:text-6xl font-bold mb-4">${img.title || 'Welcome to Oasis IMG'}</h1>
@@ -465,10 +475,12 @@ async function updateHomeMinistriesPreview() {
 
     container.innerHTML = '';
     ministries.forEach(ministry => {
+        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(ministry.image) : ministry.image;
+        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition';
         card.innerHTML = `
-            <img src="${ministry.image}" alt="${ministry.name}" class="w-full h-48 object-cover">
+            <img src="${imageUrl}" alt="${ministry.name}" class="w-full h-48 object-cover" onerror="this.src='assets/images/logo.jpg'">
             <div class="p-6">
                 <h3 class="text-xl font-bold text-gray-900 mb-3">${ministry.name}</h3>
                 <p class="text-gray-600 mb-4">${ministry.description}</p>
@@ -499,13 +511,14 @@ async function updateLeadershipPage() {
     if (seniorLeadership && senior.length > 0) {
         seniorLeadership.innerHTML = '';
         senior.forEach(leader => {
-            const imageUrl = convertGoogleDriveUrl(leader.image) || 'assets/images/placeholder.jpg';
+            const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(leader.image) : leader.image;
+            const imageUrl = convertedUrl || 'assets/images/logo.jpg';
             const card = document.createElement('div');
             card.className = 'bg-white rounded-lg shadow-xl overflow-hidden';
             card.innerHTML = `
                 <div class="md:flex">
                     <div class="md:flex-shrink-0">
-                        <img src="${imageUrl}" alt="${leader.name}" class="h-full w-full md:w-48 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
+                        <img src="${imageUrl}" alt="${leader.name}" class="h-full w-full md:w-48 object-cover" onerror="this.src='assets/images/logo.jpg'">
                     </div>
                     <div class="p-8">
                         <h4 class="text-2xl font-bold text-gray-900 mb-2">${leader.name}</h4>
@@ -529,11 +542,12 @@ async function updateLeadershipPage() {
     if (boardMembers && board.length > 0) {
         boardMembers.innerHTML = '';
         board.forEach(leader => {
-            const imageUrl = convertGoogleDriveUrl(leader.image) || 'assets/images/placeholder.jpg';
+            const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(leader.image) : leader.image;
+            const imageUrl = convertedUrl || 'assets/images/logo.jpg';
             const card = document.createElement('div');
             card.className = 'text-center';
             card.innerHTML = `
-                <img src="${imageUrl}" alt="${leader.name}" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover shadow-lg" onerror="this.src='assets/images/placeholder.jpg'">
+                <img src="${imageUrl}" alt="${leader.name}" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover shadow-lg" onerror="this.src='assets/images/logo.jpg'">
                 <h4 class="text-lg font-bold text-gray-900">${leader.name}</h4>
                 <p class="text-gray-600">${leader.title}</p>
             `;
@@ -545,11 +559,12 @@ async function updateLeadershipPage() {
     if (ministryLeaders && ministry.length > 0) {
         ministryLeaders.innerHTML = '';
         ministry.forEach(leader => {
-            const imageUrl = convertGoogleDriveUrl(leader.image) || 'assets/images/placeholder.jpg';
+            const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(leader.image) : leader.image;
+            const imageUrl = convertedUrl || 'assets/images/logo.jpg';
             const card = document.createElement('div');
             card.className = 'bg-white p-6 rounded-lg shadow-lg text-center';
             card.innerHTML = `
-                <img src="${imageUrl}" alt="${leader.name}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
+                <img src="${imageUrl}" alt="${leader.name}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" onerror="this.src='assets/images/logo.jpg'">
                 <h4 class="font-bold text-gray-900">${leader.name}</h4>
                 <p class="text-sm text-gray-600">${leader.title}</p>
             `;
@@ -568,11 +583,12 @@ async function updateHomeLeadership() {
 
     container.innerHTML = '';
     leaders.forEach(leader => {
-        const imageUrl = convertGoogleDriveUrl(leader.image) || 'assets/images/placeholder.jpg';
+        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(leader.image) : leader.image;
+        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
         const card = document.createElement('div');
         card.className = 'text-center';
         card.innerHTML = `
-            <img src="${imageUrl}" alt="${leader.name}" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
+            <img src="${imageUrl}" alt="${leader.name}" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover" onerror="this.src='assets/images/logo.jpg'">
             <h3 class="text-lg font-bold text-gray-900">${leader.name}</h3>
             <p class="text-gray-600">${leader.title}</p>
         `;
@@ -590,10 +606,12 @@ async function updateMinistriesPage() {
 
     container.innerHTML = '';
     ministries.forEach(ministry => {
+        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(ministry.image) : ministry.image;
+        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition';
         card.innerHTML = `
-            <img src="${ministry.image}" alt="${ministry.name}" class="w-full h-48 object-cover">
+            <img src="${imageUrl}" alt="${ministry.name}" class="w-full h-48 object-cover" onerror="this.src='assets/images/logo.jpg'">
             <div class="p-6">
                 <h3 class="text-xl font-bold text-gray-900 mb-3">${ministry.name}</h3>
                 <p class="text-gray-600 mb-4">${ministry.description}</p>
@@ -625,11 +643,12 @@ async function updateOBINewsPage() {
     container.innerHTML = '';
     news.forEach(item => {
         const categoryClass = categoryColors[item.category] || categoryColors.default;
-        const imageUrl = convertGoogleDriveUrl(item.image) || 'assets/images/placeholder.jpg';
+        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(item.image) : item.image;
+        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
         card.innerHTML = `
-            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-cover" onerror="this.src='../assets/images/placeholder.jpg'">
+            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-cover" onerror="this.src='../assets/images/logo.jpg'">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-3">
                     <span class="text-sm text-teal-600">${new Date(item.date).toLocaleDateString()}</span>
@@ -652,15 +671,19 @@ async function updateOBINews() {
     if (!container) return;
 
     const news = await loadNews(3);
+    console.log('OBI News items loaded:', news);
     if (news.length === 0) return;
 
     container.innerHTML = '';
     news.forEach(item => {
-        const imageUrl = convertGoogleDriveUrl(item.image) || 'assets/images/placeholder.jpg';
+        console.log('Processing news item:', item.title, 'Image URL:', item.image);
+        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(item.image) : item.image;
+        console.log('Converted URL:', convertedUrl);
+        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
         card.innerHTML = `
-            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
+            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-cover" onerror="this.src='../assets/images/logo.jpg'; console.log('Image failed to load:', '${imageUrl}');">
             <div class="p-6">
                 <div class="text-sm text-teal-600 mb-2">${new Date(item.date).toLocaleDateString()}</div>
                 <h3 class="text-xl font-bold text-gray-900 mb-3">${item.title}</h3>
@@ -678,6 +701,7 @@ async function updateHomeNewsPreview() {
     if (!container) return;
 
     const news = await loadNews(3);
+    console.log('Home News items loaded:', news);
 
     if (news.length === 0) {
         container.innerHTML = `
@@ -700,13 +724,16 @@ async function updateHomeNewsPreview() {
     container.innerHTML = '';
     news.forEach(item => {
         const categoryClass = categoryColors[item.category] || categoryColors['General'];
-        const imageUrl = convertGoogleDriveUrl(item.image) || 'assets/images/placeholder.jpg';
+        console.log('Processing home news item:', item.title, 'Image URL:', item.image);
+        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(item.image) : item.image;
+        console.log('Converted URL for home:', convertedUrl);
+        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
         const excerpt = item.excerpt || item.content?.substring(0, 120) + '...' || '';
 
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1';
         card.innerHTML = `
-            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
+            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-cover" onerror="this.src='assets/images/logo.jpg'; console.log('Image failed to load:', '${imageUrl}');">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-3">
                     <span class="text-sm text-blue-600">
@@ -756,13 +783,13 @@ async function updateHomeEventsPreview() {
     container.innerHTML = '';
     upcomingEvents.forEach(event => {
         const eventDate = new Date(event.date || '1970-01-01');
-        const imageUrl = convertGoogleDriveUrl(event.image) || 'assets/images/placeholder.jpg';
+        const imageUrl = convertGoogleDriveUrl(event.image) || 'assets/images/logo.jpg';
         const excerpt = event.description?.substring(0, 120) + '...' || '';
 
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1';
         card.innerHTML = `
-            <img src="${imageUrl}" alt="${event.title}" class="w-full h-48 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
+            <img src="${imageUrl}" alt="${event.title}" class="w-full h-48 object-cover" onerror="this.src='assets/images/logo.jpg'">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-3">
                     <span class="text-sm text-blue-600">
@@ -802,14 +829,15 @@ async function updateGalleryPage() {
     container.innerHTML = '';
     images.forEach(img => {
         // Convert Google Drive URL if needed
-        const imageUrl = convertGoogleDriveUrl(img.imageUrl || img.url || img.image) || 'assets/images/placeholder.jpg';
+        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(img.imageUrl || img.url || img.image) : (img.imageUrl || img.url || img.image);
+        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
         const uploadDate = img.uploadDate ? new Date(img.uploadDate).toLocaleDateString() : '';
 
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden group hover:shadow-xl transition';
         card.innerHTML = `
             <div class="relative overflow-hidden">
-                <img src="${imageUrl}" alt="${img.title}" class="w-full h-64 object-cover group-hover:scale-110 transition duration-300" onerror="this.src='assets/images/placeholder.jpg'">
+                <img src="${imageUrl}" alt="${img.title}" class="w-full h-64 object-cover group-hover:scale-110 transition duration-300" onerror="this.src='assets/images/logo.jpg'">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
                     <div class="text-white">
                         <h3 class="text-xl font-bold mb-1">${img.title}</h3>
@@ -877,7 +905,7 @@ async function updateOBIEventsPage() {
             const card = document.createElement('div');
             card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
             card.innerHTML = `
-                <img src="${event.image || '../assets/images/placeholder.jpg'}" alt="${event.title}" class="w-full h-48 object-cover">
+                <img src="${event.image || '../assets/images/logo.jpg'}" alt="${event.title}" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <div class="text-sm text-teal-600 mb-2">${new Date(event.date).toLocaleDateString()}</div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">${event.title}</h3>
