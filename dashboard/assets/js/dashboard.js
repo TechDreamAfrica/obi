@@ -1,12 +1,19 @@
 // Dashboard Real-time Data Management
-import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, where, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { db } from '../../assets/js/firebase-config.js';
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, where, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { db as firebaseDb } from '../../assets/js/firebase-config.js';
+
+// Use the imported db or fall back to window.db
+const getDb = () => {
+    if (firebaseDb) return firebaseDb;
+    if (window.db) return window.db;
+    throw new Error('Firebase database not initialized');
+};
 
 // ============ DASHBOARD DATA LOADERS ============
 
 // Load Applications with Real-time Updates
 export function loadApplicationsRealtime(callback) {
-    const q = query(collection(db, 'admissions'), orderBy('timestamp', 'desc'));
+    const q = query(collection(getDb(), 'admissions'), orderBy('timestamp', 'desc'));
 
     return onSnapshot(q, (snapshot) => {
         const applications = [];
@@ -19,7 +26,7 @@ export function loadApplicationsRealtime(callback) {
 
 // Load Contacts with Real-time Updates
 export function loadContactsRealtime(callback) {
-    const q = query(collection(db, 'contacts'), orderBy('timestamp', 'desc'));
+    const q = query(collection(getDb(), 'contacts'), orderBy('timestamp', 'desc'));
 
     return onSnapshot(q, (snapshot) => {
         const contacts = [];
@@ -33,7 +40,7 @@ export function loadContactsRealtime(callback) {
 // Load News for Dashboard
 export async function loadNewsForDashboard() {
     try {
-        const q = query(collection(db, 'news'), orderBy('date', 'desc'));
+        const q = query(collection(getDb(), 'news'), orderBy('date', 'desc'));
         const snapshot = await getDocs(q);
         const news = [];
         snapshot.forEach(doc => {
@@ -58,7 +65,7 @@ export async function addNewsArticle(data) {
             author: 'Admin'
         };
 
-        const docRef = await addDoc(collection(db, 'news'), newsData);
+        const docRef = await addDoc(collection(getDb(), 'news'), newsData);
         return { success: true, id: docRef.id };
     } catch (error) {
         console.error('Error adding news:', error);
@@ -69,7 +76,7 @@ export async function addNewsArticle(data) {
 // Update News Article
 export async function updateNewsArticle(id, data) {
     try {
-        const newsRef = doc(db, 'news', id);
+        const newsRef = doc(getDb(), 'news', id);
         await updateDoc(newsRef, data);
         return { success: true };
     } catch (error) {
@@ -81,7 +88,7 @@ export async function updateNewsArticle(id, data) {
 // Delete News Article
 export async function deleteNewsArticle(id) {
     try {
-        await deleteDoc(doc(db, 'news', id));
+        await deleteDoc(doc(getDb(), 'news', id));
         return { success: true };
     } catch (error) {
         console.error('Error deleting news:', error);
@@ -97,7 +104,7 @@ export async function addLeader(data) {
             timestamp: new Date().toISOString()
         };
 
-        const docRef = await addDoc(collection(db, 'leadership'), leaderData);
+        const docRef = await addDoc(collection(getDb(), 'leadership'), leaderData);
         return { success: true, id: docRef.id };
     } catch (error) {
         console.error('Error adding leader:', error);
@@ -108,7 +115,7 @@ export async function addLeader(data) {
 // Update Leader
 export async function updateLeader(id, data) {
     try {
-        const leaderRef = doc(db, 'leadership', id);
+        const leaderRef = doc(getDb(), 'leadership', id);
         await updateDoc(leaderRef, data);
         return { success: true };
     } catch (error) {
@@ -120,7 +127,7 @@ export async function updateLeader(id, data) {
 // Delete Leader
 export async function deleteLeader(id) {
     try {
-        await deleteDoc(doc(db, 'leadership', id));
+        await deleteDoc(doc(getDb(), 'leadership', id));
         return { success: true };
     } catch (error) {
         console.error('Error deleting leader:', error);
@@ -131,7 +138,7 @@ export async function deleteLeader(id) {
 // Update Application Status
 export async function updateApplicationStatus(id, status) {
     try {
-        const appRef = doc(db, 'admissions', id);
+        const appRef = doc(getDb(), 'admissions', id);
         await updateDoc(appRef, { status, updatedAt: new Date().toISOString() });
         return { success: true };
     } catch (error) {
@@ -143,7 +150,7 @@ export async function updateApplicationStatus(id, status) {
 // Mark Contact as Read
 export async function markContactAsRead(id) {
     try {
-        const contactRef = doc(db, 'contacts', id);
+        const contactRef = doc(getDb(), 'contacts', id);
         await updateDoc(contactRef, { read: true, readAt: new Date().toISOString() });
         return { success: true };
     } catch (error) {
@@ -155,7 +162,7 @@ export async function markContactAsRead(id) {
 // Delete Contact
 export async function deleteContact(id) {
     try {
-        await deleteDoc(doc(db, 'contacts', id));
+        await deleteDoc(doc(getDb(), 'contacts', id));
         return { success: true };
     } catch (error) {
         console.error('Error deleting contact:', error);
@@ -174,7 +181,7 @@ export async function addStudent(data) {
             updatedAt: new Date().toISOString()
         };
 
-        const docRef = await addDoc(collection(db, 'students'), studentData);
+        const docRef = await addDoc(collection(getDb(), 'students'), studentData);
         return { success: true, id: docRef.id };
     } catch (error) {
         console.error('Error adding student:', error);
@@ -185,7 +192,7 @@ export async function addStudent(data) {
 // Update Student
 export async function updateStudent(id, data) {
     try {
-        const studentRef = doc(db, 'students', id);
+        const studentRef = doc(getDb(), 'students', id);
         await updateDoc(studentRef, { ...data, updatedAt: new Date().toISOString() });
         return { success: true };
     } catch (error) {
@@ -197,7 +204,7 @@ export async function updateStudent(id, data) {
 // Delete Student
 export async function deleteStudent(id) {
     try {
-        await deleteDoc(doc(db, 'students', id));
+        await deleteDoc(doc(getDb(), 'students', id));
         return { success: true };
     } catch (error) {
         console.error('Error deleting student:', error);
@@ -207,7 +214,7 @@ export async function deleteStudent(id) {
 
 // Load Students with Real-time Updates
 export function loadStudentsRealtime(callback) {
-    const q = query(collection(db, 'students'), orderBy('enrollmentDate', 'desc'));
+    const q = query(collection(getDb(), 'students'), orderBy('enrollmentDate', 'desc'));
 
     return onSnapshot(q, (snapshot) => {
         const students = [];
@@ -223,7 +230,7 @@ export async function createStudentFromApplication(applicationData) {
     try {
         // Check if student already exists for this application
         const existingStudent = await getDocs(
-            query(collection(db, 'students'), where('applicationId', '==', applicationData.id))
+            query(collection(getDb(), 'students'), where('applicationId', '==', applicationData.id))
         );
 
         if (existingStudent.size > 0) {
@@ -250,7 +257,7 @@ export async function createStudentFromApplication(applicationData) {
         };
 
         console.log('Creating student with data:', studentData);
-        const docRef = await addDoc(collection(db, 'students'), studentData);
+        const docRef = await addDoc(collection(getDb(), 'students'), studentData);
         console.log('Student created successfully:', docRef.id);
         return { success: true, id: docRef.id, studentData };
     } catch (error) {
@@ -265,18 +272,18 @@ export async function createStudentFromApplication(applicationData) {
 export async function getDashboardStats() {
     try {
         const [admissions, students, contacts, news, leadership, events, courses, ministries] = await Promise.all([
-            getDocs(collection(db, 'admissions')),
-            getDocs(collection(db, 'students')),
-            getDocs(collection(db, 'contacts')),
-            getDocs(collection(db, 'news')),
-            getDocs(collection(db, 'leadership')),
-            getDocs(collection(db, 'events')),
-            getDocs(collection(db, 'courses')),
-            getDocs(collection(db, 'ministries'))
+            getDocs(collection(getDb(), 'admissions')),
+            getDocs(collection(getDb(), 'students')),
+            getDocs(collection(getDb(), 'contacts')),
+            getDocs(collection(getDb(), 'news')),
+            getDocs(collection(getDb(), 'leadership')),
+            getDocs(collection(getDb(), 'events')),
+            getDocs(collection(getDb(), 'courses')),
+            getDocs(collection(getDb(), 'ministries'))
         ]);
 
         const pendingApps = await getDocs(
-            query(collection(db, 'admissions'), where('status', '==', 'pending'))
+            query(collection(getDb(), 'admissions'), where('status', '==', 'pending'))
         );
 
         return {
