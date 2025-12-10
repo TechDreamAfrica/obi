@@ -173,8 +173,11 @@ export async function replacePageImages() {
         
         // Replace logo images
         document.querySelectorAll('img[src*="logo.jpg"]').forEach(img => {
-            if (images.logo) {
-                img.src = convertGoogleDriveUrl(images.logo);
+            if (images.logo && images.logo.trim()) {
+                const convertedUrl = convertGoogleDriveUrl(images.logo);
+                if (convertedUrl && convertedUrl.trim()) {
+                    img.src = convertedUrl;
+                }
             }
         });
         
