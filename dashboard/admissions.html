@@ -64,6 +64,7 @@
         }
         .print-only { display: none; }
         .status-badge-pending { background-color: #fef3c7; color: #92400e; }
+        .status-badge-admitted { background-color: #dbeafe; color: #0c4a6e; }
         .status-badge-approved { background-color: #d1fae5; color: #065f46; }
         .status-badge-rejected { background-color: #fee2e2; color: #991b1b; }
     </style>
@@ -272,6 +273,9 @@
             </div>
             <div class="sticky bottom-0 bg-gray-50 border-t p-6 flex justify-between items-center no-print">
                 <div class="flex space-x-3">
+                    <button onclick="updateApplicationStatus('admitted')" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
+                        <i class="fas fa-graduation-cap mr-2"></i>Admit
+                    </button>
                     <button onclick="updateApplicationStatus('approved')" class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">
                         <i class="fas fa-check mr-2"></i>Approve
                     </button>
@@ -342,6 +346,7 @@
         function updateStatistics() {
             const total = allApplications.length;
             const pending = allApplications.filter(app => app.status === 'pending').length;
+            const admitted = allApplications.filter(app => app.status === 'admitted').length;
             const approved = allApplications.filter(app => app.status === 'approved').length;
             const rejected = allApplications.filter(app => app.status === 'rejected').length;
 
@@ -394,7 +399,8 @@
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-50 transition';
 
-                const statusClass = app.status === 'approved' ? 'status-badge-approved' :
+                const statusClass = app.status === 'admitted' ? 'status-badge-admitted' :
+                                  app.status === 'approved' ? 'status-badge-approved' :
                                   app.status === 'rejected' ? 'status-badge-rejected' :
                                   'status-badge-pending';
 
@@ -573,7 +579,7 @@
         window.updateApplicationStatus = async function(newStatus) {
             if (!currentViewingApp) return;
 
-            if (!confirm(`Are you sure you want to ${newStatus} this application?`)) return;
+            if (!confirm(`Are you sure you want to mark this application as ${newStatus}?`)) return;
 
             try {
                 showLoading();
@@ -597,8 +603,8 @@
                     console.error('Email notification failed:', emailResult.error);
                 }
 
-                // If approved, create student record
-                if (newStatus === 'approved') {
+                // If admitted or approved, create student record
+                if (newStatus === 'admitted' || newStatus === 'approved') {
                     console.log('Creating student record...');
                     const studentResult = await createStudentFromApplication(currentViewingApp);
                     
@@ -606,10 +612,15 @@
                         console.log('Student record created:', studentResult.id);
                         // Send welcome email to new student
                         await sendWelcomeEmail(studentResult.studentData);
-                        showSuccess(`Application approved! Student record created with ID: ${studentResult.studentData.studentId}`);
+                        showSuccess(`Application admitted! Student record created with ID: ${studentResult.studentData.studentId}`);
                     } else {
-                        console.error('Failed to create student record:', studentResult.error);
-                        showSuccess(`Application approved! Note: Student record creation failed - please create manually.`);
+                        if (studentResult.error && studentResult.error.includes('already exists')) {
+                            console.log('Student record already exists for this application');
+                            showSuccess(`Application ${newStatus} successfully! Student record already exists.`);
+                        } else {
+                            console.error('Failed to create student record:', studentResult.error);
+                            showSuccess(`Application ${newStatus} successfully! Note: Student record creation failed - please create manually.`);
+                        }
                     }
                 } else {
                     showSuccess(`Application ${newStatus} successfully! Notifications sent.`);

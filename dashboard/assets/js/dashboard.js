@@ -222,6 +222,15 @@ export function loadStudentsRealtime(callback) {
 // Create Student from Approved Application
 export async function createStudentFromApplication(applicationData) {
     try {
+        // Check if student already exists for this application
+        const existingStudent = await getDocs(
+            query(collection(db, 'students'), where('applicationId', '==', applicationData.id))
+        );
+
+        if (existingStudent.size > 0) {
+            return { success: false, error: 'Student record already exists for this application' };
+        }
+
         const studentData = {
             fullName: applicationData.fullName || applicationData.name,
             studentId: `OBI${Date.now().toString().slice(-6)}`, // Generate unique ID

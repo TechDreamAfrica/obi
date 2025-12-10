@@ -7,16 +7,22 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    // Applications - Public read, Authenticated write
+    // Applications - Public read and write (no authentication required for admissions)
     match /applications/{document=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow write: if true;
     }
 
-    // OBI Applications - Public read, Authenticated write
+    // OBI Applications - Public read and write (no authentication required for admissions)
     match /obi-applications/{document=**} {
       allow read: if true;
-      allow write: if isAuthenticated();
+      allow write: if true;
+    }
+
+    // Admissions - Public read and write (no authentication required for admissions)
+    match /admissions/{document=**} {
+      allow read: if true;
+      allow write: if true;
     }
 
     // Students - Authenticated only

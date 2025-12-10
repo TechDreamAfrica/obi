@@ -21,8 +21,8 @@ function convertGoogleDriveUrl(url) {
         // Extract file ID from various Google Drive URL formats
         let fileId = null;
 
-        // Format: https://drive.google.com/file/d/FILE_ID/view
-        const match1 = url.match(/\/file\/d\/([^\/]+)/);
+        // Format: https://drive.google.com/file/d/FILE_ID/view or /view?usp=sharing
+        const match1 = url.match(/\/file\/d\/([^\/\?]+)/);
         if (match1) {
             fileId = match1[1];
         }
@@ -33,9 +33,9 @@ function convertGoogleDriveUrl(url) {
             fileId = match2[1];
         }
 
-        // If we found a file ID, return the direct thumbnail URL
+        // If we found a file ID, return the direct image URL (using /uc?export=view for better compatibility)
         if (fileId) {
-            return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+            return `https://drive.google.com/uc?export=view&id=${fileId}`;
         }
     }
 
@@ -499,12 +499,13 @@ async function updateLeadershipPage() {
     if (seniorLeadership && senior.length > 0) {
         seniorLeadership.innerHTML = '';
         senior.forEach(leader => {
+            const imageUrl = convertGoogleDriveUrl(leader.image) || 'assets/images/placeholder.jpg';
             const card = document.createElement('div');
             card.className = 'bg-white rounded-lg shadow-xl overflow-hidden';
             card.innerHTML = `
                 <div class="md:flex">
                     <div class="md:flex-shrink-0">
-                        <img src="${leader.image || 'assets/images/placeholder.jpg'}" alt="${leader.name}" class="h-full w-full md:w-48 object-cover">
+                        <img src="${imageUrl}" alt="${leader.name}" class="h-full w-full md:w-48 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
                     </div>
                     <div class="p-8">
                         <h4 class="text-2xl font-bold text-gray-900 mb-2">${leader.name}</h4>
@@ -528,10 +529,11 @@ async function updateLeadershipPage() {
     if (boardMembers && board.length > 0) {
         boardMembers.innerHTML = '';
         board.forEach(leader => {
+            const imageUrl = convertGoogleDriveUrl(leader.image) || 'assets/images/placeholder.jpg';
             const card = document.createElement('div');
             card.className = 'text-center';
             card.innerHTML = `
-                <img src="${leader.image || 'assets/images/placeholder.jpg'}" alt="${leader.name}" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover shadow-lg">
+                <img src="${imageUrl}" alt="${leader.name}" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover shadow-lg" onerror="this.src='assets/images/placeholder.jpg'">
                 <h4 class="text-lg font-bold text-gray-900">${leader.name}</h4>
                 <p class="text-gray-600">${leader.title}</p>
             `;
@@ -543,10 +545,11 @@ async function updateLeadershipPage() {
     if (ministryLeaders && ministry.length > 0) {
         ministryLeaders.innerHTML = '';
         ministry.forEach(leader => {
+            const imageUrl = convertGoogleDriveUrl(leader.image) || 'assets/images/placeholder.jpg';
             const card = document.createElement('div');
             card.className = 'bg-white p-6 rounded-lg shadow-lg text-center';
             card.innerHTML = `
-                <img src="${leader.image || 'assets/images/placeholder.jpg'}" alt="${leader.name}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover">
+                <img src="${imageUrl}" alt="${leader.name}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
                 <h4 class="font-bold text-gray-900">${leader.name}</h4>
                 <p class="text-sm text-gray-600">${leader.title}</p>
             `;
@@ -565,10 +568,11 @@ async function updateHomeLeadership() {
 
     container.innerHTML = '';
     leaders.forEach(leader => {
+        const imageUrl = convertGoogleDriveUrl(leader.image) || 'assets/images/placeholder.jpg';
         const card = document.createElement('div');
         card.className = 'text-center';
         card.innerHTML = `
-            <img src="${leader.image}" alt="${leader.name}" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+            <img src="${imageUrl}" alt="${leader.name}" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover" onerror="this.src='assets/images/placeholder.jpg'">
             <h3 class="text-lg font-bold text-gray-900">${leader.name}</h3>
             <p class="text-gray-600">${leader.title}</p>
         `;
