@@ -294,8 +294,9 @@
     </div>
 
     <script type="module">
-        import { db } from '../../assets/js/firebase-config.js';
+        import { db, auth } from '../../assets/js/firebase-config.js';
         import { collection, getDocs, doc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { initEmailJS, sendAdmissionNotification, sendWelcomeEmail } from './assets/js/email-service.js';
         import { createStudentFromApplication } from './assets/js/dashboard.js';
 
@@ -306,11 +307,20 @@
         let itemsPerPage = 10;
         let currentViewingApp = null;
 
-        // Initialize
+        // Logout function
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error signing out:', error);
+                alert('Error signing out: ' + error.message);
+            }
+        };
+
+        // Initialize on page load
         window.addEventListener('DOMContentLoaded', async () => {
-            // Initialize EmailJS
             initEmailJS();
-            
             await loadApplications();
             setupSearchListener();
         });
