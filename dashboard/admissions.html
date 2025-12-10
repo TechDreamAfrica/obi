@@ -295,7 +295,7 @@
 
     <script type="module">
         import { db } from '../assets/js/firebase-config.js';
-        import { collection, getDocs, doc, updateDoc, query, orderBy, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { collection, getDocs, doc, updateDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { initEmailJS, sendAdmissionNotification, sendWelcomeEmail } from './assets/js/email-service.js';
         import { createStudentFromApplication } from './assets/js/dashboard.js';
 
@@ -320,8 +320,8 @@
                 showLoading();
                 console.log('Loading applications from obi-applications...');
 
-                const q = query(collection(db, 'obi-applications'), orderBy('submittedAt', 'desc'));
-                const snapshot = await getDocs(q);
+                // Get all documents without orderBy to avoid index requirement
+                const snapshot = await getDocs(collection(db, 'obi-applications'));
 
                 allApplications = [];
                 snapshot.forEach(docSnap => {
@@ -329,6 +329,13 @@
                         id: docSnap.id,
                         ...docSnap.data()
                     });
+                });
+
+                // Sort by submittedAt in JavaScript instead of in the query
+                allApplications.sort((a, b) => {
+                    const dateA = new Date(a.submittedAt || 0);
+                    const dateB = new Date(b.submittedAt || 0);
+                    return dateB - dateA;
                 });
 
                 console.log(`Loaded ${allApplications.length} applications`);
