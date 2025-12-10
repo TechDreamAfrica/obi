@@ -1,6 +1,6 @@
 // Firebase Configuration
 import { db, auth } from './firebase-config.js';
-import { collection, addDoc, getDocs, query, orderBy, limit, where, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, addDoc, getDocs, query, orderBy, limit, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { initSiteImages } from './site-images.js';
 
