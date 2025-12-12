@@ -2,9 +2,15 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper function to check if user is authenticated
+    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
+    }
+
+    // Admin Users Collection - Authenticated users can read
+    match /admin-users/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false;
     }
 
     // Applications - Public read and write (no authentication required for admissions)
@@ -25,7 +31,7 @@ service cloud.firestore {
       allow write: if true;
     }
 
-    // Students - Authenticated only
+    // Students - Authenticated users can read and write
     match /students/{document=**} {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated();
@@ -86,3 +92,4 @@ service cloud.firestore {
     }
   }
 }
+

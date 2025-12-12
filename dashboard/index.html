@@ -205,147 +205,93 @@
     </div>
 
     <script type="module">
-        import { db, auth } from '../../assets/js/firebase-config.js';
-        import { collection, getDocs, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { ensureAdminAccess, getCurrentUser, logoutUser } from './assets/js/auth-service.js';
+        import { getDashboardStats } from './assets/js/data-service.js';
+
+        // Initialize dashboard
+        async function initDashboard() {
+            try {
+                // Check admin access
+                const hasAccess = await ensureAdminAccess();
+                if (!hasAccess) return;
+
+                // Load current user info
+                const currentUser = await getCurrentUser();
+                if (currentUser) {
+                    document.querySelector('span.text-gray-600').textContent = currentUser.displayName || currentUser.email;
+                    const initials = (currentUser.displayName || currentUser.email).split(' ').map(n => n[0]).join('');
+                    document.querySelector('img.w-10').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.displayName || currentUser.email)}&background=random`;
+                }
+
+                // Load dashboard statistics
+                await loadDashboardData();
+            } catch (error) {
+                console.error('Error initializing dashboard:', error);
+                alert('Error loading dashboard. Please refresh the page.');
+            }
+        }
 
         // Logout function
         window.handleLogout = async function() {
             try {
-                await signOut(auth);
-                window.location.href = 'login.html';
+                const result = await logoutUser();
+                if (result.success) {
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Error logging out: ' + result.error);
+                }
             } catch (error) {
                 console.error('Error signing out:', error);
                 alert('Error signing out: ' + error.message);
             }
         };
 
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-            } else {
-                await loadDashboardData();
-            }
-        });
-
         async function loadDashboardData() {
             try {
                 console.log('Loading dashboard data from Firebase...');
                 
-                // Try both collection names for applications (applications and obi-applications)
-                let applicationsSnapshot;
-                try {
-                    applicationsSnapshot = await getDocs(collection(db, 'obi-applications'));
-                    if (applicationsSnapshot.empty) {
-                        applicationsSnapshot = await getDocs(collection(db, 'applications'));
-                    }
-                } catch (err) {
-                    console.log('Trying fallback collection name...');
-                    applicationsSnapshot = await getDocs(collection(db, 'applications'));
-                }
-                
-                // Fetch all collections data in parallel
-                const [
-                    studentsSnapshot,
-                    contactsSnapshot,
-                    newsSnapshot,
-                    eventsSnapshot,
-                    coursesSnapshot,
-                    ministriesSnapshot,
-                    leadershipSnapshot,
-                    gallerySnapshot
-                ] = await Promise.all([
-                    getDocs(collection(db, 'students')).catch(() => ({ size: 0, docs: [], empty: true })),
-                    getDocs(collection(db, 'contacts')).catch(() => ({ size: 0, docs: [], empty: true })),
-                    getDocs(collection(db, 'news')).catch(() => ({ size: 0, docs: [], empty: true })),
-                    getDocs(collection(db, 'events')).catch(() => ({ size: 0, docs: [], empty: true })),
-                    getDocs(collection(db, 'courses')).catch(() => ({ size: 0, docs: [], empty: true })),
-                    getDocs(collection(db, 'ministries')).catch(() => ({ size: 0, docs: [], empty: true })),
-                    getDocs(collection(db, 'leadership')).catch(() => ({ size: 0, docs: [], empty: true })),
-                    getDocs(collection(db, 'gallery')).catch(() => ({ size: 0, docs: [], empty: true }))
-                ]);
+                const stats = await getDashboardStats();
 
-                const totalApps = applicationsSnapshot.size;
-                const pendingApps = applicationsSnapshot.docs.filter(doc => doc.data().status === 'pending').length;
-                const totalStudents = studentsSnapshot.size;
-                const totalContacts = contactsSnapshot.size;
-                const totalNews = newsSnapshot.size;
-                const totalEvents = eventsSnapshot.size;
-                const totalCourses = coursesSnapshot.size;
-                const totalMinistries = ministriesSnapshot.size;
-
-                console.log('Dashboard Statistics:', {
-                    applications: totalApps,
-                    students: totalStudents,
-                    pending: pendingApps,
-                    contacts: totalContacts,
-                    news: totalNews,
-                    events: totalEvents,
-                    courses: totalCourses,
-                    ministries: totalMinistries
-                });
+                console.log('Dashboard Statistics:', stats);
 
                 // Update all statistics
-                document.getElementById('total-applications').textContent = totalApps;
-                document.getElementById('total-students').textContent = totalStudents;
-                document.getElementById('pending-applications').textContent = pendingApps;
-                document.getElementById('total-contacts').textContent = totalContacts;
-                document.getElementById('total-news').textContent = totalNews;
-                document.getElementById('total-events').textContent = totalEvents;
-                document.getElementById('total-courses').textContent = totalCourses;
-                document.getElementById('total-ministries').textContent = totalMinistries;
+                document.getElementById('total-applications').textContent = stats.totalApplications;
+                document.getElementById('total-students').textContent = stats.totalStudents;
+                document.getElementById('pending-applications').textContent = stats.applicationsByStatus.pending;
+                document.getElementById('total-contacts').textContent = stats.totalContacts;
+                document.getElementById('total-news').textContent = stats.totalNews;
+                document.getElementById('total-events').textContent = stats.totalEvents;
+                document.getElementById('total-courses').textContent = stats.totalCourses;
+                document.getElementById('total-ministries').textContent = stats.totalMinistries;
 
                 // Load recent applications
-                try {
-                    // Try with submittedAt field first
-                    let recentAppsQuery = query(
-                        collection(db, applicationsSnapshot.empty ? 'applications' : 'obi-applications'), 
-                        orderBy('submittedAt', 'desc'), 
-                        limit(5)
-                    );
-                    let recentAppsSnapshot = await getDocs(recentAppsQuery);
-                    
-                    // If no results or error, try with timestamp field
-                    if (recentAppsSnapshot.empty) {
-                        recentAppsQuery = query(
-                            collection(db, applicationsSnapshot.empty ? 'applications' : 'obi-applications'), 
-                            orderBy('timestamp', 'desc'), 
-                            limit(5)
-                        );
-                        recentAppsSnapshot = await getDocs(recentAppsQuery);
-                    }
-                    
-                    const recentAppsContainer = document.getElementById('recent-applications');
-                    recentAppsContainer.innerHTML = '';
+                const recentAppsContainer = document.getElementById('recent-applications');
+                recentAppsContainer.innerHTML = '';
 
-                    if (recentAppsSnapshot.empty) {
-                        recentAppsContainer.innerHTML = '<p class="text-gray-500 text-sm">No applications yet</p>';
-                    } else {
-                        recentAppsSnapshot.forEach(doc => {
-                            const app = doc.data();
-                            const statusColors = {
-                                pending: 'bg-yellow-100 text-yellow-800',
-                                approved: 'bg-green-100 text-green-800',
-                                rejected: 'bg-red-100 text-red-800'
-                            };
-                            const statusClass = statusColors[app.status] || statusColors.pending;
+                if (!stats.recentApplications || stats.recentApplications.length === 0) {
+                    recentAppsContainer.innerHTML = '<p class="text-gray-500 text-sm">No applications yet</p>';
+                } else {
+                    stats.recentApplications.forEach(app => {
+                        const statusColors = {
+                            pending: 'bg-yellow-100 text-yellow-800',
+                            approved: 'bg-green-100 text-green-800',
+                            admitted: 'bg-blue-100 text-blue-800',
+                            rejected: 'bg-red-100 text-red-800'
+                        };
+                        const statusClass = statusColors[app.status] || statusColors.pending;
 
-                            const div = document.createElement('div');
-                            div.className = 'flex justify-between items-center p-3 bg-gray-50 rounded cursor-pointer hover:bg-gray-100';
-                            div.onclick = () => window.location.href = 'admissions.html';
-                            div.innerHTML = `
-                                <div>
-                                    <p class="font-semibold">${app.fullName || app.name || 'N/A'}</p>
-                                    <p class="text-sm text-gray-600">${app.program || 'N/A'}</p>
-                                </div>
-                                <span class="${statusClass} text-xs px-2 py-1 rounded capitalize">${app.status || 'pending'}</span>
-                            `;
-                            recentAppsContainer.appendChild(div);
-                        });
-                    }
-                } catch (err) {
-                    console.error('Error loading recent applications:', err);
-                    document.getElementById('recent-applications').innerHTML = '<p class="text-gray-500 text-sm">Unable to load recent applications</p>';
+                        const div = document.createElement('div');
+                        div.className = 'flex justify-between items-center p-3 bg-gray-50 rounded cursor-pointer hover:bg-gray-100';
+                        div.onclick = () => window.location.href = 'admissions.html';
+                        div.innerHTML = `
+                            <div>
+                                <p class="font-semibold">${app.fullName || app.name || 'N/A'}</p>
+                                <p class="text-sm text-gray-600">${app.program || 'N/A'}</p>
+                            </div>
+                            <span class="${statusClass} text-xs px-2 py-1 rounded capitalize">${app.status || 'pending'}</span>
+                        `;
+                        recentAppsContainer.appendChild(div);
+                    });
                 }
                 
                 console.log('Dashboard data loaded successfully');
@@ -354,6 +300,9 @@
                 alert('Error loading dashboard data. Please check console for details.');
             }
         }
+
+        // Initialize on page load
+        initDashboard();
     </script>
 
     <script>
