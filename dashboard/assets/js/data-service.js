@@ -1,6 +1,6 @@
 // Data Service - Fetch all collections from Firestore
 import { collection, getDocs, doc, getDoc, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { db as firebaseDb } from '../../assets/js/firebase-config.js';
+import { db as firebaseDb } from '../../../assets/js/firebase-config.js';
 
 const getDb = () => {
     if (firebaseDb) return firebaseDb;

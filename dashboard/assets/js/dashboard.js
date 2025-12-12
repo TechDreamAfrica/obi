@@ -2,7 +2,7 @@
 // Most dashboard pages implement their own data loading inline
 // This file only exports the one function that's actually used externally
 import { collection, getDocs, addDoc, doc, where, query } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { db as firebaseDb } from '../../assets/js/firebase-config.js';
+import { db as firebaseDb } from '../../../assets/js/firebase-config.js';
 
 // Get database reference
 const getDb = () => {

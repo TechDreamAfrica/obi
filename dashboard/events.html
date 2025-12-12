@@ -156,7 +156,10 @@
 
                 <div>
                     <label class="block text-sm font-medium mb-2">Image URL</label>
-                    <input type="text" id="event-image" name="image" placeholder="https://drive.google.com/file/d/FILE_ID/view or direct URL" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600">
+                    <input type="text" id="event-image" name="image" placeholder="Paste Google Drive link or direct image URL" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-600" onchange="updateEventImagePreview()">
+                    <div id="event-image-preview" class="mt-3 text-center bg-gray-50 rounded-lg p-4">
+                        <p class="text-gray-400 text-sm">No image selected</p>
+                    </div>
                     <p class="text-xs text-gray-500 mt-1">Supports Google Drive links or direct image URLs</p>
                 </div>
 
@@ -193,15 +196,53 @@
     </div>
 
     <script type="module">
-        import { auth, db } from '../../assets/js/firebase-config.js';
+        import { auth, db } from '../assets/js/firebase-config.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, serverTimestamp, Timestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getGoogleDriveImageUrl, handleAdminGoogleDriveInput } from './assets/js/google-drive-utils.js';
 
         let allEvents = [];
         let currentFilter = 'all';
         let editingId = null;
 
-        // Logout function
+        // Update event image preview
+        window.updateEventImagePreview = function() {
+            const imageInput = document.getElementById('event-image').value;
+            const previewDiv = document.getElementById('event-image-preview');
+            
+            if (!imageInput.trim()) {
+                previewDiv.innerHTML = '<p class="text-gray-400 text-sm">No image selected</p>';
+                return;
+            }
+            
+            // If it's a Google Drive link, validate it
+            if (imageInput.includes('drive.google.com') || /^[a-zA-Z0-9-_]{20,}$/.test(imageInput)) {
+                const validation = handleAdminGoogleDriveInput(imageInput);
+                if (validation.success) {
+                    previewDiv.innerHTML = '<p class="text-blue-500 text-sm"><i class="fas fa-spinner fa-spin mr-2"></i>Loading preview...</p>';
+                    const img = new Image();
+                    img.onload = () => {
+                        previewDiv.innerHTML = `<img src="${validation.imageUrl}" class="w-full h-40 object-cover rounded-lg" alt="Image preview">`;
+                    };
+                    img.onerror = () => {
+                        previewDiv.innerHTML = '<p class="text-yellow-600 text-sm"><i class="fas fa-exclamation-triangle mr-2"></i>Preview failed - check if link is public</p>';
+                    };
+                    img.src = validation.imageUrl;
+                    return;
+                }
+            }
+            
+            // Try as direct URL
+            previewDiv.innerHTML = '<p class="text-blue-500 text-sm"><i class="fas fa-spinner fa-spin mr-2"></i>Loading preview...</p>';
+            const img = new Image();
+            img.onload = () => {
+                previewDiv.innerHTML = `<img src="${imageInput}" class="w-full h-40 object-cover rounded-lg" alt="Image preview">`;
+            };
+            img.onerror = () => {
+                previewDiv.innerHTML = '<p class="text-yellow-600 text-sm"><i class="fas fa-exclamation-triangle mr-2"></i>Invalid URL or image not accessible</p>';
+            };
+            img.src = imageInput;
+        };
         window.handleLogout = async function() {
             try {
                 await signOut(auth);

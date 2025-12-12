@@ -277,9 +277,10 @@
     </div>
 
     <script type="module">
-        import { db, auth } from '../../assets/js/firebase-config.js';
+        import { db, auth } from '../assets/js/firebase-config.js';
         import { doc, getDoc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getGoogleDriveImageUrl, handleAdminGoogleDriveInput } from './assets/js/google-drive-utils.js';
 
         const imageKeys = ['logo', 'cert', 'students', 'building', 'class', 'leadership', 'abt', 'story', 'placeholder'];
 
@@ -307,25 +308,21 @@
         function convertGoogleDriveUrl(url) {
             if (!url) return '';
             
-            // If already converted, return as is
+            // If it's a Google Drive link, use our utility to convert it
+            if (url.includes('drive.google.com')) {
+                const validation = handleAdminGoogleDriveInput(url);
+                if (validation.success) {
+                    return validation.imageUrl;
+                }
+            }
+            
+            // If already a direct image URL, return as is
             if (url.includes('drive.google.com/uc?')) {
                 return url;
             }
             
-            // Extract file ID from various Google Drive URL formats
-            let fileId = null;
-            
-            // Format: https://drive.google.com/file/d/FILE_ID/view
-            const match1 = url.match(/\/file\/d\/([^\/]+)/);
-            if (match1) fileId = match1[1];
-            
-            // Format: https://drive.google.com/open?id=FILE_ID
-            const match2 = url.match(/[?&]id=([^&]+)/);
-            if (match2) fileId = match2[1];
-            
-            if (fileId) {
-                return `https://drive.google.com/uc?export=view&id=${fileId}`;
-            }
+            // Return original URL (might be a direct HTTP URL)
+            return url;
             
             return url; // Return original if no match
         }

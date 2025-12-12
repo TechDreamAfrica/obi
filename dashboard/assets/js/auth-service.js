@@ -1,7 +1,7 @@
 // Authentication Service - Admin Role Management
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { auth as firebaseAuth, db as firebaseDb } from '../../assets/js/firebase-config.js';
+import { auth as firebaseAuth, db as firebaseDb } from '../../../assets/js/firebase-config.js';
 
 // Get references
 const getAuth = () => {
