@@ -5,15 +5,27 @@ import { auth as firebaseAuth, db as firebaseDb } from '../../../assets/js/fireb
 
 // Get references
 const getAuth = () => {
-    if (firebaseAuth) return firebaseAuth;
-    if (window.auth) return window.auth;
-    throw new Error('Firebase auth not initialized');
+    if (firebaseAuth) {
+        return firebaseAuth;
+    }
+    if (window.auth) {
+        return window.auth;
+    }
+    const error = 'Firebase auth not initialized. Check firebase-config.js is loaded.';
+    console.error(error);
+    throw new Error(error);
 };
 
 const getDb = () => {
-    if (firebaseDb) return firebaseDb;
-    if (window.db) return window.db;
-    throw new Error('Firebase database not initialized');
+    if (firebaseDb) {
+        return firebaseDb;
+    }
+    if (window.db) {
+        return window.db;
+    }
+    const error = 'Firebase database not initialized. Check firebase-config.js is loaded.';
+    console.error(error);
+    throw new Error(error);
 };
 
 /**

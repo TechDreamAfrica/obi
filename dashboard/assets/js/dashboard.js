@@ -6,9 +6,15 @@ import { db as firebaseDb } from '../../../assets/js/firebase-config.js';
 
 // Get database reference
 const getDb = () => {
-    if (firebaseDb) return firebaseDb;
-    if (window.db) return window.db;
-    throw new Error('Firebase database not initialized');
+    if (firebaseDb) {
+        return firebaseDb;
+    }
+    if (window.db) {
+        return window.db;
+    }
+    const error = 'Firebase database not initialized. Check firebase-config.js is loaded.';
+    console.error(error);
+    throw new Error(error);
 };
 
 /**

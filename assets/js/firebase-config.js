@@ -19,3 +19,9 @@ const auth = getAuth(app);
 
 // Export for use in other modules
 export { db, auth, app };
+
+// Also set globally for dashboard modules that use fallback
+if (typeof window !== 'undefined') {
+    window.db = db;
+    window.auth = auth;
+}
