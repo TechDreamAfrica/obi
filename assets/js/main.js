@@ -2,7 +2,8 @@
 import { db, auth } from './firebase-config.js';
 import { collection, addDoc, getDocs, query, orderBy, limit, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { initSiteImages } from './site-images.js';
+import { initSiteImages, convertImageUrl } from './site-images.js';
+import { getOptimizedImageUrl, isCloudinaryUrl } from './cloudinary-utils.js';
 
 // Export for use in other modules
 window.db = db;
@@ -12,47 +13,24 @@ export { db, auth };
 // Initialize site images on page load
 initSiteImages();
 
-// Helper function to convert Google Drive share links to direct image URLs
-function convertGoogleDriveUrl(url) {
+// Helper function to always return an optimized Cloudinary image URL (or fallback)
+function getCloudinaryImageUrl(url, preset = 'default') {
     if (!url || typeof url !== 'string') {
-        return null;
+        return 'assets/images/logo.jpg';
     }
-
     const trimmedUrl = url.trim();
-    
-    // Check if it's a Google Drive link
-    if (trimmedUrl.includes('drive.google.com')) {
-        // Extract file ID from various Google Drive URL formats
-        let fileId = null;
-
-        // Format: https://drive.google.com/file/d/FILE_ID/view or /view?usp=sharing
-        const match1 = trimmedUrl.match(/\/file\/d\/([^\/\?&]+)/);
-        if (match1) {
-            fileId = match1[1];
-        }
-
-        // Format: https://drive.google.com/open?id=FILE_ID
-        if (!fileId) {
-            const match2 = trimmedUrl.match(/[?&]id=([^&]+)/);
-            if (match2) {
-                fileId = match2[1];
-            }
-        }
-
-        // If we found a file ID, return the direct image URL (using /uc?export=view for better compatibility)
-        if (fileId && fileId.trim()) {
-            const convertedUrl = `https://drive.google.com/uc?export=view&id=${fileId.trim()}`;
-            console.log('Converted Google Drive URL:', { original: url, converted: convertedUrl });
-            return convertedUrl;
-        }
+    if (trimmedUrl.includes('cloudinary.com') || trimmedUrl.includes('res.cloudinary.com')) {
+        return getOptimizedImageUrl(trimmedUrl, preset);
     }
-
-    // Return original URL if it's not a Google Drive link or direct image URL
-    return trimmedUrl;
+    // If not a Cloudinary URL, fallback to logo
+    return 'assets/images/logo.jpg';
 }
 
-// Export helper function
-window.convertGoogleDriveUrl = convertGoogleDriveUrl;
+// Export helper functions
+window.getCloudinaryImageUrl = getCloudinaryImageUrl;
+window.getOptimizedImageUrl = getOptimizedImageUrl;
+window.isCloudinaryUrl = isCloudinaryUrl;
+window.convertImageUrl = convertImageUrl;
 
 // Mobile Menu Toggle
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
@@ -270,9 +248,9 @@ function getUrlParameter(name) {
 // ============ DYNAMIC DATA RETRIEVAL FUNCTIONS ============
 
 // Load Gallery Images (for carousel and gallery page)
-async function loadGalleryImages(limit = 4) {
+async function loadGalleryImages(max = 4) {
     try {
-        const q = query(collection(db, 'gallery'), orderBy('timestamp', 'desc'), limit(limit));
+        const q = query(collection(db, 'gallery'), orderBy('uploadDate', 'desc'), limit(max));
         const snapshot = await getDocs(q);
         const images = [];
         snapshot.forEach(doc => {
@@ -286,11 +264,11 @@ async function loadGalleryImages(limit = 4) {
 }
 
 // Load Ministries
-async function loadMinistries(limit = null) {
+async function loadMinistries(maxCount = null) {
     try {
         let q = collection(db, 'ministries');
-        if (limit) {
-            q = query(q, orderBy('order'), limit(limit));
+        if (maxCount) {
+            q = query(q, orderBy('order'), limit(maxCount));
         } else {
             q = query(q, orderBy('order'));
         }
@@ -307,11 +285,11 @@ async function loadMinistries(limit = null) {
 }
 
 // Load Leadership
-async function loadLeadership(limit = null) {
+async function loadLeadership(maxCount = null) {
     try {
         let q = collection(db, 'leadership');
-        if (limit) {
-            q = query(q, orderBy('order'), limit(limit));
+        if (maxCount) {
+            q = query(q, orderBy('order'), limit(maxCount));
         } else {
             q = query(q, orderBy('order'));
         }
@@ -362,9 +340,9 @@ async function loadNews(limit = 3) {
 }
 
 // Load Events
-async function loadEvents(limit = 3) {
+async function loadEvents(maxCount = 3) {
     try {
-        const q = query(collection(db, 'events'), orderBy('date', 'desc'), limit(limit));
+        const q = query(collection(db, 'events'), orderBy('date', 'desc'), limit(maxCount));
         const snapshot = await getDocs(q);
         const events = [];
         snapshot.forEach(doc => {
@@ -411,8 +389,7 @@ async function updateCarousel() {
 
     carousel.innerHTML = '';
     images.forEach((img, index) => {
-        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(img.imageUrl || img.url || img.image) : (img.imageUrl || img.url);
-        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+        const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(img.imageUrl || img.url || img.image) : 'assets/images/logo.jpg';
         const slide = document.createElement('div');
         slide.className = `carousel-slide absolute w-full h-full transition-opacity duration-1000 ${index === 0 ? '' : 'opacity-0'}`;
         slide.innerHTML = `
@@ -475,8 +452,7 @@ async function updateHomeMinistriesPreview() {
 
     container.innerHTML = '';
     ministries.forEach(ministry => {
-        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(ministry.image) : ministry.image;
-        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+        const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(ministry.image) : 'assets/images/logo.jpg';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition';
         card.innerHTML = `
@@ -500,7 +476,12 @@ async function updateLeadershipPage() {
     if (!seniorLeadership && !boardMembers && !ministryLeaders) return;
 
     const leaders = await loadLeadership();
-    if (leaders.length === 0) return;
+    if (leaders.length === 0) {
+        if (seniorLeadership) seniorLeadership.innerHTML = '<div class="col-span-full text-center text-red-500 py-8">No leadership data found. Please check your database or network connection.</div>';
+        if (boardMembers) boardMembers.innerHTML = '<div class="col-span-full text-center text-red-500 py-8">No leadership data found. Please check your database or network connection.</div>';
+        if (ministryLeaders) ministryLeaders.innerHTML = '<div class="col-span-full text-center text-red-500 py-8">No leadership data found. Please check your database or network connection.</div>';
+        return;
+    }
 
     // Filter leaders by category
     const senior = leaders.filter(l => l.category === 'senior' || l.category === 'executive');
@@ -511,8 +492,7 @@ async function updateLeadershipPage() {
     if (seniorLeadership && senior.length > 0) {
         seniorLeadership.innerHTML = '';
         senior.forEach(leader => {
-            const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(leader.image) : leader.image;
-            const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+            const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(leader.image || leader.imageUrl) : 'assets/images/logo.jpg';
             const card = document.createElement('div');
             card.className = 'bg-white rounded-lg shadow-xl overflow-hidden';
             card.innerHTML = `
@@ -542,8 +522,7 @@ async function updateLeadershipPage() {
     if (boardMembers && board.length > 0) {
         boardMembers.innerHTML = '';
         board.forEach(leader => {
-            const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(leader.image) : leader.image;
-            const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+            const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(leader.image || leader.imageUrl) : 'assets/images/logo.jpg';
             const card = document.createElement('div');
             card.className = 'text-center';
             card.innerHTML = `
@@ -559,8 +538,7 @@ async function updateLeadershipPage() {
     if (ministryLeaders && ministry.length > 0) {
         ministryLeaders.innerHTML = '';
         ministry.forEach(leader => {
-            const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(leader.image) : leader.image;
-            const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+            const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(leader.image || leader.imageUrl) : 'assets/images/logo.jpg';
             const card = document.createElement('div');
             card.className = 'bg-white p-6 rounded-lg shadow-lg text-center';
             card.innerHTML = `
@@ -583,8 +561,7 @@ async function updateHomeLeadership() {
 
     container.innerHTML = '';
     leaders.forEach(leader => {
-        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(leader.image) : leader.image;
-        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+        const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(leader.image) : 'assets/images/logo.jpg';
         const card = document.createElement('div');
         card.className = 'text-center';
         card.innerHTML = `
@@ -606,8 +583,7 @@ async function updateMinistriesPage() {
 
     container.innerHTML = '';
     ministries.forEach(ministry => {
-        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(ministry.image) : ministry.image;
-        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+        const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(ministry.image) : 'assets/images/logo.jpg';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition';
         card.innerHTML = `
@@ -643,8 +619,7 @@ async function updateOBINewsPage() {
     container.innerHTML = '';
     news.forEach(item => {
         const categoryClass = categoryColors[item.category] || categoryColors.default;
-        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(item.image) : item.image;
-        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+        const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(item.image) : 'assets/images/logo.jpg';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
         card.innerHTML = `
@@ -677,9 +652,7 @@ async function updateOBINews() {
     container.innerHTML = '';
     news.forEach(item => {
         console.log('Processing news item:', item.title, 'Image URL:', item.image);
-        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(item.image) : item.image;
-        console.log('Converted URL:', convertedUrl);
-        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+        const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(item.image) : 'assets/images/logo.jpg';
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
         card.innerHTML = `
@@ -725,9 +698,7 @@ async function updateHomeNewsPreview() {
     news.forEach(item => {
         const categoryClass = categoryColors[item.category] || categoryColors['General'];
         console.log('Processing home news item:', item.title, 'Image URL:', item.image);
-        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(item.image) : item.image;
-        console.log('Converted URL for home:', convertedUrl);
-        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+        const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(item.image) : 'assets/images/logo.jpg';
         const excerpt = item.excerpt || item.content?.substring(0, 120) + '...' || '';
 
         const card = document.createElement('div');
@@ -783,7 +754,7 @@ async function updateHomeEventsPreview() {
     container.innerHTML = '';
     upcomingEvents.forEach(event => {
         const eventDate = new Date(event.date || '1970-01-01');
-        const imageUrl = convertGoogleDriveUrl(event.image) || 'assets/images/logo.jpg';
+        const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(event.image) : 'assets/images/logo.jpg';
         const excerpt = event.description?.substring(0, 120) + '...' || '';
 
         const card = document.createElement('div');
@@ -828,9 +799,12 @@ async function updateGalleryPage() {
 
     container.innerHTML = '';
     images.forEach(img => {
-        // Convert Google Drive URL if needed
-        const convertedUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(img.imageUrl || img.url || img.image) : (img.imageUrl || img.url || img.image);
-        const imageUrl = convertedUrl || 'assets/images/logo.jpg';
+        // Get raw image URL
+        const rawUrl = img.imageUrl || img.url || img.image;
+        
+        // Optimize based on source type (Cloudinary or Google Drive)
+        let imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(rawUrl, 'gallery') : 'assets/images/logo.jpg';
+        
         const uploadDate = img.uploadDate ? new Date(img.uploadDate).toLocaleDateString() : '';
 
         const card = document.createElement('div');
@@ -905,7 +879,7 @@ async function updateOBIEventsPage() {
             const card = document.createElement('div');
             card.className = 'bg-white rounded-lg shadow-lg overflow-hidden';
             card.innerHTML = `
-                <img src="${event.image || '../assets/images/logo.jpg'}" alt="${event.title}" class="w-full h-48 object-cover">
+                <img src="${window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(event.image) : '../assets/images/logo.jpg'}" alt="${event.title}" class="w-full h-48 object-cover">
                 <div class="p-6">
                     <div class="text-sm text-teal-600 mb-2">${new Date(event.date).toLocaleDateString()}</div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">${event.title}</h3>

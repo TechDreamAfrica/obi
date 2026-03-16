@@ -1,12 +1,31 @@
 // Site Images Utility
 // Fetches and manages site images from Firebase
+// Supports both Google Drive and Cloudinary image sources
 
 import { db } from './firebase-config.js';
 import { doc, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { isCloudinaryUrl, getOptimizedImageUrl, getCloudinaryUrl } from './cloudinary-utils.js';
+
+// Check if URL is a Cloudinary URL
+export function isCloudinary(url) {
+    if (!url) return false;
+    return url.includes('cloudinary.com') || url.includes('res.cloudinary.com');
+}
+
+// Check if URL is a Google Drive URL
+export function isGoogleDrive(url) {
+    if (!url) return false;
+    return url.includes('drive.google.com');
+}
 
 // Convert Google Drive link to direct image URL
 export function convertGoogleDriveUrl(url) {
     if (!url) return '';
+    
+    // If it's a Cloudinary URL, return optimized version
+    if (isCloudinary(url)) {
+        return getOptimizedImageUrl(url, 'default');
+    }
     
     // If already converted, return as is
     if (url.includes('drive.google.com/uc?')) {
@@ -33,6 +52,24 @@ export function convertGoogleDriveUrl(url) {
     }
     
     return url; // Return original if no match
+}
+
+// Universal image URL converter - works with both Google Drive and Cloudinary
+export function convertImageUrl(url, preset = 'default') {
+    if (!url) return '';
+    
+    // If Cloudinary URL, apply optimizations
+    if (isCloudinary(url)) {
+        return getOptimizedImageUrl(url, preset);
+    }
+    
+    // If Google Drive URL, convert it
+    if (isGoogleDrive(url)) {
+        return convertGoogleDriveUrl(url);
+    }
+    
+    // Return as-is for other URLs (local, external, etc.)
+    return url;
 }
 
 // Cache for site images
@@ -262,5 +299,9 @@ window.getSiteImage = getSiteImage;
 window.loadSiteImage = loadSiteImage;
 window.loadAllSiteImages = loadAllSiteImages;
 window.convertGoogleDriveUrl = convertGoogleDriveUrl;
+window.convertImageUrl = convertImageUrl;
+window.isCloudinary = isCloudinary;
+window.isGoogleDrive = isGoogleDrive;
 window.replacePageImages = replacePageImages;
 window.initSiteImages = initSiteImages;
+

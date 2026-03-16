@@ -230,5 +230,12 @@
     </footer>
 
     <script type="module" src="assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof window.updateLeadershipPage === 'function') {
+                window.updateLeadershipPage();
+            }
+        });
+    </script>
 </body>
 </html>
