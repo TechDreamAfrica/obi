@@ -13,16 +13,20 @@ export { db, auth };
 // Initialize site images on page load
 initSiteImages();
 
-// Helper function to always return an optimized Cloudinary image URL (or fallback)
+// Returns optimised Cloudinary URL when available, passes through any other
+// valid HTTP(S) URL, and only falls back to the logo when there is no URL.
 function getCloudinaryImageUrl(url, preset = 'default') {
-    if (!url || typeof url !== 'string') {
+    if (!url || typeof url !== 'string' || !url.trim()) {
         return 'assets/images/logo.jpg';
     }
     const trimmedUrl = url.trim();
     if (trimmedUrl.includes('cloudinary.com') || trimmedUrl.includes('res.cloudinary.com')) {
         return getOptimizedImageUrl(trimmedUrl, preset);
     }
-    // If not a Cloudinary URL, fallback to logo
+    // Pass through any other valid URL (Firebase Storage, CDN, etc.)
+    if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+        return trimmedUrl;
+    }
     return 'assets/images/logo.jpg';
 }
 
@@ -488,6 +492,38 @@ async function updateLeadershipPage() {
     const board = leaders.filter(l => l.category === 'board' || l.category === 'elder');
     const ministry = leaders.filter(l => l.category === 'ministry');
 
+    // Fallback: if no leaders have category labels, show them all under Senior Leadership
+    const hasAnyCategory = senior.length > 0 || board.length > 0 || ministry.length > 0;
+    if (!hasAnyCategory) {
+        // Relabel the section heading and render every leader there
+        const seniorSection = seniorLeadership?.closest?.('.mb-20');
+        if (seniorSection) {
+            const heading = seniorSection.querySelector('h3');
+            if (heading) heading.textContent = 'Our Team';
+        }
+        if (seniorLeadership) {
+            seniorLeadership.className = 'grid sm:grid-cols-2 lg:grid-cols-3 gap-8';
+            seniorLeadership.innerHTML = '';
+            leaders.forEach(leader => {
+                const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(leader.image || leader.imageUrl) : 'assets/images/logo.jpg';
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-lg shadow-xl overflow-hidden';
+                card.innerHTML = `
+                    <img src="${imageUrl}" alt="${leader.name}" class="w-full h-56 object-cover" onerror="this.src='assets/images/logo.jpg'">
+                    <div class="p-6">
+                        <h4 class="text-xl font-bold text-gray-900 mb-1">${leader.name}</h4>
+                        <p class="text-blue-600 font-semibold mb-3">${leader.title || leader.position || ''}</p>
+                        <p class="text-gray-600 text-sm">${leader.bio || ''}</p>
+                    </div>
+                `;
+                seniorLeadership.appendChild(card);
+            });
+        }
+        if (boardMembers) boardMembers.closest('.mb-20').style.display = 'none';
+        if (ministryLeaders) ministryLeaders.closest('div').style.display = 'none';
+        return;
+    }
+
     // Render Senior Leadership
     if (seniorLeadership && senior.length > 0) {
         seniorLeadership.innerHTML = '';
@@ -519,35 +555,43 @@ async function updateLeadershipPage() {
     }
 
     // Render Board Members
-    if (boardMembers && board.length > 0) {
-        boardMembers.innerHTML = '';
-        board.forEach(leader => {
-            const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(leader.image || leader.imageUrl) : 'assets/images/logo.jpg';
-            const card = document.createElement('div');
-            card.className = 'text-center';
-            card.innerHTML = `
-                <img src="${imageUrl}" alt="${leader.name}" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover shadow-lg" onerror="this.src='assets/images/logo.jpg'">
-                <h4 class="text-lg font-bold text-gray-900">${leader.name}</h4>
-                <p class="text-gray-600">${leader.title}</p>
-            `;
-            boardMembers.appendChild(card);
-        });
+    if (boardMembers) {
+        if (board.length > 0) {
+            boardMembers.innerHTML = '';
+            board.forEach(leader => {
+                const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(leader.image || leader.imageUrl) : 'assets/images/logo.jpg';
+                const card = document.createElement('div');
+                card.className = 'text-center';
+                card.innerHTML = `
+                    <img src="${imageUrl}" alt="${leader.name}" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover shadow-lg" onerror="this.src='assets/images/logo.jpg'">
+                    <h4 class="text-lg font-bold text-gray-900">${leader.name}</h4>
+                    <p class="text-gray-600">${leader.title}</p>
+                `;
+                boardMembers.appendChild(card);
+            });
+        } else {
+            boardMembers.innerHTML = '<div class="col-span-full text-center py-8 text-gray-400"><i class="fas fa-users text-4xl mb-3"></i><p>Board member profiles coming soon.</p></div>';
+        }
     }
 
     // Render Ministry Leaders
-    if (ministryLeaders && ministry.length > 0) {
-        ministryLeaders.innerHTML = '';
-        ministry.forEach(leader => {
-            const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(leader.image || leader.imageUrl) : 'assets/images/logo.jpg';
-            const card = document.createElement('div');
-            card.className = 'bg-white p-6 rounded-lg shadow-lg text-center';
-            card.innerHTML = `
-                <img src="${imageUrl}" alt="${leader.name}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" onerror="this.src='assets/images/logo.jpg'">
-                <h4 class="font-bold text-gray-900">${leader.name}</h4>
-                <p class="text-sm text-gray-600">${leader.title}</p>
-            `;
-            ministryLeaders.appendChild(card);
-        });
+    if (ministryLeaders) {
+        if (ministry.length > 0) {
+            ministryLeaders.innerHTML = '';
+            ministry.forEach(leader => {
+                const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(leader.image || leader.imageUrl) : 'assets/images/logo.jpg';
+                const card = document.createElement('div');
+                card.className = 'bg-white p-6 rounded-lg shadow-lg text-center';
+                card.innerHTML = `
+                    <img src="${imageUrl}" alt="${leader.name}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" onerror="this.src='assets/images/logo.jpg'">
+                    <h4 class="font-bold text-gray-900">${leader.name}</h4>
+                    <p class="text-sm text-gray-600">${leader.title}</p>
+                `;
+                ministryLeaders.appendChild(card);
+            });
+        } else {
+            ministryLeaders.innerHTML = '<div class="col-span-full text-center py-8 text-gray-400"><i class="fas fa-church text-4xl mb-3"></i><p>Ministry leader profiles coming soon.</p></div>';
+        }
     }
 }
 
@@ -808,7 +852,8 @@ async function updateGalleryPage() {
         const uploadDate = img.uploadDate ? new Date(img.uploadDate).toLocaleDateString() : '';
 
         const card = document.createElement('div');
-        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden group hover:shadow-xl transition';
+        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden group hover:shadow-xl transition gallery-card';
+        card.dataset.category = img.category || 'General';
         card.innerHTML = `
             <div class="relative overflow-hidden">
                 <img src="${imageUrl}" alt="${img.title}" class="w-full h-64 object-cover group-hover:scale-110 transition duration-300" onerror="this.src='assets/images/logo.jpg'">

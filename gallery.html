@@ -124,12 +124,46 @@
         </div>
     </section>
 
+    <!-- Gallery Lightbox Modal -->
+    <div id="gallery-lightbox" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/90 p-4" role="dialog" aria-modal="true" aria-label="Image lightbox">
+        <button id="lightbox-close" class="absolute top-4 right-4 text-white text-4xl leading-none hover:text-gray-300 transition" aria-label="Close lightbox">&times;</button>
+        <button id="lightbox-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white text-5xl leading-none hover:text-gray-300 transition" aria-label="Previous image">&#8249;</button>
+        <button id="lightbox-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white text-5xl leading-none hover:text-gray-300 transition" aria-label="Next image">&#8250;</button>
+        <div class="max-w-4xl w-full mx-8">
+            <img id="lightbox-img" src="" alt="" class="max-h-[75vh] w-full object-contain mx-auto rounded">
+            <div class="text-center mt-4">
+                <p id="lightbox-title" class="text-white text-lg font-bold"></p>
+                <p id="lightbox-caption" class="text-gray-400 text-sm mt-1"></p>
+                <p id="lightbox-counter" class="text-gray-500 text-xs mt-2"></p>
+            </div>
+        </div>
+    </div>
+
     <section class="py-20 bg-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-gray-900 mb-12 text-center">Recent Events</h2>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4 text-center">Photo Gallery</h2>
+            <p class="text-gray-600 text-center mb-8">Moments from our ministries, events, and community life.</p>
 
-            <div id="gallery-grid" class="grid md:grid-cols-3 gap-8 mb-12">
-                <!-- Dynamic content loaded from Firebase -->
+            <!-- Category Filters -->
+            <div id="gallery-filters" class="flex flex-wrap gap-2 justify-center mb-10">
+                <button data-filter="all" class="gallery-filter-btn px-5 py-2 rounded-full text-sm font-semibold bg-blue-600 text-white transition">All</button>
+            </div>
+
+            <!-- Loading state -->
+            <div id="gallery-loading" class="text-center py-16">
+                <i class="fas fa-spinner fa-spin text-5xl text-blue-600 mb-4"></i>
+                <p class="text-gray-500">Loading gallery...</p>
+            </div>
+
+            <div id="gallery-grid" class="hidden grid md:grid-cols-3 gap-6 mb-12">
+                <!-- Populated by main.js updateGalleryPage() -->
+            </div>
+
+            <!-- Empty state (shown when no images) -->
+            <div id="gallery-empty" class="hidden text-center py-16">
+                <i class="fas fa-images text-6xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">No photos yet</h3>
+                <p class="text-gray-400">Check back soon &mdash; we&rsquo;ll be posting photos from our events and ministries.</p>
             </div>
         </div>
     </section>
@@ -155,18 +189,17 @@
                     <h4 class="text-lg font-bold mb-4">Resources</h4>
                     <ul class="space-y-2">
                         <li><a href="obi/index.html" class="text-gray-400 hover:text-white transition">Bible Institute</a></li>
-                        <li><a href="admissions.html" class="text-gray-400 hover:text-white transition">Admissions</a></li>
+                        <li><a href="obi/admissions.html" class="text-gray-400 hover:text-white transition">Admissions</a></li>
                         <li><a href="gallery.html" class="text-gray-400 hover:text-white transition">Gallery</a></li>
-                        <li><a href="dashboard/login.html" class="text-gray-400 hover:text-white transition">Admin Login</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="text-lg font-bold mb-4">Connect</h4>
                     <div class="flex space-x-4 mb-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook text-2xl"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter text-2xl"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram text-2xl"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-youtube text-2xl"></i></a>
+                        <a href="javascript:void(0)" title="Facebook \u2014 link coming soon" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook text-2xl"></i></a>
+                        <a href="javascript:void(0)" title="Twitter \u2014 link coming soon" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter text-2xl"></i></a>
+                        <a href="javascript:void(0)" title="Instagram \u2014 link coming soon" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram text-2xl"></i></a>
+                        <a href="javascript:void(0)" title="YouTube \u2014 link coming soon" class="text-gray-400 hover:text-white transition"><i class="fab fa-youtube text-2xl"></i></a>
                     </div>
                 </div>
             </div>
@@ -177,5 +210,139 @@
     </footer>
 
     <script type="module" src="assets/js/main.js"></script>
+    <script>
+        // ── Gallery: lightbox + filters + loading state ──────────────────────
+        const galleryGrid    = document.getElementById('gallery-grid');
+        const galleryLoading = document.getElementById('gallery-loading');
+        const galleryEmpty   = document.getElementById('gallery-empty');
+        const filtersBar     = document.getElementById('gallery-filters');
+        const lightbox       = document.getElementById('gallery-lightbox');
+        const lbImg          = document.getElementById('lightbox-img');
+        const lbTitle        = document.getElementById('lightbox-title');
+        const lbCaption      = document.getElementById('lightbox-caption');
+        const lbCounter      = document.getElementById('lightbox-counter');
+        const lbClose        = document.getElementById('lightbox-close');
+        const lbPrev         = document.getElementById('lightbox-prev');
+        const lbNext         = document.getElementById('lightbox-next');
+
+        let allImages   = [];   // full image data from Firebase cards
+        let filtered    = [];   // currently visible subset
+        let currentIdx  = 0;
+
+        // ── Intercept updateGalleryPage to add lightbox + filter integration ──
+        document.addEventListener('DOMContentLoaded', () => {
+            // Watch for when gallery-grid becomes visible (main.js populates it)
+            const observer = new MutationObserver(() => {
+                const cards = galleryGrid.querySelectorAll('.gallery-card');
+                if (cards.length > 0) {
+                    observer.disconnect();
+                    galleryLoading.classList.add('hidden');
+                    galleryGrid.classList.remove('hidden');
+                    galleryEmpty.classList.add('hidden');
+                    buildImages(cards);
+                    buildFilters();
+                } else if (galleryGrid.querySelector('[class*="col-span"]')) {
+                    // Empty-state placeholder injected by main.js
+                    observer.disconnect();
+                    galleryLoading.classList.add('hidden');
+                    galleryGrid.classList.add('hidden');
+                    galleryEmpty.classList.remove('hidden');
+                }
+            });
+            observer.observe(galleryGrid, { childList: true });
+
+            // Fallback: if main.js never populates (network error), show empty after 8s
+            setTimeout(() => {
+                if (!galleryLoading.classList.contains('hidden')) {
+                    galleryLoading.classList.add('hidden');
+                    galleryEmpty.classList.remove('hidden');
+                }
+            }, 8000);
+        });
+
+        function buildImages(cards) {
+            allImages = [];
+            cards.forEach((card, idx) => {
+                const img     = card.querySelector('img');
+                const titleEl = card.querySelector('h3');
+                const capEl   = card.querySelector('p');
+                const catEl   = card.querySelector('[data-category]') || card.querySelector('span');
+                allImages.push({
+                    src:      img ? img.src : '',
+                    alt:      img ? img.alt : '',
+                    title:    titleEl ? titleEl.textContent : '',
+                    caption:  capEl ? capEl.textContent : '',
+                    category: card.dataset.category || (catEl ? catEl.textContent.trim() : 'General'),
+                    el:       card
+                });
+                // Make card clickable
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', () => openLightbox(idx));
+            });
+            filtered = [...allImages];
+        }
+
+        function buildFilters() {
+            const cats = ['All', ...new Set(allImages.map(i => i.category).filter(Boolean))];
+            filtersBar.innerHTML = '';
+            cats.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.dataset.filter = cat.toLowerCase();
+                btn.textContent = cat;
+                btn.className = 'gallery-filter-btn px-5 py-2 rounded-full text-sm font-semibold transition ' +
+                    (cat === 'All' ? 'bg-blue-600 text-white' : 'bg-white text-gray-700 hover:bg-blue-50');
+                btn.addEventListener('click', () => applyFilter(cat, btn));
+                filtersBar.appendChild(btn);
+            });
+        }
+
+        function applyFilter(cat, activeBtn) {
+            filtersBar.querySelectorAll('.gallery-filter-btn').forEach(b => {
+                b.className = b.className.replace('bg-blue-600 text-white', 'bg-white text-gray-700 hover:bg-blue-50');
+            });
+            activeBtn.className = activeBtn.className.replace('bg-white text-gray-700 hover:bg-blue-50', 'bg-blue-600 text-white');
+
+            allImages.forEach(img => {
+                const show = cat === 'All' || img.category === cat;
+                img.el.style.display = show ? '' : 'none';
+            });
+            filtered = cat === 'All' ? [...allImages] : allImages.filter(i => i.category === cat);
+        }
+
+        function openLightbox(idx) {
+            currentIdx = idx;
+            updateLightbox();
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.add('hidden');
+            lightbox.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function updateLightbox() {
+            const img = filtered[currentIdx];
+            if (!img) return;
+            lbImg.src     = img.src;
+            lbImg.alt     = img.alt || img.title;
+            lbTitle.textContent   = img.title;
+            lbCaption.textContent = img.caption;
+            lbCounter.textContent = `${currentIdx + 1} / ${filtered.length}`;
+        }
+
+        lbClose.addEventListener('click', closeLightbox);
+        lbPrev.addEventListener('click', () => { currentIdx = (currentIdx - 1 + filtered.length) % filtered.length; updateLightbox(); });
+        lbNext.addEventListener('click', () => { currentIdx = (currentIdx + 1) % filtered.length; updateLightbox(); });
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.classList.contains('hidden')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft')  { currentIdx = (currentIdx - 1 + filtered.length) % filtered.length; updateLightbox(); }
+            if (e.key === 'ArrowRight') { currentIdx = (currentIdx + 1) % filtered.length; updateLightbox(); }
+        });
+    </script>
 </body>
 </html>

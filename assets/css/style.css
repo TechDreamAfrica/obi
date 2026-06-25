@@ -447,3 +447,217 @@ th {
         page-break-after: always;
     }
 }
+
+/* =====================================================
+   GLOBAL OVERFLOW PREVENTION
+   ===================================================== */
+
+/* Prevent any element from causing horizontal scroll */
+img,
+video,
+iframe,
+embed,
+object,
+svg {
+    max-width: 100%;
+}
+
+/* Ensure box-sizing is consistent */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Prevent text from overflowing containers */
+body {
+    overflow-x: hidden;
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE OVERRIDES — Tablet (< 1024px)
+   ===================================================== */
+@media (max-width: 1023px) {
+    /* Reduce nav height slightly */
+    nav .h-20 {
+        height: 4.5rem;
+    }
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE OVERRIDES — Mobile (< 768px)
+   ===================================================== */
+@media (max-width: 767px) {
+
+    /* ---------- Hero Carousel ---------- */
+    #carousel {
+        height: 400px !important;
+    }
+
+    .carousel-slide h1 {
+        font-size: 1.75rem !important;   /* ~text-2xl */
+        line-height: 2.1rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    .carousel-slide p {
+        font-size: 0.95rem !important;
+        line-height: 1.4rem !important;
+        margin-bottom: 1.25rem !important;
+    }
+
+    .carousel-slide a {
+        padding: 0.6rem 1.5rem !important;
+        font-size: 0.875rem !important;
+    }
+
+    /* Carousel prev/next buttons */
+    #prev-slide,
+    #next-slide {
+        padding: 0.5rem !important;
+    }
+
+    /* ---------- Section Spacing ---------- */
+    /* Reduce heavy py-20 (5rem each side) on mobile */
+    section.py-20 {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
+
+    section.py-16 {
+        padding-top: 2.5rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+
+    /* ---------- Section Headings ---------- */
+    section h2.text-4xl {
+        font-size: 1.875rem !important;
+        line-height: 2.25rem !important;
+    }
+
+    section h3.text-2xl {
+        font-size: 1.25rem !important;
+    }
+
+    /* ---------- About / Content Images ---------- */
+    /* Any img without an explicit height class fills full width */
+    section img:not([class*="h-"]):not([class*="logo"]) {
+        width: 100%;
+        height: auto;
+    }
+
+    /* ---------- Stats Section ---------- */
+    /* Already grid-cols-2, but shrink large numbers */
+    [data-count] {
+        font-size: 2rem !important;
+        line-height: 2.5rem !important;
+    }
+
+    /* ---------- Map / iFrame Container ---------- */
+    .h-96 {
+        height: 220px !important;
+    }
+
+    /* ---------- Footer ---------- */
+    footer .grid {
+        gap: 1.5rem;
+    }
+
+    /* ---------- Ministry Grid (dynamic cards) ---------- */
+    #ministries-preview,
+    #events-preview,
+    #news-preview {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* ---------- Leadership Preview ---------- */
+    #leadership-preview {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    /* ---------- Card Images (ministry, event, news) ---------- */
+    #ministries-preview img,
+    #events-preview img,
+    #news-preview img {
+        height: 180px !important;
+    }
+
+    /* ---------- CTA Buttons ---------- */
+    .flex.flex-col.sm\:flex-row,
+    .flex-col {
+        gap: 0.75rem;
+    }
+
+    /* ---------- Contact / Map Section ---------- */
+    .grid.md\:grid-cols-2 > div {
+        min-width: 0;
+    }
+
+    /* ---------- Admissions Modal ---------- */
+    #admissions-modal .max-w-md {
+        max-width: 92vw;
+    }
+
+    #admissions-modal .p-8 {
+        padding: 1.5rem;
+    }
+
+    /* ---------- Back to Top button placement ---------- */
+    .back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* =====================================================
+   MOBILE RESPONSIVE OVERRIDES — Small Phones (< 480px)
+   ===================================================== */
+@media (max-width: 479px) {
+
+    /* Hero carousel even shorter on very small phones */
+    #carousel {
+        height: 320px !important;
+    }
+
+    .carousel-slide h1 {
+        font-size: 1.35rem !important;
+        line-height: 1.75rem !important;
+    }
+
+    .carousel-slide p {
+        font-size: 0.85rem !important;
+    }
+
+    /* Nav logo text */
+    nav .text-xl {
+        font-size: 1rem;
+    }
+
+    /* Stats — keep 2-col but smaller text */
+    [data-count] {
+        font-size: 1.75rem !important;
+    }
+
+    /* Ministries / Events / News section headings */
+    section h2 {
+        font-size: 1.5rem !important;
+        line-height: 2rem !important;
+    }
+
+    /* Leadership — 1 col on tiny screens */
+    #leadership-preview {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* About section grid gap */
+    .gap-12 {
+        gap: 2rem !important;
+    }
+
+    /* Admissions modal content */
+    #admissions-modal .text-3xl {
+        font-size: 1.4rem !important;
+    }
+}
