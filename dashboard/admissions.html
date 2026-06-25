@@ -296,10 +296,9 @@
     <script type="module">
         import { ensureAdminAccess, logoutUser } from './assets/js/auth-service.js';
         import { getAllOBIApplications, getAllApplications } from './assets/js/data-service.js';
-        import { collection, getDocs, doc, updateDoc, deleteDoc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { supabase } from '../assets/js/supabase-config.js';
         import { initEmailJS, sendAdmissionNotification, sendWelcomeEmail } from './assets/js/email-service.js';
         import { createStudentFromApplication } from './assets/js/dashboard.js';
-        import { db } from '../assets/js/firebase-config.js';
 
         let allApplications = [];
         let filteredApplications = [];
@@ -620,11 +619,11 @@
 
             try {
                 showLoading();
-                const appRef = doc(db, 'obi-applications', currentViewingApp.id);
-                await updateDoc(appRef, {
-                    status: newStatus,
-                    updatedAt: new Date().toISOString()
-                });
+                const { error: updateError } = await supabase
+                    .from('obi_applications')
+                    .update({ status: newStatus, updated_at: new Date().toISOString() })
+                    .eq('id', currentViewingApp.id);
+                if (updateError) throw updateError;
 
                 // Update local data
                 const app = allApplications.find(a => a.id === currentViewingApp.id);
@@ -729,15 +728,15 @@
             }
 
             try {
-                // Fetch fresh data from Firestore to ensure we have all fields
-                const appRef = doc(db, 'obi-applications', currentViewingApp.id);
-                const appSnap = await getDoc(appRef);
+                // Fetch fresh data from Supabase to ensure we have all fields
+                const { data: freshData, error: fetchError } = await supabase
+                    .from('obi_applications')
+                    .select('*')
+                    .eq('id', currentViewingApp.id)
+                    .single();
                 
-                if (appSnap.exists()) {
-                    const freshData = { id: appSnap.id, ...appSnap.data() };
+                if (!fetchError && freshData) {
                     currentViewingApp = freshData;
-                    
-                    // Re-render the modal with fresh data
                     viewApplication(currentViewingApp.id);
                 } else {
                     console.log('Application not found in database');

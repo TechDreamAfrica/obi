@@ -315,9 +315,7 @@
     </div>
 
     <script type="module">
-        import { db, auth } from '../assets/js/firebase-config.js';
-        import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { supabase } from '../assets/js/supabase-config.js';
 
         let allStudents = [];
         let filteredStudents = [];
@@ -329,7 +327,7 @@
         // Logout function
         window.handleLogout = async function() {
             try {
-                await signOut(auth);
+                await supabase.auth.signOut();
                 window.location.href = 'login.html';
             } catch (error) {
                 console.error('Error signing out:', error);
@@ -338,8 +336,8 @@
         };
 
         // Auth check
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
+        supabase.auth.onAuthStateChange((_event, session) => {
+            if (!session?.user) {
                 window.location.href = 'login.html';
             } else {
                 loadStudents();
@@ -347,25 +345,24 @@
         });
 
         // Load students with real-time updates
-        function loadStudents() {
+        async function loadStudents() {
             document.getElementById('loading-overlay').classList.remove('hidden');
-            
-            const q = query(collection(db, 'students'), orderBy('enrollmentDate', 'desc'));
-            
-            onSnapshot(q, (snapshot) => {
-                allStudents = [];
-                snapshot.forEach(doc => {
-                    allStudents.push({ id: doc.id, ...doc.data() });
-                });
-                
+            try {
+                const { data: rows, error } = await supabase
+                    .from('students')
+                    .select('*')
+                    .order('enrollment_date', { ascending: false });
+                if (error) throw error;
+
+                allStudents = rows || [];
                 updateStats();
                 filterByStatus(currentFilter);
-                document.getElementById('loading-overlay').classList.add('hidden');
-            }, (error) => {
+            } catch (error) {
                 console.error('Error loading students:', error);
-                document.getElementById('loading-overlay').classList.add('hidden');
                 alert('Error loading students: ' + error.message);
-            });
+            } finally {
+                document.getElementById('loading-overlay').classList.add('hidden');
+            }
         }
 
         // Update statistics
@@ -658,7 +655,8 @@
             }
 
             try {
-                await deleteDoc(doc(db, 'students', id));
+                const { error: deleteError } = await supabase.from('students').delete().eq('id', id);
+                if (deleteError) throw deleteError;
                 alert('Student deleted successfully');
             } catch (error) {
                 console.error('Error deleting student:', error);
@@ -671,30 +669,30 @@
             e.preventDefault();
 
             const studentData = {
-                fullName: document.getElementById('fullName').value,
-                studentId: document.getElementById('studentId').value,
+                full_name: document.getElementById('fullName').value,
+                student_id: document.getElementById('studentId').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
                 dob: document.getElementById('dob').value,
                 gender: document.getElementById('gender').value,
                 program: document.getElementById('program').value,
-                enrollmentDate: document.getElementById('enrollmentDate').value,
+                enrollment_date: document.getElementById('enrollmentDate').value,
                 status: document.getElementById('status').value,
                 church: document.getElementById('church').value,
                 address: document.getElementById('address').value,
                 notes: document.getElementById('notes').value,
-                updatedAt: new Date().toISOString()
+                updated_at: new Date().toISOString()
             };
 
             try {
                 if (currentEditingId) {
-                    // Update existing student
-                    await updateDoc(doc(db, 'students', currentEditingId), studentData);
+                    const { error } = await supabase.from('students').update(studentData).eq('id', currentEditingId);
+                    if (error) throw error;
                     alert('Student updated successfully');
                 } else {
-                    // Add new student
-                    studentData.createdAt = new Date().toISOString();
-                    await addDoc(collection(db, 'students'), studentData);
+                    studentData.created_at = new Date().toISOString();
+                    const { error } = await supabase.from('students').insert(studentData);
+                    if (error) throw error;
                     alert('Student added successfully');
                 }
                 closeModal();

@@ -579,8 +579,7 @@
 
     <script type="module" src="../assets/js/main.js"></script>
     <script type="module">
-        import { db } from '../assets/js/firebase-config.js';
-        import { collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { supabase } from '../assets/js/supabase-config.js';
 
         const applicationForm = document.getElementById('application-form');
 
@@ -598,15 +597,9 @@
             document.getElementById('age').value = age;
         });
 
-        // Wait for Firebase to initialize
         window.addEventListener('load', () => {
             applicationForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
-
-                if (!db) {
-                    alert('Firebase is not initialized. Please refresh the page and try again.');
-                    return;
-                }
 
                 const formData = new FormData(e.target);
                 const data = {};
@@ -625,11 +618,6 @@
                     data.ministry = ministryCheckboxes;
                 }
 
-                // Add metadata
-                data.status = 'pending';
-                data.submittedAt = new Date().toISOString();
-                data.source = 'OBI Application';
-
                 const submitBtn = e.target.querySelector('button[type="submit"]');
                 const originalText = submitBtn.textContent;
 
@@ -637,7 +625,16 @@
                     submitBtn.disabled = true;
                     submitBtn.textContent = 'Submitting...';
 
-                    await addDoc(collection(db, 'obi-applications'), data);
+                    const { error } = await supabase.from('obi_applications').insert({
+                        name:         data.fullName || data.name || '',
+                        email:        data.email || '',
+                        phone:        data.phone || '',
+                        status:       'pending',
+                        data:         data,
+                        submitted_at: new Date().toISOString(),
+                    });
+
+                    if (error) throw error;
 
                     if (window.showToast) {
                         window.showToast('Application submitted successfully! We will contact you soon.', 'success');

@@ -480,8 +480,7 @@
     <script type="module" src="assets/js/main.js"></script>
 
     <script type="module">
-        import { db } from './assets/js/firebase-config.js';
-        import { collection, getDocs, query, orderBy, limit, where } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { supabase } from './assets/js/supabase-config.js';
 
         // Load Events
         async function loadEvents() {
@@ -489,15 +488,16 @@
                 const eventsContainer = document.getElementById('events-preview');
                 const currentDate = new Date().toISOString().split('T')[0];
 
-                const q = query(
-                    collection(db, 'events'),
-                    where('date', '>=', currentDate),
-                    orderBy('date', 'asc'),
-                    limit(3)
-                );
-                const snapshot = await getDocs(q);
+                const { data, error } = await supabase
+                    .from('events')
+                    .select('*')
+                    .gte('date', currentDate)
+                    .order('date', { ascending: true })
+                    .limit(3);
 
-                if (snapshot.empty) {
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
                     eventsContainer.innerHTML = `
                         <div class="text-center col-span-3 py-8">
                             <i class="fas fa-calendar-alt text-6xl text-gray-300 mb-4"></i>
@@ -508,13 +508,12 @@
                 }
 
                 eventsContainer.innerHTML = '';
-                snapshot.forEach(docSnap => {
-                    const event = docSnap.data();
+                data.forEach(event => {
                     const eventDate = new Date(event.date);
 
                     eventsContainer.innerHTML += `
                         <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-                            <img src="${event.imageUrl || 'assets/images/default-event.jpg'}" alt="${event.title}" class="w-full h-48 object-cover">
+                            <img src="${event.image_url || 'assets/images/default-event.jpg'}" alt="${event.title}" class="w-full h-48 object-cover">
                             <div class="p-6">
                                 <div class="flex items-center text-sm text-gray-500 mb-3">
                                     <i class="fas fa-calendar mr-2"></i>
@@ -554,14 +553,15 @@
             try {
                 const leadershipContainer = document.getElementById('leadership-preview');
 
-                const q = query(
-                    collection(db, 'leadership'),
-                    orderBy('order', 'asc'),
-                    limit(4)
-                );
-                const snapshot = await getDocs(q);
+                const { data, error } = await supabase
+                    .from('leadership')
+                    .select('*')
+                    .order('sort_order', { ascending: true })
+                    .limit(4);
 
-                if (snapshot.empty) {
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
                     leadershipContainer.innerHTML = `
                         <div class="text-center col-span-4 py-8">
                             <p class="text-gray-500">No leadership information available</p>
@@ -571,17 +571,16 @@
                 }
 
                 leadershipContainer.innerHTML = '';
-                snapshot.forEach(docSnap => {
-                    const leader = docSnap.data();
-
+                data.forEach(leader => {
+                    const imageUrl = leader.image_url || leader.image;
                     leadershipContainer.innerHTML += `
                         <div class="text-center group">
                             <div class="relative mb-4 overflow-hidden rounded-lg">
-                                <img src="${window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(leader.image || leader.imageUrl) : (leader.imageUrl || 'assets/images/default-avatar.jpg')}" alt="${leader.name}" class="w-full h-64 object-cover group-hover:scale-110 transition duration-300" onerror="this.src='assets/images/logo.jpg'">
+                                <img src="${window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(imageUrl) : (imageUrl || 'assets/images/default-avatar.jpg')}" alt="${leader.name}" class="w-full h-64 object-cover group-hover:scale-110 transition duration-300" onerror="this.src='assets/images/logo.jpg'">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
                             </div>
                             <h3 class="text-xl font-bold text-gray-900 mb-1">${leader.name}</h3>
-                            <p class="text-blue-600 font-semibold mb-2">${leader.position || leader.title}</p>
+                            <p class="text-blue-600 font-semibold mb-2">${leader.position || leader.title || ''}</p>
                             ${leader.bio ? `<p class="text-gray-600 text-sm">${leader.bio.substring(0, 80)}...</p>` : ''}
                         </div>
                     `;
@@ -601,14 +600,15 @@
             try {
                 const ministriesContainer = document.getElementById('ministries-preview');
 
-                const q = query(
-                    collection(db, 'ministries'),
-                    orderBy('createdAt', 'desc'),
-                    limit(3)
-                );
-                const snapshot = await getDocs(q);
+                const { data, error } = await supabase
+                    .from('ministries')
+                    .select('*')
+                    .order('sort_order', { ascending: true })
+                    .limit(3);
 
-                if (snapshot.empty) {
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
                     ministriesContainer.innerHTML = `
                         <div class="text-center col-span-3 py-8">
                             <p class="text-gray-500">No ministries available</p>
@@ -618,14 +618,11 @@
                 }
 
                 ministriesContainer.innerHTML = '';
-                snapshot.forEach(docSnap => {
-                    const ministry = docSnap.data();
-                    const ministryId = docSnap.id;
-
+                data.forEach(ministry => {
                     ministriesContainer.innerHTML += `
                         <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-                            ${ministry.imageUrl ? `
-                                <img src="${ministry.imageUrl}" alt="${ministry.title}" class="w-full h-48 object-cover">
+                            ${ministry.image_url ? `
+                                <img src="${ministry.image_url}" alt="${ministry.title}" class="w-full h-48 object-cover">
                             ` : `
                                 <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                                     <i class="fas ${ministry.icon || 'fa-church'} text-6xl text-white"></i>
@@ -640,7 +637,7 @@
                                         ${ministry.leader}
                                     </div>
                                 ` : ''}
-                                <a href="ministry-detail.html?id=${ministryId}" class="text-blue-600 hover:text-blue-700 font-semibold">
+                                <a href="ministry-detail.html?id=${ministry.id}" class="text-blue-600 hover:text-blue-700 font-semibold">
                                     Learn More <i class="fas fa-arrow-right ml-2"></i>
                                 </a>
                             </div>

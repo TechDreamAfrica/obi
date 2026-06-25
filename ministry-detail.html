@@ -269,8 +269,7 @@
 
     <script type="module" src="assets/js/main.js"></script>
     <script type="module">
-        import { db } from './assets/js/main.js';
-        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { supabase } from './assets/js/supabase-config.js';
 
         async function loadMinistry() {
             const ministryId = window.getUrlParameter('id');
@@ -280,16 +279,17 @@
             }
 
             try {
-                const docRef = doc(db, 'ministries', ministryId);
-                const docSnap = await getDoc(docRef);
+                const { data: ministry, error } = await supabase
+                    .from('ministries')
+                    .select('*')
+                    .eq('id', ministryId)
+                    .single();
 
-                if (docSnap.exists()) {
-                    const ministry = docSnap.data();
-
+                if (!error && ministry) {
                     document.getElementById('ministry-title').textContent = ministry.name || ministry.title;
                     document.getElementById('ministry-breadcrumb').textContent = ministry.name || ministry.title;
-                    document.getElementById('ministry-image').src = ministry.image || 'assets/images/logo.jpg';
-                    document.getElementById('ministry-description').innerHTML = `<p>${ministry.description || ministry.fullDescription || ''}</p>`;
+                    document.getElementById('ministry-image').src = ministry.image_url || ministry.image || 'assets/images/logo.jpg';
+                    document.getElementById('ministry-description').innerHTML = `<p>${ministry.description || ministry.full_description || ''}</p>`;
 
                     if (ministry.activities && ministry.activities.length > 0) {
                         const activitiesList = ministry.activities.map(activity =>
@@ -298,7 +298,7 @@
                         document.getElementById('ministry-activities').innerHTML = activitiesList;
                     }
 
-                    document.getElementById('ministry-time').textContent = ministry.meetingTime || ministry.time || 'Contact for details';
+                    document.getElementById('ministry-time').textContent = ministry.meeting_time || ministry.time || 'Contact for details';
                     document.getElementById('ministry-location').textContent = ministry.location || 'Main Sanctuary';
                     document.getElementById('ministry-leader').textContent = ministry.leader || 'Contact for details';
                     document.getElementById('ministry-contact').textContent = ministry.contact || ministry.email || 'info@oasisimg.org';

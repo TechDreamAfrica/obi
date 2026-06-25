@@ -277,9 +277,7 @@
     </div>
 
     <script type="module">
-        import { db, auth } from '../assets/js/firebase-config.js';
-        import { doc, getDoc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { supabase } from '../assets/js/supabase-config.js';
         import { getGoogleDriveImageUrl, handleAdminGoogleDriveInput } from './assets/js/google-drive-utils.js';
 
         const imageKeys = ['logo', 'cert', 'students', 'building', 'class', 'leadership', 'abt', 'story', 'placeholder'];
@@ -287,7 +285,7 @@
         // Logout function
         window.handleLogout = async function() {
             try {
-                await signOut(auth);
+                await supabase.auth.signOut();
                 window.location.href = 'login.html';
             } catch (error) {
                 console.error('Error signing out:', error);
@@ -296,8 +294,8 @@
         };
 
         // Auth check
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
+        supabase.auth.onAuthStateChange((_event, session) => {
+            if (!session?.user) {
                 window.location.href = 'login.html';
             } else {
                 loadImages();
@@ -332,14 +330,17 @@
             try {
                 document.getElementById('loading-overlay').classList.remove('hidden');
                 
-                const docRef = doc(db, 'site-settings', 'images');
-                const docSnap = await getDoc(docRef);
+                const { data, error } = await supabase
+                    .from('site_settings')
+                    .select('value')
+                    .eq('key', 'images')
+                    .single();
                 
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
+                if (!error && data?.value) {
+                    const value = data.value;
                     imageKeys.forEach(key => {
-                        if (data[key]) {
-                            const originalUrl = data[key];
+                        if (value[key]) {
+                            const originalUrl = value[key];
                             const convertedUrl = convertGoogleDriveUrl(originalUrl);
                             document.getElementById(`image-${key}`).value = originalUrl;
                             const preview = document.getElementById(`preview-${key}`);
@@ -371,14 +372,26 @@
             try {
                 document.getElementById('loading-overlay').classList.remove('hidden');
                 
-                const docRef = doc(db, 'site-settings', 'images');
                 const convertedUrl = convertGoogleDriveUrl(url);
                 
-                await setDoc(docRef, {
+                // Get existing value first to merge
+                const { data: existing } = await supabase
+                    .from('site_settings')
+                    .select('value')
+                    .eq('key', 'images')
+                    .single();
+                const currentValue = existing?.value || {};
+                const newValue = {
+                    ...currentValue,
                     [imageKey]: url,
                     [`${imageKey}_converted`]: convertedUrl,
                     [`${imageKey}_updated`]: new Date().toISOString()
-                }, { merge: true });
+                };
+                
+                const { error } = await supabase
+                    .from('site_settings')
+                    .upsert({ key: 'images', value: newValue }, { onConflict: 'key' });
+                if (error) throw error;
                 
                 // Update preview
                 const preview = document.getElementById(`preview-${imageKey}`);
@@ -427,8 +440,19 @@
                     return;
                 }
                 
-                const docRef = doc(db, 'site-settings', 'images');
-                await setDoc(docRef, updates, { merge: true });
+                // Get existing value to merge
+                const { data: existing } = await supabase
+                    .from('site_settings')
+                    .select('value')
+                    .eq('key', 'images')
+                    .single();
+                const currentValue = existing?.value || {};
+                const mergedValue = { ...currentValue, ...updates };
+                
+                const { error } = await supabase
+                    .from('site_settings')
+                    .upsert({ key: 'images', value: mergedValue }, { onConflict: 'key' });
+                if (error) throw error;
                 
                 // Reload to show updates
                 await loadImages();

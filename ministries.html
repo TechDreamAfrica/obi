@@ -202,8 +202,7 @@
 
     <script type="module" src="assets/js/main.js"></script>
     <script type="module">
-        import { db } from './assets/js/firebase-config.js';
-        import { collection, getDocs, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { supabase } from './assets/js/supabase-config.js';
 
         async function loadMinistries() {
             try {
@@ -215,10 +214,14 @@
                     </div>
                 `;
 
-                const q = query(collection(db, 'ministries'), orderBy('createdAt', 'desc'));
-                const snapshot = await getDocs(q);
+                const { data, error } = await supabase
+                    .from('ministries')
+                    .select('*')
+                    .order('sort_order', { ascending: true });
 
-                if (snapshot.empty) {
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
                     ministriesContainer.innerHTML = `
                         <div class="col-span-3 text-center py-12">
                             <i class="fas fa-church text-6xl text-gray-300 mb-4"></i>
@@ -229,13 +232,11 @@
                 }
 
                 ministriesContainer.innerHTML = '';
-                snapshot.forEach(docSnap => {
-                    const ministry = docSnap.data();
-
+                data.forEach(ministry => {
                     ministriesContainer.innerHTML += `
                         <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-                            ${ministry.imageUrl ? `
-                                <img src="${ministry.imageUrl}" alt="${ministry.title}" class="w-full h-48 object-cover">
+                            ${ministry.image_url ? `
+                                <img src="${ministry.image_url}" alt="${ministry.title}" class="w-full h-48 object-cover">
                             ` : `
                                 <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                                     <i class="fas ${ministry.icon || 'fa-church'} text-6xl text-white"></i>

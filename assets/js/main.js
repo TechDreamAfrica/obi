@@ -1,14 +1,11 @@
-// Firebase Configuration
-import { db, auth } from './firebase-config.js';
-import { collection, addDoc, getDocs, query, orderBy, limit, doc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+// Supabase Configuration
+import { supabase } from './supabase-config.js';
 import { initSiteImages, convertImageUrl } from './site-images.js';
 import { getOptimizedImageUrl, isCloudinaryUrl } from './cloudinary-utils.js';
 
 // Export for use in other modules
-window.db = db;
-window.auth = auth;
-export { db, auth };
+window.supabase = supabase;
+export { supabase };
 
 // Initialize site images on page load
 initSiteImages();
@@ -150,7 +147,8 @@ async function handleFormSubmit(formId, collectionName) {
             submitBtn.innerHTML = '<span class="loading"></span> Submitting...';
             submitBtn.disabled = true;
 
-            await addDoc(collection(db, collectionName), data);
+            const { error: insertError } = await supabase.from(collectionName).insert(data);
+            if (insertError) throw insertError;
 
             showToast('Form submitted successfully!', 'success');
             form.reset();
@@ -254,13 +252,17 @@ function getUrlParameter(name) {
 // Load Gallery Images (for carousel and gallery page)
 async function loadGalleryImages(max = 4) {
     try {
-        const q = query(collection(db, 'gallery'), orderBy('uploadDate', 'desc'), limit(max));
-        const snapshot = await getDocs(q);
-        const images = [];
-        snapshot.forEach(doc => {
-            images.push({ id: doc.id, ...doc.data() });
-        });
-        return images;
+        const { data, error } = await supabase
+            .from('gallery')
+            .select('*')
+            .order('upload_date', { ascending: false })
+            .limit(max);
+        if (error) throw error;
+        return (data || []).map(row => ({
+            ...row,
+            imageUrl: row.image_url || row.imageUrl,
+            uploadDate: row.upload_date || row.uploadDate,
+        }));
     } catch (error) {
         console.error('Error loading gallery:', error);
         return [];
@@ -270,18 +272,11 @@ async function loadGalleryImages(max = 4) {
 // Load Ministries
 async function loadMinistries(maxCount = null) {
     try {
-        let q = collection(db, 'ministries');
-        if (maxCount) {
-            q = query(q, orderBy('order'), limit(maxCount));
-        } else {
-            q = query(q, orderBy('order'));
-        }
-        const snapshot = await getDocs(q);
-        const ministries = [];
-        snapshot.forEach(doc => {
-            ministries.push({ id: doc.id, ...doc.data() });
-        });
-        return ministries;
+        let q = supabase.from('ministries').select('*').order('sort_order', { ascending: true });
+        if (maxCount) q = q.limit(maxCount);
+        const { data, error } = await q;
+        if (error) throw error;
+        return (data || []).map(row => ({ ...row, order: row.sort_order }));
     } catch (error) {
         console.error('Error loading ministries:', error);
         return [];
@@ -291,18 +286,15 @@ async function loadMinistries(maxCount = null) {
 // Load Leadership
 async function loadLeadership(maxCount = null) {
     try {
-        let q = collection(db, 'leadership');
-        if (maxCount) {
-            q = query(q, orderBy('order'), limit(maxCount));
-        } else {
-            q = query(q, orderBy('order'));
-        }
-        const snapshot = await getDocs(q);
-        const leaders = [];
-        snapshot.forEach(doc => {
-            leaders.push({ id: doc.id, ...doc.data() });
-        });
-        return leaders;
+        let q = supabase.from('leadership').select('*').order('sort_order', { ascending: true });
+        if (maxCount) q = q.limit(maxCount);
+        const { data, error } = await q;
+        if (error) throw error;
+        return (data || []).map(row => ({
+            ...row,
+            imageUrl: row.image_url || row.imageUrl || row.image,
+            order: row.sort_order,
+        }));
     } catch (error) {
         console.error('Error loading leadership:', error);
         return [];
@@ -310,33 +302,20 @@ async function loadLeadership(maxCount = null) {
 }
 
 // Load News
-async function loadNews(limit = 3) {
+async function loadNews(maxCount = 3) {
     try {
-        // Query all news, then filter and sort in JavaScript to avoid composite index requirement
-        const q = query(collection(db, 'news'));
-        const snapshot = await getDocs(q);
-        const news = [];
-
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            // Only include published articles
-            if (data.published !== false) {
-                news.push({
-                    id: doc.id,
-                    ...data,
-                    date: data.publishedAt?.toDate?.() || new Date()
-                });
-            }
-        });
-
-        // Sort by publishedAt descending and limit
-        news.sort((a, b) => {
-            const dateA = a.publishedAt?.toDate?.() || new Date(0);
-            const dateB = b.publishedAt?.toDate?.() || new Date(0);
-            return dateB - dateA;
-        });
-
-        return news.slice(0, limit);
+        const { data, error } = await supabase
+            .from('news')
+            .select('*')
+            .eq('published', true)
+            .order('published_at', { ascending: false })
+            .limit(maxCount);
+        if (error) throw error;
+        return (data || []).map(row => ({
+            ...row,
+            publishedAt: row.published_at || row.publishedAt,
+            date: new Date(row.published_at || row.created_at || Date.now()),
+        }));
     } catch (error) {
         console.error('Error loading news:', error);
         return [];
@@ -346,13 +325,13 @@ async function loadNews(limit = 3) {
 // Load Events
 async function loadEvents(maxCount = 3) {
     try {
-        const q = query(collection(db, 'events'), orderBy('date', 'desc'), limit(maxCount));
-        const snapshot = await getDocs(q);
-        const events = [];
-        snapshot.forEach(doc => {
-            events.push({ id: doc.id, ...doc.data() });
-        });
-        return events;
+        const { data, error } = await supabase
+            .from('events')
+            .select('*')
+            .order('date', { ascending: false })
+            .limit(maxCount);
+        if (error) throw error;
+        return data || [];
     } catch (error) {
         console.error('Error loading events:', error);
         return [];
@@ -362,24 +341,24 @@ async function loadEvents(maxCount = 3) {
 // Load Statistics
 async function loadStats() {
     try {
-        const snapshot = await getDocs(collection(db, 'statistics'));
-        if (!snapshot.empty) {
-            return snapshot.docs[0].data();
+        const { data, error } = await supabase
+            .from('statistics')
+            .select('*')
+            .limit(1)
+            .single();
+        if (error && error.code !== 'PGRST116') throw error;  // PGRST116 = no rows found
+        if (data) {
+            return {
+                livesImpacted:   data.lives_impacted   || 1000,
+                ministries:      data.ministries       || 5,
+                studentsTrained: data.students_trained || 200,
+                yearsOfService:  data.years_of_service || 15,
+            };
         }
-        return {
-            livesImpacted: 1000,
-            ministries: 5,
-            studentsTrained: 200,
-            yearsOfService: 15
-        };
+        return { livesImpacted: 1000, ministries: 5, studentsTrained: 200, yearsOfService: 15 };
     } catch (error) {
         console.error('Error loading stats:', error);
-        return {
-            livesImpacted: 1000,
-            ministries: 5,
-            studentsTrained: 200,
-            yearsOfService: 15
-        };
+        return { livesImpacted: 1000, ministries: 5, studentsTrained: 200, yearsOfService: 15 };
     }
 }
 
@@ -956,28 +935,23 @@ async function updateStatistics() {
 // ============ AUTHENTICATION FUNCTIONS ============
 
 // Check auth state
-onAuthStateChanged(auth, (user) => {
-    const signInBtn = document.getElementById('sign-in-btn');
+supabase.auth.onAuthStateChange((_event, session) => {
+    const signInBtn       = document.getElementById('sign-in-btn');
     const mobileSignInBtn = document.getElementById('mobile-sign-in-btn');
-    const userMenu = document.getElementById('user-menu');
-    const mobileUserMenu = document.getElementById('mobile-user-menu');
+    const userMenu        = document.getElementById('user-menu');
+    const mobileUserMenu  = document.getElementById('mobile-user-menu');
 
-    if (user) {
-        // User is signed in
-        if (signInBtn) signInBtn.classList.add('hidden');
+    if (session?.user) {
+        if (signInBtn)       signInBtn.classList.add('hidden');
         if (mobileSignInBtn) mobileSignInBtn.classList.add('hidden');
-        if (userMenu) userMenu.classList.remove('hidden');
-        if (mobileUserMenu) mobileUserMenu.classList.remove('hidden');
-
-        // Store user in window for access
-        window.currentUser = user;
+        if (userMenu)        userMenu.classList.remove('hidden');
+        if (mobileUserMenu)  mobileUserMenu.classList.remove('hidden');
+        window.currentUser = session.user;
     } else {
-        // User is signed out
-        if (signInBtn) signInBtn.classList.remove('hidden');
+        if (signInBtn)       signInBtn.classList.remove('hidden');
         if (mobileSignInBtn) mobileSignInBtn.classList.remove('hidden');
-        if (userMenu) userMenu.classList.add('hidden');
-        if (mobileUserMenu) mobileUserMenu.classList.add('hidden');
-
+        if (userMenu)        userMenu.classList.add('hidden');
+        if (mobileUserMenu)  mobileUserMenu.classList.add('hidden');
         window.currentUser = null;
     }
 });
@@ -1047,7 +1021,8 @@ function showSignInModal() {
         const password = document.getElementById('sign-in-password').value;
 
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) throw error;
             closeSignInModal();
             showToast('Successfully signed in!', 'success');
         } catch (error) {
@@ -1063,16 +1038,23 @@ function showSignInModal() {
         const password = document.getElementById('register-password').value;
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-            await updateProfile(userCredential.user, { displayName: name });
-
-            // Save user profile to Firestore
-            await setDoc(doc(db, 'users', userCredential.user.uid), {
-                name: name,
-                email: email,
-                createdAt: new Date().toISOString(),
-                role: 'user'
+            const { data: signUpData, error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: { data: { full_name: name } }
             });
+            if (error) throw error;
+
+            // Save user profile to public.users table
+            if (signUpData?.user) {
+                await supabase.from('users').insert({
+                    auth_id: signUpData.user.id,
+                    name,
+                    email,
+                    role: 'user',
+                    created_at: new Date().toISOString(),
+                });
+            }
 
             closeSignInModal();
             showToast('Account created successfully!', 'success');
@@ -1109,7 +1091,8 @@ function switchTab(tab) {
 // Sign Out
 async function handleSignOut() {
     try {
-        await signOut(auth);
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
         showToast('Signed out successfully', 'success');
         window.location.href = 'index.html';
     } catch (error) {

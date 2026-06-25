@@ -1,9 +1,8 @@
 // Site Images Utility
-// Fetches and manages site images from Firebase
+// Fetches and manages site images from Supabase
 // Supports both Google Drive and Cloudinary image sources
 
-import { db } from './firebase-config.js';
-import { doc, getDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { supabase } from './supabase-config.js';
 import { isCloudinaryUrl, getOptimizedImageUrl, getCloudinaryUrl } from './cloudinary-utils.js';
 
 // Check if URL is a Cloudinary URL
@@ -92,11 +91,14 @@ export async function getSiteImages() {
     isLoading = true;
     loadPromise = (async () => {
         try {
-            const docRef = doc(db, 'site-settings', 'images');
-            const docSnap = await getDoc(docRef);
-            
-            if (docSnap.exists()) {
-                siteImagesCache = docSnap.data();
+            const { data, error } = await supabase
+                .from('site_settings')
+                .select('value')
+                .eq('key', 'images')
+                .single();
+
+            if (!error && data?.value) {
+                siteImagesCache = data.value;
                 return siteImagesCache;
             }
             
@@ -191,16 +193,23 @@ export async function loadAllSiteImages() {
 
 // Listen for image updates in real-time
 export function watchSiteImages(callback) {
-    const docRef = doc(db, 'site-settings', 'images');
-    
-    return onSnapshot(docRef, (docSnap) => {
-        if (docSnap.exists()) {
-            siteImagesCache = docSnap.data();
-            if (callback) callback(siteImagesCache);
-        }
-    }, (error) => {
-        console.error('Error watching site images:', error);
-    });
+    // Supabase Realtime — subscribe to changes on the site_settings table
+    const channel = supabase
+        .channel('site_settings_images')
+        .on(
+            'postgres_changes',
+            { event: 'UPDATE', schema: 'public', table: 'site_settings', filter: 'key=eq.images' },
+            (payload) => {
+                if (payload.new?.value) {
+                    siteImagesCache = payload.new.value;
+                    if (callback) callback(siteImagesCache);
+                }
+            }
+        )
+        .subscribe();
+
+    // Return an unsubscribe function
+    return () => supabase.removeChannel(channel);
 }
 
 // Replace all images on page load

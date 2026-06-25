@@ -1,230 +1,143 @@
-// Authentication Service - Admin Role Management
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-import { doc, getDoc, setDoc, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
-import { auth as firebaseAuth, db as firebaseDb } from '../../../assets/js/firebase-config.js';
-
-// Get references
-const getAuth = () => {
-    if (firebaseAuth) {
-        return firebaseAuth;
-    }
-    if (window.auth) {
-        return window.auth;
-    }
-    const error = 'Firebase auth not initialized. Check firebase-config.js is loaded.';
-    console.error(error);
-    throw new Error(error);
-};
-
-const getDb = () => {
-    if (firebaseDb) {
-        return firebaseDb;
-    }
-    if (window.db) {
-        return window.db;
-    }
-    const error = 'Firebase database not initialized. Check firebase-config.js is loaded.';
-    console.error(error);
-    throw new Error(error);
-};
+﻿// Auth Service — Supabase edition
+import { supabase } from '../../../assets/js/supabase-config.js';
 
 /**
- * Check if current user has admin role
- * @returns {Promise<boolean>} True if user is admin
+ * Check whether the currently logged-in user is an admin.
+ * Returns true if they have an active row in the admin_users table.
  */
 export async function isUserAdmin() {
     try {
-        const auth = getAuth();
-        const currentUser = auth.currentUser;
-        
-        if (!currentUser) {
-            return false;
-        }
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return false;
 
-        const db = getDb();
-        const userDocRef = doc(db, 'admin-users', currentUser.uid);
-        const userDocSnap = await getDoc(userDocRef);
+        const { data, error } = await supabase
+            .from('admin_users')
+            .select('role, active')
+            .eq('auth_id', user.id)
+            .single();
 
-        if (userDocSnap.exists()) {
-            const userData = userDocSnap.data();
-            return userData.role === 'admin' && userData.active === true;
-        }
-
-        return false;
-    } catch (error) {
-        console.error('Error checking admin status:', error);
+        return !error && data?.active === true;
+    } catch {
         return false;
     }
 }
 
 /**
- * Get current authenticated user
- * @returns {Promise<Object|null>} Current user object or null
+ * Get the currently logged-in user, or null if not logged in.
+ * @returns {Promise<Object|null>}
  */
 export async function getCurrentUser() {
-    return new Promise((resolve, reject) => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            unsubscribe();
-            if (user) {
-                resolve({
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName || user.email.split('@')[0]
-                });
-            } else {
-                resolve(null);
-            }
-        });
-    });
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return null;
+    return {
+        uid:         user.id,
+        email:       user.email,
+        displayName: user.user_metadata?.full_name || user.email.split('@')[0],
+    };
 }
 
 /**
- * Login with email and password
- * @param {string} email - User email
- * @param {string} password - User password
- * @returns {Promise<Object>} Login result with success status and message
+ * Sign in with email + password.
+ * @returns {{ success: boolean, user?: Object, error?: string }}
  */
 export async function loginUser(email, password) {
     try {
-        const auth = getAuth();
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        return { 
-            success: true, 
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        const user = data.user;
+        return {
+            success: true,
             user: {
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName || user.email.split('@')[0]
-            }
+                uid:         user.id,
+                email:       user.email,
+                displayName: user.user_metadata?.full_name || user.email.split('@')[0],
+            },
         };
     } catch (error) {
-        console.error('Login error:', error);
-        let errorMessage = 'Login failed. Please try again.';
-        
-        if (error.code === 'auth/user-not-found') {
-            errorMessage = 'Email not found.';
-        } else if (error.code === 'auth/wrong-password') {
-            errorMessage = 'Incorrect password.';
-        } else if (error.code === 'auth/invalid-email') {
-            errorMessage = 'Invalid email address.';
-        }
-        
-        return { success: false, error: errorMessage };
+        return { success: false, error: error.message };
     }
 }
 
 /**
- * Logout current user
- * @returns {Promise<Object>} Logout result
+ * Sign out the current user.
+ * @returns {{ success: boolean, error?: string }}
  */
 export async function logoutUser() {
     try {
-        const auth = getAuth();
-        await signOut(auth);
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
         return { success: true };
     } catch (error) {
-        console.error('Logout error:', error);
         return { success: false, error: error.message };
     }
 }
 
 /**
- * Register a new admin user (requires existing admin)
- * @param {string} email - New admin email
- * @param {string} password - New admin password
- * @param {string} displayName - Display name
- * @returns {Promise<Object>} Registration result
+ * Register a new admin user.
+ * Creates the Supabase Auth account AND inserts into admin_users.
+ * @returns {{ success: boolean, user?: Object, error?: string }}
  */
 export async function registerAdminUser(email, password, displayName) {
     try {
-        // Check if current user is admin
-        const isCurrentUserAdmin = await isUserAdmin();
-        if (!isCurrentUserAdmin) {
-            return { 
-                success: false, 
-                error: 'Only existing admins can register new admin users.' 
-            };
-        }
-
-        const auth = getAuth();
-        
-        // Create new user
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
-
-        // Create admin user record
-        const db = getDb();
-        const userDocRef = doc(db, 'admin-users', user.uid);
-        await setDoc(userDocRef, {
-            email: email,
-            displayName: displayName,
-            role: 'admin',
-            active: true,
-            createdAt: new Date().toISOString(),
-            createdBy: auth.currentUser.uid
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: { data: { full_name: displayName } },
         });
+        if (error) throw error;
 
-        return { 
-            success: true, 
-            user: {
-                uid: user.uid,
-                email: email,
-                displayName: displayName
-            }
+        const user = data.user;
+        const { error: insertError } = await supabase.from('admin_users').insert({
+            auth_id:      user.id,
+            email:        user.email,
+            name:         displayName,
+            role:         'admin',
+            active:       true,
+            created_at:   new Date().toISOString(),
+        });
+        if (insertError) throw insertError;
+
+        return {
+            success: true,
+            user: { uid: user.id, email: user.email, displayName },
         };
     } catch (error) {
-        console.error('Registration error:', error);
         return { success: false, error: error.message };
     }
 }
 
 /**
- * Check authentication and redirect if not authorized
- * @param {string} redirectUrl - URL to redirect to if not authenticated (default: login.html)
+ * Redirect to redirectUrl if no active session, otherwise return the user.
+ * @param {string} redirectUrl - URL to redirect to when unauthenticated
+ * @returns {Promise<Object|null>} session user or null (after redirect)
  */
-export async function ensureAdminAccess(redirectUrl = 'login.html') {
-    try {
-        const auth = getAuth();
-        
-        return new Promise((resolve) => {
-            onAuthStateChanged(auth, async (user) => {
-                if (!user) {
-                    window.location.href = redirectUrl;
-                    resolve(false);
-                    return;
-                }
-
-                resolve(true);
-            });
-        });
-    } catch (error) {
-        console.error('Error checking authentication:', error);
+export async function ensureAdminAccess(redirectUrl = '/dashboard/login.html') {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
         window.location.href = redirectUrl;
+        return null;
     }
+    const user = session.user;
+    return {
+        uid:         user.id,
+        email:       user.email,
+        displayName: user.user_metadata?.full_name || user.email.split('@')[0],
+    };
 }
 
 /**
- * Get all admin users
- * @returns {Promise<Array>} Array of admin users
+ * Fetch all admin users from the admin_users table.
+ * @returns {Promise<Array>}
  */
 export async function getAllAdminUsers() {
     try {
-        const db = getDb();
-        const adminUsersCol = collection(db, 'admin-users');
-        const q = query(adminUsersCol, where('role', '==', 'admin'));
-        const querySnapshot = await getDocs(q);
-        
-        const admins = [];
-        querySnapshot.forEach((doc) => {
-            admins.push({
-                id: doc.id,
-                ...doc.data()
-            });
-        });
-
-        return admins;
+        const { data, error } = await supabase
+            .from('admin_users')
+            .select('*')
+            .eq('role', 'admin')
+            .order('created_at', { ascending: false });
+        if (error) throw error;
+        return data || [];
     } catch (error) {
         console.error('Error fetching admin users:', error);
         return [];
@@ -232,11 +145,18 @@ export async function getAllAdminUsers() {
 }
 
 /**
- * Listen to authentication state changes
- * @param {Function} callback - Callback function that receives auth state
+ * Subscribe to auth state changes.
+ * @param {Function} callback - Called with user object or null on each auth change
  * @returns {Function} Unsubscribe function
  */
 export function onAuthChange(callback) {
-    const auth = getAuth();
-    return onAuthStateChanged(auth, callback);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const user = session?.user || null;
+        callback(user ? {
+            uid:         user.id,
+            email:       user.email,
+            displayName: user.user_metadata?.full_name || user.email.split('@')[0],
+        } : null);
+    });
+    return () => subscription.unsubscribe();
 }
