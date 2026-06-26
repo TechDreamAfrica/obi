@@ -214,8 +214,11 @@
 
             grid.innerHTML = ministries.map(ministry => `
                 <div class="bg-white border rounded-lg overflow-hidden hover:shadow-lg transition">
-                    ${ministry.imageUrl ? `
-                        <img src="${ministry.imageUrl}" alt="${ministry.title}" class="w-full h-48 object-cover">
+                    ${ministry.image_url ? `
+                        <img src="${ministry.image_url}" alt="${ministry.title}" class="w-full h-48 object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                        <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center hidden">
+                            <i class="fas ${ministry.icon || 'fa-church'} text-6xl text-white"></i>
+                        </div>
                     ` : `
                         <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                             <i class="fas ${ministry.icon || 'fa-church'} text-6xl text-white"></i>
