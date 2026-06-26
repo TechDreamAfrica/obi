@@ -623,24 +623,21 @@
             window.URL.revokeObjectURL(url);
         };
 
-        // Auth check and initialize
-        supabase.auth.onAuthStateChange(async (_event, session) => {
-            const user = session?.user || null;
-            if (!user) {
-                console.log('User not authenticated');
+        // Immediately check session and load data
+        (async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session?.user) {
+                window.location.href = 'login.html';
+                return;
             }
-            }
-            
-            console.log('Initializing contacts page...');
-            const contactList = document.getElementById('contact-list');
-            contactList.innerHTML = `
-                <div class="p-12 text-center text-gray-500">
-                    <i class="fas fa-spinner fa-spin text-6xl mb-4"></i>
-                    <p class="text-xl">Loading contacts...</p>
-                </div>
-            `;
-            
             await loadContacts();
+        })();
+
+        // Redirect on future session expiry / logout
+        supabase.auth.onAuthStateChange((_event, session) => {
+            if (!session?.user) {
+                window.location.href = 'login.html';
+            }
         });
     </script>
 

@@ -336,12 +336,20 @@
             }
         };
 
-        // Auth check
+        // Immediately check session and load data
+        (async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session?.user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            loadStudents();
+        })();
+
+        // Redirect on future session expiry / logout
         supabase.auth.onAuthStateChange((_event, session) => {
             if (!session?.user) {
                 window.location.href = 'login.html';
-            } else {
-                loadStudents();
             }
         });
 
