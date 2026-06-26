@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/assets/images/logo.jpg" type="image/jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Site Images - Oasis IMG Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -278,7 +279,6 @@
 
     <script type="module">
         import { supabase } from '../assets/js/supabase-config.js';
-        import { getGoogleDriveImageUrl, handleAdminGoogleDriveInput } from './assets/js/google-drive-utils.js';
 
         const imageKeys = ['logo', 'cert', 'students', 'building', 'class', 'leadership', 'abt', 'story', 'placeholder'];
 
@@ -302,27 +302,9 @@
             }
         });
 
-        // Convert Google Drive link to direct image URL
+        // Convert URL (passthrough — Cloudinary and direct URLs need no conversion)
         function convertGoogleDriveUrl(url) {
-            if (!url) return '';
-            
-            // If it's a Google Drive link, use our utility to convert it
-            if (url.includes('drive.google.com')) {
-                const validation = handleAdminGoogleDriveInput(url);
-                if (validation.success) {
-                    return validation.imageUrl;
-                }
-            }
-            
-            // If already a direct image URL, return as is
-            if (url.includes('drive.google.com/uc?')) {
-                return url;
-            }
-            
-            // Return original URL (might be a direct HTTP URL)
-            return url;
-            
-            return url; // Return original if no match
+            return url || '';
         }
 
         // Load images from Supabase
@@ -365,7 +347,7 @@
             const url = input.value.trim();
             
             if (!url) {
-                alert('Please enter a Google Drive link');
+                alert('Please enter an image URL');
                 return;
             }
             

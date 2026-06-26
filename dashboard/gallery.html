@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/assets/images/logo.jpg" type="image/jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery - Oasis IMG Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -218,7 +219,6 @@
 
     <script type="module">
         import { supabase } from '../assets/js/supabase-config.js';
-        import { getGoogleDriveImageUrl, handleAdminGoogleDriveInput } from './assets/js/google-drive-utils.js';
         import { cloudinaryConfig } from '../assets/js/cloudinary-config.js';
         import { getOptimizedImageUrl, isCloudinaryUrl } from '../assets/js/cloudinary-utils.js';
 
@@ -345,24 +345,6 @@
                 return;
             }
             
-            // If it's a Google Drive link, validate it
-            if (imageInput.includes('drive.google.com') || /^[a-zA-Z0-9-_]{20,}$/.test(imageInput)) {
-                const validation = handleAdminGoogleDriveInput(imageInput);
-                if (validation.success) {
-                    previewDiv.innerHTML = '<p class="text-blue-500 text-sm"><i class="fas fa-spinner fa-spin mr-2"></i>Loading preview...</p>';
-                    const img = new Image();
-                    img.onload = () => {
-                        previewDiv.innerHTML = `<img src="${validation.imageUrl}" class="w-full h-40 object-cover rounded-lg" alt="Image preview">`;
-                        document.getElementById('finalImageUrl').value = imageInput;
-                    };
-                    img.onerror = () => {
-                        previewDiv.innerHTML = '<p class="text-yellow-600 text-sm"><i class="fas fa-exclamation-triangle mr-2"></i>Preview failed - check if link is public</p>';
-                    };
-                    img.src = validation.imageUrl;
-                    return;
-                }
-            }
-            
             // Try as direct URL
             previewDiv.innerHTML = '<p class="text-blue-500 text-sm"><i class="fas fa-spinner fa-spin mr-2"></i>Loading preview...</p>';
             const img = new Image();
@@ -444,20 +426,15 @@
             galleryGrid.innerHTML = '';
 
             filteredData.forEach(image => {
-                let imageUrl = image.imageUrl;
+                let imageUrl = image.image_url;
                 
                 // Handle Cloudinary URLs - apply optimizations
                 if (imageUrl && imageUrl.includes('cloudinary.com')) {
                     imageUrl = getOptimizedImageUrl(imageUrl, 'card');
                 }
-                // Convert Google Drive URLs if needed
-                else if (imageUrl && imageUrl.includes('drive.google.com')) {
-                    const validation = handleAdminGoogleDriveInput(imageUrl);
-                    imageUrl = validation.success ? validation.imageUrl : imageUrl;
-                }
 
-                const uploadDate = image.uploadDate?.toDate ?
-                    image.uploadDate.toDate() : new Date(image.uploadDate);
+                const uploadDate = image.upload_date?.toDate ?
+                    image.upload_date.toDate() : new Date(image.upload_date);
 
                 const card = document.createElement('div');
                 card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition';
@@ -535,8 +512,8 @@
             document.getElementById('imageId').value = id;
             document.getElementById('imageTitle').value = image.title;
             document.getElementById('imageCategory').value = image.category;
-            document.getElementById('imageUrl').value = image.imageUrl;
-            document.getElementById('finalImageUrl').value = image.imageUrl;
+            document.getElementById('imageUrl').value = image.image_url;
+            document.getElementById('finalImageUrl').value = image.image_url;
             document.getElementById('imageDescription').value = image.description || '';
             document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save mr-2"></i>Update Image';
             
@@ -583,8 +560,7 @@
                     image_url: imageUrl,
                     description: document.getElementById('imageDescription').value,
                     upload_date: new Date().toISOString(),
-                    source: imageUrl.includes('cloudinary.com') ? 'cloudinary' : 
-                            imageUrl.includes('drive.google.com') ? 'google-drive' : 'external'
+                    source: imageUrl.includes('cloudinary.com') ? 'cloudinary' : 'external'
                 };
 
                 if (imageId) {

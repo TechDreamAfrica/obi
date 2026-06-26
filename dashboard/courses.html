@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/assets/images/logo.jpg" type="image/jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programs Offered - Oasis IMG Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -220,7 +221,6 @@
 
     <script type="module">
         import { supabase } from '../assets/js/supabase-config.js';
-        import { getGoogleDriveImageUrl, handleAdminGoogleDriveInput } from './assets/js/google-drive-utils.js';
         import { uploadImage } from '../assets/js/cloudinary-utils.js';
 
         let allCourses = [];
@@ -261,18 +261,19 @@
             }
         };
 
-        supabase.auth.onAuthStateChange(async (_event, session) => {
+        (async () => {
+            const { data: { session } } = await supabase.auth.getSession();
             if (!session?.user) {
                 window.location.href = 'login.html';
             } else {
                 await loadCourses();
             }
-        });
+        })();
 
         // Load all courses
         async function loadCourses() {
             try {
-                const { data: rows, error } = await supabase.from('courses').select('*').order('sort_order', { ascending: true });
+                const { data: rows, error } = await supabase.from('courses').select('*').order('title', { ascending: true });
                 if (error) throw error;
                 allCourses = rows || [];
 
@@ -313,8 +314,8 @@
             list.innerHTML = coursesArray.map(course => {
                 const statusClass = course.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
                 const statusText = course.active ? 'Published' : 'Draft';
-                const enrollmentClass = course.enrollmentOpen ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800';
-                const enrollmentText = course.enrollmentOpen ? 'Accepting Applications' : 'Applications Closed';
+                const enrollmentClass = course.enrollment_open ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800';
+                const enrollmentText = course.enrollment_open ? 'Accepting Applications' : 'Applications Closed';
 
                 return `
                     <div class="p-6 hover:bg-gray-50">
@@ -334,7 +335,7 @@
                                     ${course.duration ? `<div><i class="fas fa-clock mr-2 text-blue-600"></i>${course.duration}</div>` : ''}
                                     ${course.credits ? `<div><i class="fas fa-award mr-2 text-blue-600"></i>${course.credits}</div>` : ''}
                                     ${course.fee ? `<div><i class="fas fa-money-bill mr-2 text-blue-600"></i>${course.fee}</div>` : ''}
-                                    ${course.startDate ? `<div><i class="fas fa-calendar mr-2 text-blue-600"></i>Starts: ${new Date(course.startDate).toLocaleDateString()}</div>` : ''}
+                                    ${course.start_date ? `<div><i class="fas fa-calendar mr-2 text-blue-600"></i>Starts: ${new Date(course.start_date).toLocaleDateString()}</div>` : ''}
                                 </div>
                                 <p class="text-gray-600 mb-2">${course.description?.substring(0, 150)}${(course.description?.length || 0) > 150 ? '...' : ''}</p>
                                 ${course.deadline ? `
@@ -399,11 +400,10 @@
             document.getElementById('course-credits').value = course.credits || '';
             document.getElementById('course-requirements').value = course.requirements || '';
             document.getElementById('course-subjects').value = course.subjects || '';
-            document.getElementById('course-start').value = course.startDate || '';
-            document.getElementById('course-deadline').value = course.deadline || '';
-            document.getElementById('course-image').value = course.imageUrl || '';
+            document.getElementById('course-start').value = course.start_date || '';
+            document.getElementById('course-image').value = course.image_url || '';
             document.getElementById('course-active').checked = course.active !== false;
-            document.getElementById('course-enrollment').checked = course.enrollmentOpen === true;
+            document.getElementById('course-enrollment').checked = course.enrollment_open === true;
             document.getElementById('courseModal').classList.remove('hidden');
         };
 
@@ -417,9 +417,9 @@
 
             viewContent.innerHTML = `
                 <div class="space-y-6">
-                    ${course.imageUrl ? `
+                    ${course.image_url ? `
                         <div class="mb-6">
-                            <img src="${course.imageUrl}" alt="${course.title}" class="w-full h-64 object-cover rounded-lg">
+                            <img src="${course.image_url}" alt="${course.title}" class="w-full h-64 object-cover rounded-lg">
                         </div>
                     ` : ''}
 
@@ -447,10 +447,10 @@
                                 <p class="font-semibold text-gray-900">${course.fee}</p>
                             </div>
                         ` : ''}
-                        ${course.startDate ? `
+                        ${course.start_date ? `
                             <div class="border-l-4 border-blue-600 pl-4">
                                 <p class="text-sm text-gray-500 mb-1">Start Date</p>
-                                <p class="font-semibold text-gray-900">${new Date(course.startDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                                <p class="font-semibold text-gray-900">${new Date(course.start_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                             </div>
                         ` : ''}
                         ${course.deadline ? `
@@ -465,8 +465,8 @@
                         <span class="bg-${course.active ? 'green' : 'gray'}-100 text-${course.active ? 'green' : 'gray'}-800 px-4 py-2 rounded-full text-sm font-semibold">
                             ${course.active ? 'Published' : 'Draft'}
                         </span>
-                        <span class="bg-${course.enrollmentOpen ? 'blue' : 'gray'}-100 text-${course.enrollmentOpen ? 'blue' : 'gray'}-800 px-4 py-2 rounded-full text-sm font-semibold">
-                            ${course.enrollmentOpen ? 'Accepting Applications' : 'Applications Closed'}
+                        <span class="bg-${course.enrollment_open ? 'blue' : 'gray'}-100 text-${course.enrollment_open ? 'blue' : 'gray'}-800 px-4 py-2 rounded-full text-sm font-semibold">
+                            ${course.enrollment_open ? 'Accepting Applications' : 'Applications Closed'}
                         </span>
                     </div>
 
@@ -494,8 +494,8 @@
                     ` : ''}
 
                     <div class="border-t pt-6 text-sm text-gray-500">
-                        <p>Created: ${course.createdAt ? new Date(course.createdAt).toLocaleString() : 'N/A'}</p>
-                        <p>Last Updated: ${course.updatedAt ? new Date(course.updatedAt).toLocaleString() : 'N/A'}</p>
+                        <p>Created: ${course.created_at ? new Date(course.created_at).toLocaleString() : 'N/A'}</p>
+                        <p>Last Updated: ${course.updated_at ? new Date(course.updated_at).toLocaleString() : 'N/A'}</p>
                     </div>
                 </div>
             `;
@@ -544,25 +544,34 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
 
-            const formData = new FormData(e.target);
-            const data = {
-                title: formData.get('title'),
-                type: formData.get('type'),
-                duration: formData.get('duration'),
-                description: formData.get('description'),
-                fee: formData.get('fee') || null,
-                credits: formData.get('credits') ? parseInt(formData.get('credits')) : null,
-                requirements: formData.get('requirements') || '',
-                subjects: formData.get('subjects') || '',
-                start_date: formData.get('startDate') || null,
-                deadline: formData.get('deadline') || null,
-                image_url: formData.get('imageUrl') || '',
-                active: document.getElementById('course-active').checked,
-                enrollment_open: document.getElementById('course-enrollment').checked,
-                updated_at: new Date().toISOString()
-            };
-
             try {
+                const { data: { user }, error: authError } = await supabase.auth.getUser();
+                if (authError || !user) {
+                    alert('Your session has expired. Please log in again.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const creditsRaw = document.getElementById('course-credits').value.trim();
+                const data = {
+                    title:           document.getElementById('course-title').value.trim(),
+                    type:            document.getElementById('course-type').value,
+                    duration:        document.getElementById('course-duration').value.trim(),
+                    description:     document.getElementById('course-description').value.trim(),
+                    fee:             document.getElementById('course-fee').value.trim() || null,
+                    credits:         creditsRaw ? parseInt(creditsRaw) : null,
+                    requirements:    document.getElementById('course-requirements').value.trim() || null,
+                    subjects:        document.getElementById('course-subjects').value.trim() || null,
+                    start_date:      document.getElementById('course-start').value || null,
+                    deadline:        document.getElementById('course-deadline').value || null,
+                    image_url:       document.getElementById('course-image').value.trim() || null,
+                    active:          document.getElementById('course-active').checked,
+                    enrollment_open: document.getElementById('course-enrollment').checked,
+                    updated_at:      new Date().toISOString()
+                };
+
+                if (!data.title) { alert('Program title is required.'); return; }
+
                 if (editingId) {
                     const { error } = await supabase.from('courses').update(data).eq('id', editingId);
                     if (error) throw error;
@@ -578,7 +587,7 @@
                 loadCourses(); // fire-and-forget so button unlocks immediately
             } catch (error) {
                 console.error('Error saving program:', error);
-                alert('Error saving program: ' + error.message);
+                alert('Error saving program: ' + (error.message || JSON.stringify(error)));
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;

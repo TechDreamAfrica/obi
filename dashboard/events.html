@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/assets/images/logo.jpg" type="image/jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events - Oasis IMG Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -199,7 +200,6 @@
 
     <script type="module">
         import { supabase } from '../assets/js/supabase-config.js';
-        import { getGoogleDriveImageUrl, handleAdminGoogleDriveInput } from './assets/js/google-drive-utils.js';
         import { uploadImage } from '../assets/js/cloudinary-utils.js';
 
         let allEvents = [];
@@ -328,8 +328,7 @@
                 const isPast = eventDate < today;
                 const statusClass = isPast ? 'bg-gray-100 text-gray-800' : 'bg-green-100 text-green-800';
                 const statusText = isPast ? 'Past' : 'Upcoming';
-                const imageUrl = window.convertGoogleDriveUrl ? window.convertGoogleDriveUrl(event.image) : event.image;
-                const finalImageUrl = imageUrl || '../assets/images/logo.jpg';
+                const finalImageUrl = event.image || '../assets/images/logo.jpg';
 
                 return `
                     <div class="p-6 hover:bg-gray-50">
@@ -354,7 +353,7 @@
                                     <span><i class="fas fa-tag mr-1"></i>${event.category || 'General'}</span>
                                     ${event.speaker ? `<span><i class="fas fa-user mr-1"></i>${event.speaker}</span>` : ''}
                                     ${event.capacity ? `<span><i class="fas fa-users mr-1"></i>Max: ${event.capacity}</span>` : ''}
-                                    ${event.registrationRequired ? '<span class="text-blue-600"><i class="fas fa-clipboard-check mr-1"></i>Registration Required</span>' : ''}
+                                    ${event.registration_required ? '<span class="text-blue-600"><i class="fas fa-clipboard-check mr-1"></i>Registration Required</span>' : ''}
                                 </div>
                                 <p class="text-gray-600">${event.description?.substring(0, 150)}${(event.description?.length || 0) > 150 ? '...' : ''}</p>
                             </div>
@@ -404,7 +403,7 @@
             document.getElementById('event-speaker').value = event.speaker || '';
             document.getElementById('event-capacity').value = event.capacity || '';
             document.getElementById('event-featured').checked = event.featured === true;
-            document.getElementById('event-registration').checked = event.registrationRequired === true;
+            document.getElementById('event-registration').checked = event.registration_required === true;
             document.getElementById('eventModal').classList.remove('hidden');
         };
 
@@ -439,23 +438,31 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
 
-            const formData = new FormData(e.target);
-            const data = {
-                title: formData.get('title'),
-                category: formData.get('category'),
-                location: formData.get('location') || '',
-                date: formData.get('date'),
-                time: formData.get('time') || '',
-                description: formData.get('description'),
-                image: formData.get('image') || '',
-                speaker: formData.get('speaker') || '',
-                capacity: parseInt(formData.get('capacity')) || null,
-                featured: document.getElementById('event-featured').checked,
-                registration_required: document.getElementById('event-registration').checked,
-                updated_at: new Date().toISOString()
-            };
-
             try {
+                const { data: { user }, error: authError } = await supabase.auth.getUser();
+                if (authError || !user) {
+                    alert('Your session has expired. Please log in again.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const data = {
+                    title:                 document.getElementById('event-title').value.trim(),
+                    category:              document.getElementById('event-category').value,
+                    location:              document.getElementById('event-location').value.trim() || null,
+                    date:                  document.getElementById('event-date').value || null,
+                    time:                  document.getElementById('event-time').value || null,
+                    description:           document.getElementById('event-description').value.trim(),
+                    image:                 document.getElementById('event-image').value.trim() || null,
+                    speaker:               document.getElementById('event-speaker').value.trim() || null,
+                    capacity:              document.getElementById('event-capacity').value ? parseInt(document.getElementById('event-capacity').value) : null,
+                    featured:              document.getElementById('event-featured').checked,
+                    registration_required: document.getElementById('event-registration').checked,
+                    updated_at:            new Date().toISOString()
+                };
+
+                if (!data.title) { alert('Event title is required.'); return; }
+
                 if (editingId) {
                     const { error } = await supabase.from('events').update(data).eq('id', editingId);
                     if (error) throw error;

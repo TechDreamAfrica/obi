@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="/assets/images/logo.jpg" type="image/jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News Management - Oasis IMG Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -201,49 +202,10 @@
 
     <script type="module">
         import { supabase } from '../assets/js/supabase-config.js';
-        import { handleAdminGoogleDriveInput } from '../assets/js/google-drive-utils.js';
 
         let allNews = [];
         let editingId = null;
 
-        // Update image preview
-        window.updateImagePreview = function() {
-            const imageInput = document.getElementById('news-image').value;
-            const previewDiv = document.getElementById('image-preview');
-            const errorDiv = document.getElementById('image-error');
-            
-            errorDiv.classList.add('hidden');
-            
-            if (!imageInput.trim()) {
-                previewDiv.innerHTML = '<p class="text-gray-400 text-sm">No image selected</p>';
-                return;
-            }
-            
-            // Validate and process the input
-            const validation = handleAdminGoogleDriveInput(imageInput);
-            
-            if (!validation.success) {
-                previewDiv.innerHTML = '<p class="text-gray-400 text-sm">No image selected</p>';
-                errorDiv.textContent = validation.error;
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-            
-            // Show loading and attempt preview
-            previewDiv.innerHTML = '<p class="text-blue-500 text-sm"><i class="fas fa-spinner fa-spin mr-2"></i>Loading preview...</p>';
-            
-            const img = new Image();
-            img.onload = () => {
-                const previewHtml = `<img src="${validation.imageUrl}" class="w-full h-40 object-cover rounded-lg" alt="Image preview">`;
-                previewDiv.innerHTML = previewHtml;
-            };
-            
-            img.onerror = () => {
-                previewDiv.innerHTML = '<p class="text-yellow-600 text-sm"><i class="fas fa-exclamation-triangle mr-2"></i>Preview failed - file may not be public</p>';
-            };
-            
-            img.src = validation.imageUrl;
-        };
         window.handleLogout = async function() {
             try {
                 await supabase.auth.signOut();
@@ -302,13 +264,7 @@
                 const statusClass = news.published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
                 const statusText = news.published ? 'Published' : 'Draft';
 
-                // Convert Google Drive URL if needed
-                let imageUrl = news.image || '';
-                if (imageUrl && imageUrl.includes('drive.google.com')) {
-                    const validation = handleAdminGoogleDriveInput(imageUrl);
-                    imageUrl = validation.success ? validation.imageUrl : '';
-                }
-                const finalImageUrl = imageUrl || '../assets/images/logo.jpg';
+                const finalImageUrl = news.image || '../assets/images/logo.jpg';
                 const excerpt = news.excerpt || news.content?.substring(0, 100) + '...';
 
                 return `
@@ -354,7 +310,10 @@
             document.getElementById('modal-title').textContent = 'Add News Article';
             document.getElementById('newsForm').reset();
             document.getElementById('news-id').value = '';
+            document.getElementById('news-image').value = '';
             document.getElementById('news-published').checked = true;
+            document.getElementById('image-preview').innerHTML = '<p class="text-gray-400 text-sm">No image selected</p>';
+            document.getElementById('image-error').classList.add('hidden');
             document.getElementById('newsModal').classList.remove('hidden');
         };
 
@@ -407,20 +366,45 @@
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
 
-            const formData = new FormData(e.target);
-            const data = {
-                title: formData.get('title'),
-                category: formData.get('category'),
-                author: formData.get('author') || 'Admin',
-                image: formData.get('image') || '',
-                excerpt: formData.get('excerpt') || '',
-                content: formData.get('content'),
-                published: document.getElementById('news-published').checked,
-                published_at: new Date().toISOString(),
-                updated_at: new Date().toISOString()
-            };
-
             try {
+                // Verify auth session before attempting write
+                const { data: { user }, error: authError } = await supabase.auth.getUser();
+                if (authError || !user) {
+                    alert('Your session has expired. Please log in again.');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Read values directly from DOM — more reliable than FormData for hidden inputs
+                const title   = document.getElementById('news-title').value.trim();
+                const category = document.getElementById('news-category').value;
+                const author  = document.getElementById('news-author').value.trim() || 'Admin';
+                const image   = document.getElementById('news-image').value.trim() || null;
+                const excerpt = document.getElementById('news-excerpt').value.trim() || null;
+                const content = document.getElementById('news-content').value.trim();
+                const published = document.getElementById('news-published').checked;
+
+                if (!title) {
+                    alert('Title is required.');
+                    return;
+                }
+                if (!content) {
+                    alert('Content is required.');
+                    return;
+                }
+
+                const data = {
+                    title,
+                    category,
+                    author,
+                    image,
+                    excerpt,
+                    content,
+                    published,
+                    published_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString()
+                };
+
                 if (editingId) {
                     const { error } = await supabase.from('news').update(data).eq('id', editingId);
                     if (error) throw error;
@@ -431,10 +415,10 @@
                     alert('News article published successfully!');
                 }
                 closeModal();
-                loadNews(); // fire-and-forget so the button unlocks immediately
+                loadNews();
             } catch (error) {
                 console.error('Error saving news:', error);
-                alert('Error saving news: ' + error.message);
+                alert('Error saving news: ' + (error.message || JSON.stringify(error)));
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalText;
