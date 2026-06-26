@@ -216,11 +216,20 @@
             }
         };
 
-        supabase.auth.onAuthStateChange(async (_event, session) => {
+        // Immediately check session and load data (reliable even if onAuthStateChange is delayed)
+        (async () => {
+            const { data: { session } } = await supabase.auth.getSession();
             if (!session?.user) {
                 window.location.href = 'login.html';
-            } else {
-                await loadNews();
+                return;
+            }
+            await loadNews();
+        })();
+
+        // Redirect on future session expiry / logout
+        supabase.auth.onAuthStateChange((_event, session) => {
+            if (!session?.user) {
+                window.location.href = 'login.html';
             }
         });
 

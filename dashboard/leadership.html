@@ -198,13 +198,6 @@
             }
         });
 
-        // On modal open, always check if image is present
-        window.showAddModal = function() {
-            document.getElementById('leaderForm').reset();
-            document.getElementById('leader-image-preview').innerHTML = '<p class="text-gray-400 text-sm">No image selected</p>';
-            document.getElementById('submit-btn').disabled = true;
-            document.getElementById('leaderModal').classList.remove('hidden');
-        };
         window.handleLogout = async function() {
             try {
                 await supabase.auth.signOut();
@@ -215,11 +208,20 @@
             }
         };
 
-        supabase.auth.onAuthStateChange(async (_event, session) => {
+        // Immediately check session and load data
+        (async () => {
+            const { data: { session } } = await supabase.auth.getSession();
             if (!session?.user) {
                 window.location.href = 'login.html';
-            } else {
-                await loadLeaders();
+                return;
+            }
+            await loadLeaders();
+        })();
+
+        // Redirect on future session expiry / logout
+        supabase.auth.onAuthStateChange((_event, session) => {
+            if (!session?.user) {
+                window.location.href = 'login.html';
             }
         });
 
@@ -309,6 +311,8 @@
             document.getElementById('modal-title').textContent = 'Add Leader';
             document.getElementById('leaderForm').reset();
             document.getElementById('leader-id').value = '';
+            document.getElementById('leader-image-preview').innerHTML = '<p class="text-gray-400 text-sm">No image selected</p>';
+            document.getElementById('submit-btn').disabled = true;
             document.getElementById('leaderModal').classList.remove('hidden');
         };
 
@@ -325,7 +329,15 @@
             document.getElementById('leader-category').value = leader.category || '';
             document.getElementById('leader-image').value = leader.image || '';
             document.getElementById('leader-bio').value = leader.bio || '';
-            document.getElementById('leader-order').value = leader.order || 1;
+            document.getElementById('leader-order').value = leader.sort_order || 1;
+            // Show existing image preview and enable submit
+            if (leader.image) {
+                document.getElementById('leader-image-preview').innerHTML = `<img src="${leader.image}" class="w-full h-40 object-cover rounded-lg" alt="Current image">`;
+                document.getElementById('submit-btn').disabled = false;
+            } else {
+                document.getElementById('leader-image-preview').innerHTML = '<p class="text-gray-400 text-sm">No image selected</p>';
+                document.getElementById('submit-btn').disabled = true;
+            }
             document.getElementById('leaderModal').classList.remove('hidden');
         };
 
