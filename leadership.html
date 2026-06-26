@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -156,21 +156,21 @@
             <div class="mb-20">
                 <h3 class="text-3xl font-bold text-gray-900 mb-10 text-center">Senior Leadership</h3>
                 <div id="senior-leadership" class="grid md:grid-cols-2 gap-12">
-                    <!-- Dynamic content loaded from Firebase -->
+                    <!-- Dynamic content loaded from Supabase -->
                 </div>
             </div>
 
             <div class="mb-20">
                 <h3 class="text-3xl font-bold text-gray-900 mb-10 text-center">Board</h3>
                 <div id="board-members" class="grid md:grid-cols-4 gap-8">
-                    <!-- Dynamic content loaded from Firebase -->
+                    <!-- Dynamic content loaded from Supabase -->
                 </div>
             </div>
 
             <div>
                 <h3 class="text-3xl font-bold text-gray-900 mb-10 text-center">Ministry Leaders</h3>
                 <div id="ministry-leaders" class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <!-- Dynamic content loaded from Firebase -->
+                    <!-- Dynamic content loaded from Supabase -->
                 </div>
             </div>
         </div>
@@ -229,12 +229,55 @@
     </footer>
 
     <script type="module" src="assets/js/main.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof window.updateLeadershipPage === 'function') {
-                window.updateLeadershipPage();
+    <script type="module">
+        import { supabase } from './assets/js/supabase-config.js';
+
+        function leaderCard(leader, large = false) {
+            const img = leader.image_url || leader.image || 'assets/images/default-avatar.jpg';
+            return `
+                <div class="text-center group">
+                    <div class="relative mb-4 overflow-hidden rounded-lg">
+                        <img src="${img}" alt="${leader.name}" class="w-full ${large ? 'h-80' : 'h-64'} object-cover group-hover:scale-110 transition duration-300" onerror="this.src='assets/images/logo.jpg'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-1">${leader.name}</h3>
+                    <p class="text-blue-600 font-semibold mb-2">${leader.position || leader.title || ''}</p>
+                    ${leader.bio ? `<p class="text-gray-600 text-sm">${leader.bio.substring(0, 120)}...</p>` : ''}
+                </div>
+            `;
+        }
+
+        async function loadLeadership() {
+            try {
+                const { data, error } = await supabase
+                    .from('leadership')
+                    .select('*')
+                    .order('sort_order', { ascending: true });
+
+                if (error) throw error;
+
+                const senior   = (data || []).filter(l => l.category === 'senior');
+                const board    = (data || []).filter(l => l.category === 'board');
+                const ministry = (data || []).filter(l => l.category === 'ministry' || !l.category);
+
+                const seniorEl   = document.getElementById('senior-leadership');
+                const boardEl    = document.getElementById('board-members');
+                const ministryEl = document.getElementById('ministry-leaders');
+
+                seniorEl.innerHTML   = senior.length   ? senior.map(l => leaderCard(l, true)).join('')   : '<p class="text-gray-500 col-span-2 text-center py-6">Coming soon</p>';
+                boardEl.innerHTML    = board.length    ? board.map(l => leaderCard(l)).join('')           : '<p class="text-gray-500 col-span-4 text-center py-6">Coming soon</p>';
+                ministryEl.innerHTML = ministry.length ? ministry.map(l => leaderCard(l)).join('')        : '<p class="text-gray-500 col-span-4 text-center py-6">Coming soon</p>';
+
+            } catch (err) {
+                console.error('Error loading leadership:', err);
+                ['senior-leadership', 'board-members', 'ministry-leaders'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.innerHTML = `<p class="text-red-500 col-span-4 text-center py-6">Error loading leadership: ${err.message}</p>`;
+                });
             }
-        });
+        }
+
+        window.addEventListener('load', loadLeadership);
     </script>
 </body>
 </html>

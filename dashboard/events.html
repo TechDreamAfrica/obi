@@ -468,7 +468,7 @@
                 }
 
                 closeModal();
-                await loadEvents();
+                loadEvents(); // fire-and-forget so button unlocks immediately
             } catch (error) {
                 console.error('Error saving event:', error);
                 alert('Error saving event: ' + error.message);

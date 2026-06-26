@@ -20,7 +20,7 @@ function getCloudinaryImageUrl(url, preset = 'default') {
     if (trimmedUrl.includes('cloudinary.com') || trimmedUrl.includes('res.cloudinary.com')) {
         return getOptimizedImageUrl(trimmedUrl, preset);
     }
-    // Pass through any other valid URL (Firebase Storage, CDN, etc.)
+    // Pass through any other valid URL (CDN, etc.)
     if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
         return trimmedUrl;
     }

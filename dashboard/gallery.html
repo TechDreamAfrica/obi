@@ -395,7 +395,7 @@
             }
         });
 
-        // Load Gallery from Firestore
+        // Load Gallery from Supabase
         async function loadGallery() {
             try {
                 const loadingState = document.getElementById('loadingState');
@@ -598,7 +598,7 @@
                 }
 
                 closeImageModal();
-                await loadGallery();
+                loadGallery(); // fire-and-forget so button unlocks immediately
             } catch (error) {
                 console.error('Error saving image:', error);
                 showToast('Error saving image: ' + error.message, 'error');
@@ -621,7 +621,7 @@
                 const { error: deleteError } = await supabase.from('gallery').delete().eq('id', id);
                 if (deleteError) throw deleteError;
                 showToast('Image deleted successfully!', 'success');
-                await loadGallery();
+                loadGallery(); // fire-and-forget
             } catch (error) {
                 console.error('Error deleting image:', error);
                 showToast('Error deleting image: ' + error.message, 'error');

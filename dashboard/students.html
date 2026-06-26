@@ -413,8 +413,8 @@
             if (searchTerm) {
                 const baseList = currentFilter === 'all' ? allStudents : allStudents.filter(s => s.status === currentFilter);
                 filteredStudents = baseList.filter(s => 
-                    s.fullName?.toLowerCase().includes(searchTerm) ||
-                    s.studentId?.toLowerCase().includes(searchTerm) ||
+                    s.full_name?.toLowerCase().includes(searchTerm) ||
+                    s.student_id?.toLowerCase().includes(searchTerm) ||
                     s.email?.toLowerCase().includes(searchTerm) ||
                     s.program?.toLowerCase().includes(searchTerm)
                 );
@@ -454,16 +454,16 @@
                 row.innerHTML = `
                     <td class="px-6 py-4">
                         <div class="flex items-center">
-                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(student.fullName)}" class="w-10 h-10 rounded-full mr-3">
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(student.full_name)}" class="w-10 h-10 rounded-full mr-3">
                             <div>
-                                <p class="font-semibold">${student.fullName}</p>
-                                <p class="text-sm text-gray-500">${student.email}</p>
+                                <p class="font-semibold">${student.full_name}</p>
+                                <p class="text-sm text-gray-500">${student.email || ''}</p>
                             </div>
                         </div>
                     </td>
-                    <td class="px-6 py-4">${student.studentId}</td>
-                    <td class="px-6 py-4">${student.program}</td>
-                    <td class="px-6 py-4">${new Date(student.enrollmentDate).toLocaleDateString()}</td>
+                    <td class="px-6 py-4">${student.student_id || ''}</td>
+                    <td class="px-6 py-4">${student.program || ''}</td>
+                    <td class="px-6 py-4">${student.enrollment_date ? new Date(student.enrollment_date).toLocaleDateString() : 'N/A'}</td>
                     <td class="px-6 py-4">
                         <span class="${statusClass} text-xs px-3 py-1 rounded-full capitalize">${student.status}</span>
                     </td>
@@ -559,33 +559,47 @@
         };
 
         // Edit student
-        window.editStudent = function(id) {
-            const student = allStudents.find(s => s.id === id);
-            if (!student) return;
+        window.editStudent = async function(id) {
+            try {
+                const { data: student, error } = await supabase
+                    .from('students')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+                if (error) throw error;
 
-            currentEditingId = id;
-            document.getElementById('modal-title').textContent = 'Edit Student';
-            document.getElementById('student-id').value = id;
-            document.getElementById('fullName').value = student.fullName || '';
-            document.getElementById('studentId').value = student.studentId || '';
-            document.getElementById('email').value = student.email || '';
-            document.getElementById('phone').value = student.phone || '';
-            document.getElementById('dob').value = student.dob || '';
-            document.getElementById('gender').value = student.gender || '';
-            document.getElementById('program').value = student.program || '';
-            document.getElementById('enrollmentDate').value = student.enrollmentDate || '';
-            document.getElementById('status').value = student.status || 'active';
-            document.getElementById('church').value = student.church || '';
-            document.getElementById('address').value = student.address || '';
-            document.getElementById('notes').value = student.notes || '';
-            
-            document.getElementById('studentModal').classList.remove('hidden');
+                currentEditingId = id;
+                document.getElementById('modal-title').textContent = 'Edit Student';
+                document.getElementById('student-id').value = id;
+                document.getElementById('fullName').value = student.full_name || '';
+                document.getElementById('studentId').value = student.student_id || '';
+                document.getElementById('email').value = student.email || '';
+                document.getElementById('phone').value = student.phone || '';
+                document.getElementById('dob').value = student.dob || '';
+                document.getElementById('gender').value = student.gender || '';
+                document.getElementById('program').value = student.program || '';
+                document.getElementById('enrollmentDate').value = student.enrollment_date || '';
+                document.getElementById('status').value = student.status || 'active';
+                document.getElementById('church').value = student.church || '';
+                document.getElementById('address').value = student.address || '';
+                document.getElementById('notes').value = student.notes || '';
+
+                document.getElementById('studentModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error fetching student:', error);
+                alert('Error loading student data: ' + error.message);
+            }
         };
 
         // View student
-        window.viewStudent = function(id) {
-            const student = allStudents.find(s => s.id === id);
-            if (!student) return;
+        window.viewStudent = async function(id) {
+            try {
+                const { data: student, error } = await supabase
+                    .from('students')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+                if (error) throw error;
 
             const statusClass = {
                 active: 'bg-green-100 text-green-800',
@@ -598,10 +612,10 @@
                 <div class="space-y-6">
                     <div class="flex items-start justify-between">
                         <div class="flex items-center space-x-4">
-                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(student.fullName)}&size=128" class="w-24 h-24 rounded-full">
+                            <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(student.full_name)}&size=128" class="w-24 h-24 rounded-full">
                             <div>
-                                <h3 class="text-2xl font-bold">${student.fullName}</h3>
-                                <p class="text-gray-600">${student.studentId}</p>
+                                <h3 class="text-2xl font-bold">${student.full_name}</h3>
+                                <p class="text-gray-600">${student.student_id || ''}</p>
                                 <span class="${statusClass} text-xs px-3 py-1 rounded-full capitalize mt-2 inline-block">${student.status}</span>
                             </div>
                         </div>
@@ -611,7 +625,7 @@
                         <div>
                             <h4 class="font-semibold text-gray-700 mb-2">Contact Information</h4>
                             <div class="bg-gray-50 p-4 rounded-lg space-y-2">
-                                <p><span class="font-medium">Email:</span> ${student.email}</p>
+                                <p><span class="font-medium">Email:</span> ${student.email || 'N/A'}</p>
                                 <p><span class="font-medium">Phone:</span> ${student.phone || 'N/A'}</p>
                                 <p><span class="font-medium">Address:</span> ${student.address || 'N/A'}</p>
                             </div>
@@ -630,7 +644,7 @@
                             <h4 class="font-semibold text-gray-700 mb-2">Academic Information</h4>
                             <div class="bg-gray-50 p-4 rounded-lg space-y-2">
                                 <p><span class="font-medium">Program:</span> ${student.program}</p>
-                                <p><span class="font-medium">Enrollment Date:</span> ${new Date(student.enrollmentDate).toLocaleDateString()}</p>
+                                <p><span class="font-medium">Enrollment Date:</span> ${student.enrollment_date ? new Date(student.enrollment_date).toLocaleDateString() : 'N/A'}</p>
                                 <p><span class="font-medium">Status:</span> <span class="capitalize">${student.status}</span></p>
                             </div>
                         </div>
@@ -646,6 +660,10 @@
             `;
 
             document.getElementById('viewModal').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error fetching student:', error);
+                alert('Error loading student data: ' + error.message);
+            }
         };
 
         // Delete student
@@ -670,13 +688,13 @@
 
             const studentData = {
                 full_name: document.getElementById('fullName').value,
-                student_id: document.getElementById('studentId').value,
+                student_id: document.getElementById('studentId').value || null,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
-                dob: document.getElementById('dob').value,
+                dob: document.getElementById('dob').value || null,
                 gender: document.getElementById('gender').value,
                 program: document.getElementById('program').value,
-                enrollment_date: document.getElementById('enrollmentDate').value,
+                enrollment_date: document.getElementById('enrollmentDate').value || null,
                 status: document.getElementById('status').value,
                 church: document.getElementById('church').value,
                 address: document.getElementById('address').value,
@@ -721,14 +739,14 @@
             }
 
             const csvData = filteredStudents.map(s => ({
-                'Student ID': s.studentId,
-                'Full Name': s.fullName,
-                'Email': s.email,
+                'Student ID': s.student_id || '',
+                'Full Name': s.full_name,
+                'Email': s.email || '',
                 'Phone': s.phone || '',
                 'Date of Birth': s.dob || '',
                 'Gender': s.gender || '',
-                'Program': s.program,
-                'Enrollment Date': s.enrollmentDate,
+                'Program': s.program || '',
+                'Enrollment Date': s.enrollment_date || '',
                 'Status': s.status,
                 'Church': s.church || '',
                 'Address': s.address || ''

@@ -197,8 +197,11 @@
                         newsErrorDiv.classList.remove('hidden');
                     }
                 });
+    </script>
+
+    <script type="module">
         import { supabase } from '../assets/js/supabase-config.js';
-        import { getGoogleDriveImageUrl, handleAdminGoogleDriveInput, createImagePreviewElement } from './assets/js/google-drive-utils.js';
+        import { handleAdminGoogleDriveInput } from '../assets/js/google-drive-utils.js';
 
         let allNews = [];
         let editingId = null;
@@ -294,7 +297,7 @@
             }
 
             newsList.innerHTML = newsArray.map(news => {
-                const date = news.publishedAt?.toDate?.() || new Date();
+                const date = news.published_at ? new Date(news.published_at) : new Date();
                 const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
                 const statusClass = news.published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
                 const statusText = news.published ? 'Published' : 'Draft';
@@ -427,9 +430,8 @@
                     if (error) throw error;
                     alert('News article published successfully!');
                 }
-
                 closeModal();
-                await loadNews();
+                loadNews(); // fire-and-forget so the button unlocks immediately
             } catch (error) {
                 console.error('Error saving news:', error);
                 alert('Error saving news: ' + error.message);

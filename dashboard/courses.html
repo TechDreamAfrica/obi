@@ -550,12 +550,12 @@
                 type: formData.get('type'),
                 duration: formData.get('duration'),
                 description: formData.get('description'),
-                fee: formData.get('fee') || '',
-                credits: formData.get('credits') || '',
+                fee: formData.get('fee') || null,
+                credits: formData.get('credits') ? parseInt(formData.get('credits')) : null,
                 requirements: formData.get('requirements') || '',
                 subjects: formData.get('subjects') || '',
-                startDate: formData.get('startDate') || '',
-                deadline: formData.get('deadline') || '',
+                start_date: formData.get('startDate') || null,
+                deadline: formData.get('deadline') || null,
                 image_url: formData.get('imageUrl') || '',
                 active: document.getElementById('course-active').checked,
                 enrollment_open: document.getElementById('course-enrollment').checked,
@@ -575,7 +575,7 @@
                 }
 
                 closeModal();
-                await loadCourses();
+                loadCourses(); // fire-and-forget so button unlocks immediately
             } catch (error) {
                 console.error('Error saving program:', error);
                 alert('Error saving program: ' + error.message);
