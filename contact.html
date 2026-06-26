@@ -418,7 +418,7 @@
                     subject: formData.get('subject'),
                     message: formData.get('message'),
                     status: 'unread',
-                    submittedAt: new Date().toISOString()
+                    submitted_at: new Date().toISOString()
                 };
 
                 const { error: insertError } = await supabase.from('contacts').insert(contactData);
