@@ -389,8 +389,7 @@
                 category: formData.get('category'),
                 image: imageVal,
                 bio: formData.get('bio'),
-                sort_order: parseInt(formData.get('order')) || 1,
-                updated_at: new Date().toISOString()
+                sort_order: parseInt(formData.get('order')) || 1
             };
 
             try {

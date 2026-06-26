@@ -255,9 +255,9 @@
 
                 if (error) throw error;
 
-                const senior   = (data || []).filter(l => l.category === 'senior');
-                const board    = (data || []).filter(l => l.category === 'board');
-                const ministry = (data || []).filter(l => l.category === 'ministry' || !l.category);
+                const senior   = (data || []).filter(l => l.category === 'Senior Leadership' || l.category === 'senior');
+                const board    = (data || []).filter(l => l.category === 'Board Members'    || l.category === 'board');
+                const ministry = (data || []).filter(l => l.category === 'Ministry Leaders' || l.category === 'ministry' || !l.category);
 
                 const seniorEl   = document.getElementById('senior-leadership');
                 const boardEl    = document.getElementById('board-members');

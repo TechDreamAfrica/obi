@@ -272,8 +272,15 @@
             document.getElementById('ministry-title').value = ministry.title;
             document.getElementById('ministry-description').value = ministry.description;
             document.getElementById('ministry-icon').value = ministry.icon || '';
-            document.getElementById('ministry-image').value = ministry.imageUrl || '';
+            document.getElementById('ministry-image').value = ministry.image_url || '';
             document.getElementById('ministry-leader').value = ministry.leader || '';
+            // Show existing image preview
+            const previewDiv = document.getElementById('ministry-image-preview');
+            if (ministry.image_url) {
+                previewDiv.innerHTML = `<img src="${ministry.image_url}" class="w-full h-40 object-cover rounded-lg" alt="Current image">`;
+            } else {
+                previewDiv.innerHTML = '<p class="text-gray-400 text-sm">No image selected</p>';
+            }
             document.getElementById('ministry-modal').classList.remove('hidden');
         };
 
