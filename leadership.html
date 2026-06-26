@@ -227,21 +227,87 @@
         </div>
     </footer>
 
+    <!-- Leader Profile Modal -->
+    <div id="leader-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50" onclick="if(event.target===this)closeLeaderModal()">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden">
+            <!-- Modal Header Image -->
+            <div class="relative h-64 bg-blue-900">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-cover object-top" onerror="this.src='assets/images/logo.jpg'">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <button onclick="closeLeaderModal()" class="absolute top-4 right-4 bg-white/20 hover:bg-white/40 text-white rounded-full w-9 h-9 flex items-center justify-center transition">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="absolute bottom-4 left-6 text-white">
+                    <h2 id="modal-name" class="text-2xl font-bold leading-tight"></h2>
+                    <p id="modal-title-text" class="text-blue-200 font-semibold text-sm mt-1"></p>
+                </div>
+            </div>
+            <!-- Modal Body -->
+            <div class="p-6">
+                <div id="modal-category-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold mb-4 bg-blue-100 text-blue-700"></div>
+                <p id="modal-bio" class="text-gray-600 leading-relaxed text-sm"></p>
+                <div id="modal-no-bio" class="hidden text-gray-400 text-sm italic">No biography available.</div>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="assets/js/main.js"></script>
     <script type="module">
         import { supabase } from './assets/js/supabase-config.js';
 
+        // Open profile modal
+        window.openLeaderModal = function(encoded) {
+            const leader = JSON.parse(decodeURIComponent(encoded));
+            const img    = leader.image_url || leader.image || 'assets/images/logo.jpg';
+
+            document.getElementById('modal-img').src          = img;
+            document.getElementById('modal-img').alt          = leader.name;
+            document.getElementById('modal-name').textContent = leader.name;
+            document.getElementById('modal-title-text').textContent = leader.position || leader.title || '';
+            document.getElementById('modal-category-badge').textContent = leader.category || 'Leader';
+
+            const bioEl    = document.getElementById('modal-bio');
+            const noBioEl  = document.getElementById('modal-no-bio');
+            if (leader.bio) {
+                bioEl.textContent = leader.bio;
+                bioEl.classList.remove('hidden');
+                noBioEl.classList.add('hidden');
+            } else {
+                bioEl.classList.add('hidden');
+                noBioEl.classList.remove('hidden');
+            }
+
+            document.getElementById('leader-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        };
+
+        window.closeLeaderModal = function() {
+            document.getElementById('leader-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        };
+
+        // Close on Escape key
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLeaderModal(); });
+
         function leaderCard(leader, large = false) {
-            const img = leader.image_url || leader.image || 'assets/images/default-avatar.jpg';
+            const img     = leader.image_url || leader.image || 'assets/images/default-avatar.jpg';
+            const encoded = encodeURIComponent(JSON.stringify(leader));
             return `
                 <div class="text-center group">
-                    <div class="relative mb-4 overflow-hidden rounded-lg">
+                    <div class="relative mb-4 overflow-hidden rounded-lg cursor-pointer" onclick="openLeaderModal('${encoded}')">
                         <img src="${img}" alt="${leader.name}" class="w-full ${large ? 'h-80' : 'h-64'} object-cover group-hover:scale-110 transition duration-300" onerror="this.src='assets/images/logo.jpg'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-end pb-5">
+                            <span class="bg-white text-blue-700 font-semibold text-sm px-4 py-2 rounded-full shadow hover:bg-blue-600 hover:text-white transition">
+                                <i class="fas fa-user mr-1"></i> View Profile
+                            </span>
+                        </div>
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-1">${leader.name}</h3>
                     <p class="text-blue-600 font-semibold mb-2">${leader.position || leader.title || ''}</p>
-                    ${leader.bio ? `<p class="text-gray-600 text-sm">${leader.bio.substring(0, 120)}...</p>` : ''}
+                    ${leader.bio ? `<p class="text-gray-600 text-sm">${leader.bio.substring(0, 100)}${leader.bio.length > 100 ? '...' : ''}</p>` : ''}
+                    <button onclick="openLeaderModal('${encoded}')" class="mt-3 text-blue-600 hover:text-blue-800 text-sm font-semibold transition">
+                        View Profile <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
                 </div>
             `;
         }
