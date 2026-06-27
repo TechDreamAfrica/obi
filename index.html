@@ -633,11 +633,16 @@
 
                 ministriesContainer.innerHTML = '';
                 data.forEach(ministry => {
+                    const title  = ministry.title || ministry.name || 'Unnamed Ministry';
+                    const desc   = ministry.description || '';
+                    const short  = desc.length > 120 ? desc.slice(0, 120).trimEnd() + '…' : desc;
                     const imgSrc = ministry.image_url || ministry.image || '';
+                    const imgFallback = `this.style.display='none';this.nextElementSibling.style.display='flex'`;
+
                     ministriesContainer.innerHTML += `
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col">
                             ${imgSrc ? `
-                                <img src="${imgSrc}" alt="${ministry.title}" class="w-full h-48 object-cover" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                                <img src="${imgSrc}" alt="${title}" class="w-full h-48 object-cover" onerror="${imgFallback}">
                                 <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center hidden">
                                     <i class="fas ${ministry.icon || 'fa-church'} text-6xl text-white"></i>
                                 </div>
@@ -646,16 +651,19 @@
                                     <i class="fas ${ministry.icon || 'fa-church'} text-6xl text-white"></i>
                                 </div>
                             `}
-                            <div class="p-6">
-                                <h3 class="text-xl font-bold text-gray-900 mb-3">${ministry.title}</h3>
-                                <p class="text-gray-600 mb-4">${ministry.description ? ministry.description.substring(0, 120) + (ministry.description.length > 120 ? '...' : '') : ''}</p>
+                            <div class="p-6 flex flex-col flex-1">
+                                <h3 class="text-xl font-bold text-gray-900 mb-3">${title}</h3>
+                                <p class="text-gray-600 mb-1 flex-1">${short}</p>
+                                ${desc.length > 120 ? `
+                                    <a href="ministry-detail.html?id=${ministry.id}" class="text-blue-600 hover:underline text-sm font-medium mb-3">Read More</a>
+                                ` : ''}
                                 ${ministry.leader ? `
                                     <div class="flex items-center text-sm text-gray-500 mb-3">
                                         <i class="fas fa-user mr-2"></i>
                                         ${ministry.leader}
                                     </div>
                                 ` : ''}
-                                <a href="ministry-detail.html?id=${ministry.id}" class="text-blue-600 hover:text-blue-700 font-semibold">
+                                <a href="ministry-detail.html?id=${ministry.id}" class="text-blue-600 hover:text-blue-700 font-semibold mt-auto">
                                     Learn More <i class="fas fa-arrow-right ml-2"></i>
                                 </a>
                             </div>

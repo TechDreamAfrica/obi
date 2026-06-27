@@ -435,15 +435,36 @@ async function updateHomeMinistriesPreview() {
 
     container.innerHTML = '';
     ministries.forEach(ministry => {
-        const imageUrl = window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(ministry.image) : 'assets/images/logo.jpg';
+        const title   = ministry.title || ministry.name || 'Unnamed Ministry';
+        const desc    = ministry.description || '';
+        const short   = desc.length > 120 ? desc.slice(0, 120).trimEnd() + '…' : desc;
+        const rawImg  = ministry.image_url || ministry.image || '';
+        const imgSrc  = rawImg && window.getCloudinaryImageUrl ? window.getCloudinaryImageUrl(rawImg) : rawImg;
+        const iconCls = ministry.icon || 'fa-church';
+
         const card = document.createElement('div');
-        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition';
+        card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col';
+
+        const imgBlock = imgSrc
+            ? `<img src="${imgSrc}" alt="${title}" class="w-full h-48 object-cover"
+                   onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+               <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center hidden">
+                   <i class="fas ${iconCls} text-6xl text-white"></i>
+               </div>`
+            : `<div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                   <i class="fas ${iconCls} text-6xl text-white"></i>
+               </div>`;
+
         card.innerHTML = `
-            <img src="${imageUrl}" alt="${ministry.name}" class="w-full h-48 object-cover" onerror="this.src='assets/images/logo.jpg'">
-            <div class="p-6">
-                <h3 class="text-xl font-bold text-gray-900 mb-3">${ministry.name}</h3>
-                <p class="text-gray-600 mb-4">${ministry.description}</p>
-                <a href="ministry-detail.html?id=${ministry.id}" class="text-blue-600 font-semibold hover:text-blue-700">Learn More →</a>
+            ${imgBlock}
+            <div class="p-6 flex flex-col flex-1">
+                <h3 class="text-xl font-bold text-gray-900 mb-3">${title}</h3>
+                <p class="text-gray-600 mb-1 flex-1">${short}</p>
+                ${desc.length > 120 ? `<a href="ministry-detail.html?id=${ministry.id}" class="text-blue-600 hover:underline text-sm font-medium mb-3">Read More</a>` : ''}
+                ${ministry.leader ? `<div class="flex items-center text-sm text-gray-500 mb-3"><i class="fas fa-user mr-2"></i>${ministry.leader}</div>` : ''}
+                <a href="ministry-detail.html?id=${ministry.id}" class="text-blue-600 font-semibold hover:text-blue-700 mt-auto">
+                    Learn More <i class="fas fa-arrow-right ml-1"></i>
+                </a>
             </div>
         `;
         container.appendChild(card);
