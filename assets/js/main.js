@@ -1179,7 +1179,7 @@ window.addEventListener('load', async () => {
     }
 
     if (document.getElementById('senior-leadership') || document.getElementById('board-members') || document.getElementById('ministry-leaders')) {
-        await updateLeadershipPage();
+        // leadership.html has its own complete inline script — skip to avoid conflict
     }
 
     if (document.getElementById('ministries-list')) {

@@ -78,7 +78,9 @@
                             </div>
                         </div>
 
+                        <a href="gallery.html" class="text-gray-700 hover:text-blue-900 transition">Gallery</a>
                         <a href="obi/events.html" class="text-gray-700 hover:text-blue-900 transition">Events</a>
+                        <a href="obi/news.html" class="text-gray-700 hover:text-blue-900 transition">News</a>
                     </div>
                 </div>
 
@@ -124,7 +126,8 @@
                 <a href="sponsor-student.html" class="block text-gray-700 pl-4">Sponsor Student</a>
                 <a href="contact.html" class="block text-gray-700 pl-4">Contact</a>
                 <a href="gallery.html" class="block text-gray-700">Gallery</a>
-                                <a href="obi/events.html" class="block text-gray-700">Events</a>
+                <a href="obi/events.html" class="block text-gray-700">Events</a>
+                <a href="obi/news.html" class="block text-gray-700">News</a>
                 <button id="mobile-sign-in-btn" class="w-full bg-blue-600 text-white px-4 py-2 rounded-md text-center mt-2">Sign In</button>
                 <div id="mobile-user-menu" class="hidden">
                     <a href="dashboard/index.html" class="block text-gray-700 pl-4">Dashboard</a>
@@ -298,10 +301,13 @@
             const img      = leader.image_url || leader.image || 'assets/images/default-avatar.jpg';
             const id       = leader.id;
             const shortBio = leader.bio ? leader.bio.substring(0, 100) + (leader.bio.length > 100 ? '...' : '') : '';
+            const ratio    = large ? '4/5' : '1/1';
             return `
                 <div class="text-center group">
-                    <div class="relative mb-4 overflow-hidden rounded-lg cursor-pointer" onclick="openLeaderModal('${id}')">
-                        <img src="${img}" alt="${leader.name}" class="w-full ${large ? 'h-80' : 'h-64'} object-cover group-hover:scale-110 transition duration-300" onerror="this.src='assets/images/logo.jpg'">
+                    <div class="relative mb-4 overflow-hidden rounded-lg cursor-pointer" style="aspect-ratio:${ratio}" onclick="openLeaderModal('${id}')">
+                        <img src="${img}" alt="${leader.name}"
+                             class="absolute inset-0 w-full h-full object-contain bg-gray-100 group-hover:scale-105 transition duration-300"
+                             onerror="this.src='assets/images/logo.jpg'">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col items-center justify-end pb-5">
                             <span class="bg-white text-blue-700 font-semibold text-sm px-4 py-2 rounded-full shadow hover:bg-blue-600 hover:text-white transition">
                                 <i class="fas fa-user mr-1"></i> View Profile
@@ -366,3 +372,5 @@
     </script>
 </body>
 </html>
+
+
