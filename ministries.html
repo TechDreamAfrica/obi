@@ -232,24 +232,39 @@
 
                 ministriesContainer.innerHTML = '';
                 data.forEach(ministry => {
+                    const title = ministry.title || ministry.name || 'Unnamed Ministry';
+                    const desc  = ministry.description || '';
+                    const short = desc.length > 120 ? desc.slice(0, 120).trimEnd() + '…' : desc;
+                    const imgFallback = `this.style.display='none';this.nextElementSibling.style.display='flex'`;
+
                     ministriesContainer.innerHTML += `
-                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
+                        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col">
                             ${ministry.image_url ? `
-                                <img src="${ministry.image_url}" alt="${ministry.title}" class="w-full h-48 object-cover">
+                                <img src="${ministry.image_url}" alt="${title}" class="w-full h-48 object-cover" onerror="${imgFallback}">
+                                <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center hidden">
+                                    <i class="fas ${ministry.icon || 'fa-church'} text-6xl text-white"></i>
+                                </div>
                             ` : `
                                 <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                                     <i class="fas ${ministry.icon || 'fa-church'} text-6xl text-white"></i>
                                 </div>
                             `}
-                            <div class="p-6">
-                                <h3 class="text-2xl font-bold text-gray-900 mb-3">${ministry.title}</h3>
-                                <p class="text-gray-600 mb-4">${ministry.description}</p>
+                            <div class="p-6 flex flex-col flex-1">
+                                <h3 class="text-2xl font-bold text-gray-900 mb-3">${title}</h3>
+                                <p class="text-gray-600 mb-1 flex-1">${short}</p>
+                                ${desc.length > 120 ? `
+                                    <a href="ministry-detail.html?id=${ministry.id}" class="text-blue-600 hover:underline text-sm font-medium mb-4">Read More</a>
+                                ` : ''}
                                 ${ministry.leader ? `
                                     <div class="flex items-center text-sm text-gray-700 mt-4 pt-4 border-t">
                                         <i class="fas fa-user mr-2 text-blue-600"></i>
-                                        <span class="font-semibold">Contact:</span>&nbsp;${ministry.leader}
+                                        <span class="font-semibold">Leader:</span>&nbsp;${ministry.leader}
                                     </div>
                                 ` : ''}
+                                <a href="ministry-detail.html?id=${ministry.id}"
+                                    class="mt-4 block text-center bg-blue-600 text-white px-6 py-2 rounded-md font-semibold hover:bg-blue-700 transition">
+                                    View Details
+                                </a>
                             </div>
                         </div>
                     `;

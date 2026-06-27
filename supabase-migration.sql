@@ -303,6 +303,22 @@ CREATE TABLE IF NOT EXISTS public.site_images (
     created_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- ─────────────────────────────────────────────────────────────
+-- 18. MINISTRY_SUPPORT  (ministry support / volunteer expressions)
+-- ─────────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS public.ministry_support (
+    id            UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+    ministry_id   UUID        REFERENCES public.ministries(id) ON DELETE SET NULL,
+    ministry_name TEXT,
+    full_name     TEXT        NOT NULL,
+    email         TEXT        NOT NULL,
+    phone         TEXT,
+    support_type  TEXT        DEFAULT 'volunteer',  -- volunteer | prayer | financial | other
+    message       TEXT,
+    status        TEXT        DEFAULT 'pending',    -- pending | reviewed | contacted
+    created_at    TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- ═════════════════════════════════════════════════════════════
 -- ROW LEVEL SECURITY
 -- ═════════════════════════════════════════════════════════════
@@ -324,6 +340,7 @@ ALTER TABLE public.admin_users      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.users            ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_settings    ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_images      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ministry_support ENABLE ROW LEVEL SECURITY;
 
 -- ── Drop existing policies (makes script safe to re-run) ─────
 DROP POLICY IF EXISTS "Public read gallery"              ON public.gallery;
@@ -357,6 +374,8 @@ DROP POLICY IF EXISTS "Admin full access admin_users"    ON public.admin_users;
 DROP POLICY IF EXISTS "Admin full access users"          ON public.users;
 DROP POLICY IF EXISTS "Admin full access site_settings"  ON public.site_settings;
 DROP POLICY IF EXISTS "Admin full access site_images"    ON public.site_images;
+DROP POLICY IF EXISTS "Public insert ministry_support"   ON public.ministry_support;
+DROP POLICY IF EXISTS "Admin full access ministry_support" ON public.ministry_support;
 
 -- ── Public read on content tables ────────────────────────────
 CREATE POLICY "Public read gallery"       ON public.gallery       FOR SELECT USING (true);
@@ -375,6 +394,7 @@ CREATE POLICY "Public insert credentials" ON public.credentials      FOR INSERT 
 CREATE POLICY "Public insert sponsors"    ON public.sponsors         FOR INSERT WITH CHECK (true);
 CREATE POLICY "Public insert admissions"  ON public.admissions       FOR INSERT WITH CHECK (true);
 CREATE POLICY "Public insert obi_apps"    ON public.obi_applications FOR INSERT WITH CHECK (true);
+CREATE POLICY "Public insert ministry_support" ON public.ministry_support FOR INSERT WITH CHECK (true);
 
 -- ── Authenticated users (admins) get full CRUD ───────────────
 CREATE POLICY "Admin full access gallery"       ON public.gallery       FOR ALL TO authenticated USING (true) WITH CHECK (true);
@@ -394,3 +414,4 @@ CREATE POLICY "Admin full access admin_users"   ON public.admin_users   FOR ALL 
 CREATE POLICY "Admin full access users"         ON public.users         FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Admin full access site_settings" ON public.site_settings FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Admin full access site_images"   ON public.site_images   FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Admin full access ministry_support" ON public.ministry_support FOR ALL TO authenticated USING (true) WITH CHECK (true);
