@@ -446,7 +446,7 @@ async function updateHomeMinistriesPreview() {
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col';
 
         const imgBlock = imgSrc
-            ? `<img src="${imgSrc}" alt="${title}" class="w-full h-48 object-cover"
+            ? `<img src="${imgSrc}" alt="${title}" class="w-full h-48 object-contain bg-gray-50"
                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                <div class="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 items-center justify-center hidden">
                    <i class="fas ${iconCls} text-6xl text-white"></i>
@@ -748,7 +748,7 @@ async function updateHomeNewsPreview() {
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1';
         card.innerHTML = `
-            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-cover" onerror="this.src='assets/images/logo.jpg'; console.log('Image failed to load:', '${imageUrl}');">
+            <img src="${imageUrl}" alt="${item.title}" class="w-full h-48 object-contain bg-gray-50" onerror="this.src='assets/images/logo.jpg';">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-3">
                     <span class="text-sm text-blue-600">
@@ -804,7 +804,7 @@ async function updateHomeEventsPreview() {
         const card = document.createElement('div');
         card.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition transform hover:-translate-y-1';
         card.innerHTML = `
-            <img src="${imageUrl}" alt="${event.title}" class="w-full h-48 object-cover" onerror="this.src='assets/images/logo.jpg'">
+            <img src="${imageUrl}" alt="${event.title}" class="w-full h-48 object-contain bg-gray-50" onerror="this.src='assets/images/logo.jpg'">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-3">
                     <span class="text-sm text-blue-600">

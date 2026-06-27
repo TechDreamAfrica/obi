@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -58,7 +58,7 @@
                             </div>
                         </div>
 
-                        <a href="gallery.html" class="text-blue-900 font-semibold border-b-2 border-blue-600">Gallery</a>
+                        <a href="obi/events.html" class="text-gray-700 hover:text-blue-900 transition">Events</a>
                     </div>
                 </div>
 
@@ -210,7 +210,7 @@
 
     <script type="module" src="assets/js/main.js"></script>
     <script>
-        // ── Gallery: lightbox + filters + loading state ──────────────────────
+        // â”€â”€ Gallery: lightbox + filters + loading state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         const galleryGrid    = document.getElementById('gallery-grid');
         const galleryLoading = document.getElementById('gallery-loading');
         const galleryEmpty   = document.getElementById('gallery-empty');
@@ -228,7 +228,7 @@
         let filtered    = [];   // currently visible subset
         let currentIdx  = 0;
 
-        // ── Intercept updateGalleryPage to add lightbox + filter integration ──
+        // â”€â”€ Intercept updateGalleryPage to add lightbox + filter integration â”€â”€
         document.addEventListener('DOMContentLoaded', () => {
             // Watch for when gallery-grid becomes visible (main.js populates it)
             const observer = new MutationObserver(() => {
